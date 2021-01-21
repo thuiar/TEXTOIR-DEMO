@@ -8,7 +8,7 @@ def run():
     args = param.args 
 
     print('Data Preparation...')
-    data = Dataaz(args)
+    data = Data(args)
 
 
     print('Open Intent Detection Begin...')
