@@ -1,11 +1,12 @@
-from models import *
-from dataloader import *
-from utils import *
+from utils import * 
+import Backbone
 
 class PretrainModelManager:
     
     def __init__(self, args, data):
-        self.model = BertForModel.from_pretrained(args.bert_model, cache_dir = "", num_labels = data.num_labels)
+        Model = Backbone.__dict__[args.backbone]
+        self.model = Model.from_pretrained(args.bert_model, cache_dir = "", num_labels = data.num_labels)
+
         if args.freeze_bert_parameters:
             for name, param in self.model.bert.named_parameters():  
                 param.requires_grad = False
@@ -15,9 +16,9 @@ class PretrainModelManager:
         os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu_id           
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model.to(self.device)
-        n_gpu = torch.cuda.device_count()
-        if n_gpu > 1:
-            self.model = torch.nn.DataParallel(self.model)
+        # n_gpu = torch.cuda.device_count()
+        # if n_gpu > 1:
+        #     self.model = torch.nn.DataParallel(self.model)
         
         self.num_train_optimization_steps = int(len(data.train_examples) / args.train_batch_size) * args.num_train_epochs
         
@@ -84,8 +85,7 @@ class PretrainModelManager:
                     break
                 
         self.model = best_model
-        if args.save_model:
-            self.save_model(args)
+        self.save_model(args)
 
     def get_optimizer(self, args):
         param_optimizer = list(self.model.named_parameters())

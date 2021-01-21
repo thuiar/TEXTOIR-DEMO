@@ -1,5 +1,11 @@
-from utils import *
-
+import random
+import numpy as np
+import torch
+import os
+import csv
+import sys
+from pytorch_pretrained_bert.tokenization import BertTokenizer
+from torch.utils.data import (DataLoader, RandomSampler, SequentialSampler, TensorDataset)
 
 def set_seed(seed):
     random.seed(seed)
@@ -7,6 +13,7 @@ def set_seed(seed):
     torch.manual_seed(seed)
     
 class Data:
+    
     
     def __init__(self, args):
         set_seed(args.seed)

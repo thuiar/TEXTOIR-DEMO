@@ -1,9 +1,11 @@
-from utils import *
+from pytorch_pretrained_bert.modeling import BertPreTrainedModel, BertModel
+from torch import nn
 
+        
 
-class BertForModel(BertPreTrainedModel):
+class bert(BertPreTrainedModel):
     def __init__(self,config,num_labels):
-        super(BertForModel, self).__init__(config)
+        super(bert, self).__init__(config)
         self.num_labels = num_labels
         self.bert = BertModel(config)
         self.dense = nn.Linear(config.hidden_size, config.hidden_size)

@@ -1,24 +1,64 @@
-from models import *
-from init_parameters import *
-from dataloader import *
-from pretrain import *
 from utils import *
-from losses import *
+from pretrain import *
+import Backbone
 
 TIMESTAMP = "{0:%Y-%m-%dT%H-%M-%S/}".format(datetime.now())
 train_log_dir = 'logs/train/' + TIMESTAMP
 test_log_dir = 'logs/test/'   + TIMESTAMP
 
+def euclidean_metric(a, b):
+    n = a.shape[0]
+    m = b.shape[0]
+    a = a.unsqueeze(1).expand(n, m, -1)
+    b = b.unsqueeze(0).expand(n, m, -1)
+    logits = -((a - b)**2).sum(dim=2)
+    return logits
 
+class BoundaryLoss(nn.Module):
+
+    def __init__(self, num_labels=10, feat_dim=2):
+        super(BoundaryLoss, self).__init__()
+        self.num_labels = num_labels
+        self.feat_dim = feat_dim
+        self.delta = nn.Parameter(torch.randn(num_labels).cuda())
+        nn.init.normal_(self.delta)
+        
+    def forward(self, pooled_output, centroids, labels):
+        
+        logits = euclidean_metric(pooled_output, centroids)
+        probs, preds = F.softmax(logits.detach(), dim=1).max(dim=1) 
+        delta = F.softplus(self.delta)
+        c = centroids[labels]
+        d = delta[labels]
+        x = pooled_output
+        
+        euc_dis = torch.norm(x - c,2, 1).view(-1)
+        pos_mask = (euc_dis > d).type(torch.cuda.FloatTensor)
+#         print(pos_mask)
+        neg_mask = (euc_dis < d).type(torch.cuda.FloatTensor)
+#         print(neg_mask)
+        pos_loss = (euc_dis - d) * pos_mask
+        neg_loss = (d - euc_dis) * neg_mask
+        loss = pos_loss.mean() + neg_loss.mean()
+        
+        return loss, delta 
         
 class ModelManager:
     
-    def __init__(self, args, data, pretrained_model=None):
+    def __init__(self, args, data):
         
-        self.model = pretrained_model
+        Model = Backbone.__dict__[args.backbone]
+        self.model = Model.from_pretrained(args.bert_model, cache_dir = "", num_labels = data.num_labels)
 
-        if self.model is None:
-            self.model = BertForModel.from_pretrained(args.bert_model, cache_dir = "", num_labels = data.num_labels)
+        if args.pretrain:
+            args.pretrain_dir = os.path.join(args.method, args.pretrain_dir)
+            print(args.pretrain_dir)
+            print('Pretraining Start...')
+            manager_p = PretrainModelManager(args, data)
+            manager_p.train(args, data)
+            print('Pretraining finished...')
+        
+        if os.listdir(args.pretrain_dir):
             self.restore_model(args)
 
         os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu_id     
@@ -35,7 +75,7 @@ class ModelManager:
         self.predictions = None
         self.true_labels = None
 
-    def open_classify(self, features):
+    def open_classify(self, data, features):
 
         logits = euclidean_metric(features, self.centroids)
         probs, preds = F.softmax(logits.detach(), dim = 1).max(dim = 1)
@@ -59,7 +99,7 @@ class ModelManager:
             input_ids, input_mask, segment_ids, label_ids = batch
             with torch.set_grad_enabled(False):
                 pooled_output, _ = self.model(input_ids, segment_ids, input_mask)
-                preds = self.open_classify(pooled_output)
+                preds = self.open_classify(data, pooled_output)
 
                 total_labels = torch.cat((total_labels,label_ids))
                 total_preds = torch.cat((total_preds, preds))
@@ -196,21 +236,7 @@ class ModelManager:
 
 
 
-if __name__ == '__main__':
-    
-    parser = init_model()
-    args = parser.parse_args()
-    data = Data(args)
 
-    manager_p = PretrainModelManager(args, data)
-    manager_p.train(args, data)
-    
-    manager = ModelManager(args, data, manager_p.model)
-    manager.train(args, data)
-    manager.evaluation(args, data, mode="test")  
-
-    # debug(data, manager_p, manager, args)
-    print('Training finished!')
   
 
     
