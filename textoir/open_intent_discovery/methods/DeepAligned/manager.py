@@ -1,8 +1,6 @@
-from models import *
-from init_parameters import *
-from dataloader import *
-from pretrain import *
 from utils import *
+from pretrain import *
+import Backbone
 
 TIMESTAMP = "{0:%Y-%m-%dT%H-%M-%S/}".format(datetime.now())
 train_log_dir = 'logs/train/' + TIMESTAMP
@@ -10,35 +8,38 @@ test_log_dir = 'logs/test/'   + TIMESTAMP
 
 class ModelManager:
     
-    def __init__(self, args, data, pretrained_model=None):
+    def __init__(self, args, data):
         
-        if pretrained_model is None:
-            pretrained_model = BertForModel.from_pretrained(args.bert_model, cache_dir = "", num_labels = data.n_known_cls)
-            if os.path.exists(args.pretrain_dir):
-                pretrained_model = self.restore_model(args.pretrained_model)
-        self.pretrained_model = pretrained_model
+        Model = Backbone.__dict__[args.backbone]
+        self.pretrained_model = Model.from_pretrained(args.bert_model, cache_dir = "", num_labels = data.n_known_cls)
 
-        os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu_id           
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        if args.pretrain:
+            method_dir = os.path.join('methods',args.method)
+            args.pretrain_dir = os.path.join(method_dir, args.pretrain_dir)
+            manager_p = PretrainModelManager(args, data)
+            manager_p.train(args, data)
+            print('Pretraining finished...')
+
+        os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu_id
 
         if args.cluster_num_factor > 1:
             self.num_labels = self.predict_k(args, data) 
         else:
             self.num_labels = data.num_labels       
+    
+        self.model = Model.from_pretrained(args.bert_model, cache_dir = "", num_labels = self.num_labels)
 
-        self.model = BertForModel.from_pretrained(args.bert_model, cache_dir = "", num_labels = self.num_labels)    
-        
-        if args.pretrain:
+        if os.listdir(args.pretrain_dir):
             self.load_pretrained_model(args)
 
         if args.freeze_bert_parameters:
-            self.freeze_parameters(self.model)
-            
+            self.freeze_parameters(self.model)   
+
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model.to(self.device)
 
         num_train_examples = len(data.train_labeled_examples) + len(data.train_unlabeled_examples)
         self.num_train_optimization_steps = int(num_train_examples / args.train_batch_size) * args.num_train_epochs
-        
         self.optimizer = self.get_optimizer(args)
 
         self.best_eval_score = 0
@@ -66,7 +67,8 @@ class ModelManager:
         return total_features, total_labels
 
     def predict_k(self, args, data):
-        
+        print('Predict K begin...')
+
         feats, _ = self.get_features_labels(data.train_semi_dataloader, self.pretrained_model, args)
         feats = feats.cpu().numpy()
         km = KMeans(n_clusters = data.num_labels).fit(feats)
@@ -74,7 +76,6 @@ class ModelManager:
 
         pred_label_list = np.unique(y_pred)
         drop_out = len(feats) / data.num_labels
-        print('drop',drop_out)
 
         cnt = 0
         for label in pred_label_list:
@@ -83,8 +84,7 @@ class ModelManager:
                 cnt += 1
 
         num_labels = len(pred_label_list) - cnt
-        print('pred_num',num_labels)
-
+        print('Predict K finished.. K={}, mean_cluster_size={}'.format(num_labels, drop_out))
         return num_labels
     
     def get_optimizer(self, args):
@@ -116,10 +116,13 @@ class ModelManager:
         map_ = {i[0]:i[1] for i in ind}
         y_pred = np.array([map_[idx] for idx in y_pred])
 
+        self.predictions = list([data.all_label_list[idx] for idx in y_pred])
+        self.true_labels = list([data.all_label_list[idx] for idx in y_true])
+        
         cm = confusion_matrix(y_true,y_pred)   
         print('confusion matrix',cm)
+
         self.test_results = results
-        
         self.save_results(args)
 
     def alignment(self, km, args):
@@ -159,7 +162,6 @@ class ModelManager:
 
     def train(self, args, data): 
 
-        best_score = 0
         best_model = None
         wait = 0
 
@@ -169,17 +171,16 @@ class ModelManager:
             feats = feats.cpu().numpy()
             km = KMeans(n_clusters = self.num_labels).fit(feats)
             
-            score = metrics.silhouette_score(feats, km.labels_)
-            print('score',score)
+            eval_score = metrics.silhouette_score(feats, km.labels_)
+            print('eval_score',eval_score)
 
-            if score > best_score:
+            if eval_score > self.best_eval_score:
                 best_model = copy.deepcopy(self.model)
                 wait = 0
-                best_score = score
+                self.best_eval_score = eval_score
             else:
                 wait += 1
                 if wait >= args.wait_patient:
-                    self.model = best_model
                     break 
             
             pseudo_labels = self.alignment(km, args)
@@ -208,18 +209,13 @@ class ModelManager:
             tr_loss = tr_loss / nb_tr_steps
             print('train_loss',tr_loss)
         
+        self.model = best_model
 
     def load_pretrained_model(self, args):
         pretrained_dict = self.pretrained_model.state_dict()
         classifier_params = ['classifier.weight','classifier.bias']
         pretrained_dict =  {k: v for k, v in pretrained_dict.items() if k not in classifier_params}
         self.model.load_state_dict(pretrained_dict, strict=False)
-        
-
-    def restore_model(self, args, model):
-        output_model_file = os.path.join(args.pretrain_dir, WEIGHTS_NAME)
-        model.load_state_dict(torch.load(output_model_file))
-        return model
     
     def freeze_parameters(self,model):
         for name, param in model.bert.named_parameters():  
@@ -228,6 +224,8 @@ class ModelManager:
                 param.requires_grad = True
 
     def save_results(self, args):
+        method_dir = os.path.join('methods',args.method)
+        args.save_results_path = os.path.join(method_dir, args.save_results_path)
         if not os.path.exists(args.save_results_path):
             os.makedirs(args.save_results_path)
 
@@ -255,19 +253,4 @@ class ModelManager:
         
         print('test_results', data_diagram)
 
-if __name__ == '__main__':
-    
-    parser = init_model()
-    args = parser.parse_args()
-    data = Data(args)
-
-    if args.pretrain:
-        manager_p = PretrainModelManager(args, data)
-        manager_p.train(args, data)
-        manager = ModelManager(args, data, manager_p.model)
-    else:
-        manager = ModelManager(args, data)
-        
-    manager.train(args,data)
-    manager.evaluation(args, data)
     

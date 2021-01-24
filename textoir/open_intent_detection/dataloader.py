@@ -1,11 +1,4 @@
-import random
-import numpy as np
-import torch
-import os
-import csv
-import sys
-from pytorch_pretrained_bert.tokenization import BertTokenizer
-from torch.utils.data import (DataLoader, RandomSampler, SequentialSampler, TensorDataset)
+from utils import *
 
 def set_seed(seed):
     random.seed(seed)

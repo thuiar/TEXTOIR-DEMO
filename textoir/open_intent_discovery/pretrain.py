@@ -1,21 +1,20 @@
-from utils import *
-from models import *
-from dataloader import *
+from utils import * 
+import Backbone
 
 class PretrainModelManager:
     
     def __init__(self, args, data):
-        set_seed(args.seed)
-        self.model = BertForModel.from_pretrained(args.bert_model, cache_dir = "", num_labels = data.n_known_cls)
+        Model = Backbone.__dict__[args.backbone]
+        self.model = Model.from_pretrained(args.bert_model, cache_dir = "", num_labels = data.n_known_cls)
         if args.freeze_bert_parameters:
             self.freeze_parameters(self.model)
-
+                    
         os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu_id           
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model.to(self.device)
-        n_gpu = torch.cuda.device_count()
-        if n_gpu > 1:
-            self.model = torch.nn.DataParallel(self.model)
+        # n_gpu = torch.cuda.device_count()
+        # if n_gpu > 1:
+        #     self.model = torch.nn.DataParallel(self.model)
         
         self.num_train_optimization_steps = int(len(data.train_labeled_examples) / args.train_batch_size) * args.num_train_epochs
         
@@ -34,7 +33,7 @@ class PretrainModelManager:
             input_ids, input_mask, segment_ids, label_ids = batch
             with torch.set_grad_enabled(False):
                 _, logits = self.model(input_ids, segment_ids, input_mask, mode = 'eval')
-                total_labels = torch.cat((total_labels,label_ids))
+                total_labels = torch.cat((total_labels, label_ids))
                 total_logits = torch.cat((total_logits, logits))
         
         total_probs, total_preds = F.softmax(total_logits.detach(), dim=1).max(dim = 1)
@@ -45,8 +44,7 @@ class PretrainModelManager:
         return acc
 
 
-    def train(self, args, data):  
- 
+    def train(self, args, data):     
         wait = 0
         best_model = None
         for epoch in trange(int(args.num_train_epochs), desc="Epoch"):
@@ -59,12 +57,11 @@ class PretrainModelManager:
                 input_ids, input_mask, segment_ids, label_ids = batch
                 with torch.set_grad_enabled(True):
                     loss = self.model(input_ids, segment_ids, input_mask, label_ids, mode = "train")
-                    loss.backward()
-                    tr_loss += loss.item()
-                    
-                    self.optimizer.step()
                     self.optimizer.zero_grad()
+                    loss.backward()
+                    self.optimizer.step()
                     
+                    tr_loss += loss.item()
                     nb_tr_examples += input_ids.size(0)
                     nb_tr_steps += 1
             
@@ -84,8 +81,7 @@ class PretrainModelManager:
                     break
                 
         self.model = best_model
-        if args.save_model:
-            self.save_model(args)
+        self.save_model(args)
 
     def get_optimizer(self, args):
         param_optimizer = list(self.model.named_parameters())
@@ -110,7 +106,7 @@ class PretrainModelManager:
         with open(model_config_file, "w") as f:
             f.write(self.save_model.config.to_json_string())
 
-    def freeze_parameters(self,model):
+    def freeze_parameters(self, model):
         for name, param in model.bert.named_parameters():  
             param.requires_grad = False
             if "encoder.layer.11" in name or "pooler" in name:

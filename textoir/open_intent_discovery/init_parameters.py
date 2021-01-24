@@ -23,16 +23,13 @@ class Param:
         
         parser.add_argument("--labeled_ratio", default=1.0, type=float, required=True, help="The ratio of labeled samples in the training set")
         
-        parser.add_argument("--method", type=str, default='ADB', required=True, help="which method to use")
+        parser.add_argument("--method", type=str, default='DeepAligned', required=True, help="which method to use")
 
-        parser.add_argument("--backbone", type=str, default='bert', required=True, help="which model to use")
+        parser.add_argument("--backbone", default='bert', type=str, required=True, help="which model to use")
+
+        parser.add_argument("--cluster_num_factor", default=1.0, type=float, required=True,  help="The factor (magnification) of the number of clusters K.")
 
         parser.add_argument('--seed', type=int, default=0, help="random seed for initialization")
-        
-        return parser
-
-    def ADB(self, parser):
-        parser.add_argument("--lr_boundary", type=float, default=0.05, help="The learning rate of the decision boundary.")
         
         return parser
 
@@ -60,14 +57,16 @@ class Param:
 
         parser.add_argument("--freeze_bert_parameters", action="store_true", help="Freeze the last parameters of BERT")
 
-        parser.add_argument("--save_model", action="store_true", help="save trained-model")
-
         parser.add_argument("--save_results", action="store_true", help="save test results")
+        
+        parser.add_argument("--save_model", action="store_true", help="save trained-model")
         
         parser.add_argument("--gpu_id", type=str, default='0', help="Select the GPU id")
 
-        parser.add_argument("--lr", default=2e-5, type=float,
+        parser.add_argument("--lr", default=5e-5, type=float,
                             help="The learning rate of BERT.")    
+
+        parser.add_argument("--lr_pre", default=5e-5, type=float, help="The learning rate for pre-training.")
 
         parser.add_argument("--num_train_epochs", default=100.0, type=float,
                             help="Total number of training epochs to perform.") 
