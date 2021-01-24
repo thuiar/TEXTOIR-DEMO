@@ -51,9 +51,8 @@ class ModelManager:
         self.model = Model.from_pretrained(args.bert_model, cache_dir = "", num_labels = data.num_labels)
 
         if args.pretrain:
-            args.pretrain_dir = os.path.join(args.method, args.pretrain_dir)
-            print(args.pretrain_dir)
-            print('Pretraining Start...')
+            method_dir = os.path.join('methods',args.method)
+            args.pretrain_dir = os.path.join(method_dir, args.pretrain_dir)
             manager_p = PretrainModelManager(args, data)
             manager_p.train(args, data)
             print('Pretraining finished...')
@@ -205,6 +204,8 @@ class ModelManager:
         self.model.load_state_dict(torch.load(output_model_file))
     
     def save_results(self, args):
+        method_dir = os.path.join('methods',args.method)
+        args.save_results_path = os.path.join(method_dir, args.save_results_path)
         if not os.path.exists(args.save_results_path):
             os.makedirs(args.save_results_path)
 
