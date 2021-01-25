@@ -49,16 +49,7 @@ class ModelManager:
         
         Model = Backbone.__dict__[args.backbone]
         self.model = Model.from_pretrained(args.bert_model, cache_dir = "", num_labels = data.num_labels)
-
-        if args.pretrain:
-            method_dir = os.path.join('methods',args.method)
-            args.pretrain_dir = os.path.join(method_dir, args.pretrain_dir)
-            manager_p = PretrainModelManager(args, data)
-            manager_p.train(args, data)
-            print('Pretraining finished...')
-        
-        if os.listdir(args.pretrain_dir):
-            self.restore_model(args)
+        self.model = self.pre_train(args, data)
 
         os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu_id     
         
@@ -73,6 +64,14 @@ class ModelManager:
         self.test_results = None
         self.predictions = None
         self.true_labels = None
+
+    def pre_train(self, args, data):
+        method_dir = os.path.join('methods',args.method)
+        args.pretrain_dir = os.path.join(method_dir, args.pretrain_dir)
+        manager_p = PretrainModelManager(args, data)
+        manager_p.train(args, data)
+        print('Pretraining finished...')
+        return manager_p.model
 
     def open_classify(self, data, features):
 

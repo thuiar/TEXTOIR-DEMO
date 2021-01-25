@@ -3,6 +3,9 @@ from dataloader import *
 from utils import debug
 
 def run():
+
+    print('Open Intent Discovery Begin...')
+    
     print('Parameters Initialization...')
     param = Param()
     args = param.args 
@@ -10,8 +13,6 @@ def run():
     print('Data Preparation...')
     data = Data(args)
 
-
-    print('Open Intent Discovery Begin...')
     Method = __import__('methods.' + args.method + '.manager')
     Method = Method.__dict__[args.method].manager
     manager = Method.ModelManager(args, data)

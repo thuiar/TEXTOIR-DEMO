@@ -45,7 +45,7 @@ class Param:
         parser.add_argument("--pretrain", action="store_true", default = 'pretrain', help="Pretrain the model")
 
         parser.add_argument("--pretrain_dir", default='pretrain_models', type=str, 
-                            help="The output directory where the model predictions and checkpoints will be written.") 
+                            help="The output directory where the model checkpoints will be written.") 
         
         parser.add_argument("--max_seq_length", default=None, type=int,
                             help="The maximum total input sequence length after tokenization. Sequences longer "
@@ -55,9 +55,9 @@ class Param:
 
         parser.add_argument("--warmup_proportion", default=0.1, type=float)
 
-        parser.add_argument("--freeze_bert_parameters", action="store_true", help="Freeze the last parameters of BERT")
+        parser.add_argument("--freeze_bert_parameters", action="store_true", default = True, help="Freeze the last parameters of BERT")
 
-        parser.add_argument("--save_results", action="store_true", help="save test results")
+        parser.add_argument("--save_results", action="store_true", default = 'save_results', help="save test results")
         
         parser.add_argument("--save_model", action="store_true", help="save trained-model")
         
@@ -77,7 +77,7 @@ class Param:
         parser.add_argument("--eval_batch_size", default=64, type=int,
                             help="Batch size for evaluation.")    
         
-        parser.add_argument("--wait_patient", default=10, type=int,
+        parser.add_argument("--wait_patient", default=20, type=int,
                             help="Patient steps for Early Stop.")    
         
         return parser

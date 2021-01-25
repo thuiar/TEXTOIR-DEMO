@@ -1,11 +1,13 @@
-from init_parameters import Param
+from open_intent_detection.init_parameters import Param as param1
+from open_intent_discovery.init_parameters import Param as param2
+
 from dataloader import *
 from utils import debug
 
 def run():
-    
-    print('Open Intent Detection Begin...')
 
+    print('Open Intent Discovery Begin...')
+    
     print('Parameters Initialization...')
     param = Param()
     args = param.args 
@@ -22,11 +24,11 @@ def run():
     print('Training Finished...')
 
     print('Evaluation begin...')
-    manager.evaluation(args, data, mode='test')
+    manager.evaluation(args, data)
     print('Evaluation finished...')
 
     debug(data, manager, args)
-    print('Open Intent Detection Finished...')
+    print('Open Intent Discovery Finished...')
 
 if __name__ == '__main__':
     run()

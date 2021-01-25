@@ -11,26 +11,17 @@ class ModelManager:
     def __init__(self, args, data):
         
         Model = Backbone.__dict__[args.backbone]
-        self.pretrained_model = Model.from_pretrained(args.bert_model, cache_dir = "", num_labels = data.n_known_cls)
-
-        if args.pretrain:
-            method_dir = os.path.join('methods',args.method)
-            args.pretrain_dir = os.path.join(method_dir, args.pretrain_dir)
-            manager_p = PretrainModelManager(args, data)
-            manager_p.train(args, data)
-            print('Pretraining finished...')
-
-        os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu_id
+        pretrained_model = self.pre_train(args, data)
 
         if args.cluster_num_factor > 1:
-            self.num_labels = self.predict_k(args, data) 
+            self.num_labels = self.predict_k(args, data, pretrained_model) 
         else:
-            self.num_labels = data.num_labels       
+            self.num_labels = data.num_labels   
+
+        os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu_id    
     
         self.model = Model.from_pretrained(args.bert_model, cache_dir = "", num_labels = self.num_labels)
-
-        if os.listdir(args.pretrain_dir):
-            self.load_pretrained_model(args)
+        self.load_pretrained_model(args, pretrained_model)
 
         if args.freeze_bert_parameters:
             self.freeze_parameters(self.model)   
@@ -49,6 +40,16 @@ class ModelManager:
         self.predictions = None
         self.true_labels = None
 
+    def pre_train(self, args, data):
+
+        method_dir = os.path.join('methods',args.method)
+        args.pretrain_dir = os.path.join(method_dir, args.pretrain_dir)
+        manager_p = PretrainModelManager(args, data)
+        manager_p.train(args, data)
+        print('Pretraining finished...')
+
+        return manager_p.model
+
     def get_features_labels(self, dataloader, model, args):
         
         model.eval()
@@ -66,10 +67,10 @@ class ModelManager:
 
         return total_features, total_labels
 
-    def predict_k(self, args, data):
+    def predict_k(self, args, data, pretrained_model):
         print('Predict K begin...')
 
-        feats, _ = self.get_features_labels(data.train_semi_dataloader, self.pretrained_model, args)
+        feats, _ = self.get_features_labels(data.train_semi_dataloader, pretrained_model, args)
         feats = feats.cpu().numpy()
         km = KMeans(n_clusters = data.num_labels).fit(feats)
         y_pred = km.labels_
@@ -211,8 +212,8 @@ class ModelManager:
         
         self.model = best_model
 
-    def load_pretrained_model(self, args):
-        pretrained_dict = self.pretrained_model.state_dict()
+    def load_pretrained_model(self, args, pretrained_model):
+        pretrained_dict = pretrained_model.state_dict()
         classifier_params = ['classifier.weight','classifier.bias']
         pretrained_dict =  {k: v for k, v in pretrained_dict.items() if k not in classifier_params}
         self.model.load_state_dict(pretrained_dict, strict=False)
