@@ -41,8 +41,8 @@ class ModelManager:
         self.true_labels = None
 
     def pre_train(self, args, data):
-
-        method_dir = os.path.join('open_intent_discovery/methods',args.method)
+        
+        method_dir = os.path.join(args.type, 'methods',args.method)
         args.pretrain_dir = os.path.join(method_dir, args.pretrain_dir)
         manager_p = PretrainModelManager(args, data)
         manager_p.train(args, data)
@@ -225,7 +225,7 @@ class ModelManager:
                 param.requires_grad = True
 
     def save_results(self, args):
-        method_dir = os.path.join('methods',args.method)
+        method_dir = os.path.join(args.type, 'methods',args.method)
         args.save_results_path = os.path.join(method_dir, args.save_results_path)
         if not os.path.exists(args.save_results_path):
             os.makedirs(args.save_results_path)

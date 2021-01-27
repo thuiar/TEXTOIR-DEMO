@@ -30,6 +30,8 @@ class Param:
 
         parser.add_argument('--seed', type=int, default=0, help="random seed for initialization")
         
+        parser.add_argument('--type', type=str, default='open_intent_discovery', help="Type for methods")
+
         return parser
 
     def bert(self, parser):

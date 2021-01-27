@@ -27,7 +27,9 @@ class Param:
         parser.add_argument("--backbone", type=str, default='bert', help="which model to use")
 
         parser.add_argument('--seed', type=int, default=0, help="random seed for initialization")
-        
+
+        parser.add_argument('--type', type=str, default='open_intent_detection', help="Type for methods")
+
         return parser
 
     def ADB(self, parser):

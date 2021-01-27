@@ -1,7 +1,7 @@
 from open_intent_detection.init_parameters import Param as Param_detect
 from open_intent_discovery.init_parameters import Param as Param_discover
 from run_detect import run as detect 
-
+import os
 
 if __name__ == '__main__':
     print('Parameters Initialization...')

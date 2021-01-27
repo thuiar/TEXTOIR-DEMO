@@ -1,0 +1,2 @@
+Seen,Unseen,Overall,Acc,dataset,method,known_cls_ratio,labeled_ratio,seed
+7.3597,85.8008,11.2818,75.26,banking,ADB,0.25,0.1,0
