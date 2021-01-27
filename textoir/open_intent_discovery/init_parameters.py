@@ -16,18 +16,17 @@ class Param:
         self.args = parser.parse_args()  
 
     def common_param(self, parser):
-        parser.add_argument("--dataset", default=None, type=str, required=True,
-                            help="The name of the dataset to train selected")
+        parser.add_argument("--dataset", default=None, type=str, help="The name of the dataset to train selected")
         
-        parser.add_argument("--known_cls_ratio", default=0.75, type=float, required=True, help="The number of known classes")
+        parser.add_argument("--known_cls_ratio", default=0.75, type=float, help="The number of known classes")
         
-        parser.add_argument("--labeled_ratio", default=1.0, type=float, required=True, help="The ratio of labeled samples in the training set")
+        parser.add_argument("--labeled_ratio", default=1.0, type=float, help="The ratio of labeled samples in the training set")
         
-        parser.add_argument("--method", type=str, default='DeepAligned', required=True, help="which method to use")
+        parser.add_argument("--method", type=str, default='DeepAligned', help="which method to use")
 
-        parser.add_argument("--backbone", default='bert', type=str, required=True, help="which model to use")
+        parser.add_argument("--backbone", default='bert', type=str, help="which model to use")
 
-        parser.add_argument("--cluster_num_factor", default=1.0, type=float, required=True,  help="The factor (magnification) of the number of clusters K.")
+        parser.add_argument("--cluster_num_factor", default=1.0, type=float, help="The factor (magnification) of the number of clusters K.")
 
         parser.add_argument('--seed', type=int, default=0, help="random seed for initialization")
         
@@ -37,7 +36,7 @@ class Param:
         ##############Your Location for Pretrained Bert Model#####################
         parser.add_argument("--bert_model", default="/home/zhl/pretrained_models/uncased_L-12_H-768_A-12", type=str, help="The path for the pre-trained bert model.")
         
-        parser.add_argument("--data_dir", default='../data', type=str,
+        parser.add_argument("--data_dir", default='data', type=str,
                             help="The input data dir. Should contain the .csv files (or other data files) for the task.")
         
         parser.add_argument("--save_results_path", type=str, default='outputs', help="the path to save results")

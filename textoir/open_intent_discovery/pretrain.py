@@ -1,5 +1,5 @@
-from utils import * 
-import Backbone
+from open_intent_discovery.utils import * 
+import open_intent_discovery.Backbone as Backbone
 
 class PretrainModelManager:
     

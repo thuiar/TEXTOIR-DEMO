@@ -1,5 +1,5 @@
-from utils import * 
-import Backbone
+from open_intent_detection.utils import * 
+import open_intent_detection.Backbone as Backbone
 
 class PretrainModelManager:
     
@@ -16,9 +16,9 @@ class PretrainModelManager:
         os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu_id           
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model.to(self.device)
-        # n_gpu = torch.cuda.device_count()
-        # if n_gpu > 1:
-        #     self.model = torch.nn.DataParallel(self.model)
+        n_gpu = torch.cuda.device_count()
+        if n_gpu > 1:
+            self.model = torch.nn.DataParallel(self.model)
         
         self.num_train_optimization_steps = int(len(data.train_examples) / args.train_batch_size) * args.num_train_epochs
         

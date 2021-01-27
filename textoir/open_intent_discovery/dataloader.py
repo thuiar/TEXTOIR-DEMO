@@ -1,4 +1,12 @@
-from utils import *
+import os
+import numpy as np
+import pandas as pd
+import torch
+import random
+import csv
+import sys
+from pytorch_pretrained_bert.tokenization import BertTokenizer
+from torch.utils.data import (DataLoader, RandomSampler, SequentialSampler, TensorDataset)
 
 def set_seed(seed):
     random.seed(seed)
@@ -7,7 +15,7 @@ def set_seed(seed):
     
 class Data:
     
-    def __init__(self, args):
+    def __init__(self, args, data_detect=None):
         set_seed(args.seed)
         max_seq_lengths = {'clinc':30, 'stackoverflow':45,'banking':55}
         args.max_seq_length = max_seq_lengths[args.dataset]

@@ -1,6 +1,6 @@
-from utils import *
-from pretrain import *
-import Backbone
+from open_intent_discovery.utils import *
+from open_intent_discovery.pretrain import *
+import open_intent_discovery.Backbone as Backbone
 
 TIMESTAMP = "{0:%Y-%m-%dT%H-%M-%S/}".format(datetime.now())
 train_log_dir = 'logs/train/' + TIMESTAMP
@@ -42,7 +42,7 @@ class ModelManager:
 
     def pre_train(self, args, data):
 
-        method_dir = os.path.join('methods',args.method)
+        method_dir = os.path.join('open_intent_discovery/methods',args.method)
         args.pretrain_dir = os.path.join(method_dir, args.pretrain_dir)
         manager_p = PretrainModelManager(args, data)
         manager_p.train(args, data)

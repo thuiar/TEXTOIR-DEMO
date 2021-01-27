@@ -3,11 +3,10 @@ import argparse
 class Param:
 
     def __init__(self):
-
         parser = argparse.ArgumentParser()
         parser = self.common_param(parser)
-        args = parser.parse_args()  
-
+        args = parser.parse_args() 
+        
         if args.backbone == 'bert':
             parser = self.bert(parser)
         if args.method == 'ADB':
@@ -16,16 +15,16 @@ class Param:
         self.args = parser.parse_args()  
 
     def common_param(self, parser):
-        parser.add_argument("--dataset", default=None, type=str, required=True,
+        parser.add_argument("--dataset", default='banking', type=str, 
                             help="The name of the dataset to train selected")
         
-        parser.add_argument("--known_cls_ratio", default=0.75, type=float, required=True, help="The number of known classes")
+        parser.add_argument("--known_cls_ratio", default=0.75, type=float, help="The number of known classes")
         
-        parser.add_argument("--labeled_ratio", default=1.0, type=float, required=True, help="The ratio of labeled samples in the training set")
+        parser.add_argument("--labeled_ratio", default=1.0, type=float, help="The ratio of labeled samples in the training set")
         
-        parser.add_argument("--method", type=str, default='ADB', required=True, help="which method to use")
+        parser.add_argument("--method", type=str, default='ADB', help="which method to use")
 
-        parser.add_argument("--backbone", type=str, default='bert', required=True, help="which model to use")
+        parser.add_argument("--backbone", type=str, default='bert', help="which model to use")
 
         parser.add_argument('--seed', type=int, default=0, help="random seed for initialization")
         
@@ -40,7 +39,7 @@ class Param:
         ##############Your Location for Pretrained Bert Model#####################
         parser.add_argument("--bert_model", default="/home/zhl/pretrained_models/uncased_L-12_H-768_A-12", type=str, help="The path for the pre-trained bert model.")
         
-        parser.add_argument("--data_dir", default='../data', type=str,
+        parser.add_argument("--data_dir", default='data', type=str,
                             help="The input data dir. Should contain the .csv files (or other data files) for the task.")
         
         parser.add_argument("--save_results_path", type=str, default='outputs', help="the path to save results")
@@ -58,7 +57,7 @@ class Param:
 
         parser.add_argument("--warmup_proportion", default=0.1, type=float)
 
-        parser.add_argument("--freeze_bert_parameters", action="store_true", help="Freeze the last parameters of BERT")
+        parser.add_argument("--freeze_bert_parameters", action="store_true", default="freeze", help="Freeze the last parameters of BERT")
 
         parser.add_argument("--save_model", action="store_true", help="save trained-model")
 
