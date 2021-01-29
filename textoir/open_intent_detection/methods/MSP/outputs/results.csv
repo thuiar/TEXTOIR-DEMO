@@ -1,0 +1,4 @@
+Seen,Unseen,Overall,Acc,dataset,method,known_cls_ratio,labeled_ratio,seed
+0.0,85.9259,4.2963,75.32,banking,MSP,0.25,0.1,0
+50.7128,22.7568,49.315,33.25,banking,MSP,0.25,1.0,0
+57.6187,35.6562,56.5206,40.23,banking,MSP,0.25,1.0,0

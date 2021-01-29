@@ -3,14 +3,14 @@ from open_intent_discovery.dataloader import *
 from open_intent_discovery.utils import debug
 import importlib
 
-def run(args, inputs=None):
+def run(args):
     test = True
     if test:
         print("Notice: ****This is test mode****")
         args.dataset = 'banking'
         args.labeled_ratio = 0.1
         args.known_cls_ratio = 0.25
-        args.num_train_epochs = 1
+        args.num_train_epochs = 100
 
     print('Data Preparation...')
     data = Data(args)
@@ -26,6 +26,8 @@ def run(args, inputs=None):
     manager.evaluation(args, data)
     print('Evaluation finished...')
 
+    manager.save_results(args)
+    
     debug(data, manager, args)
     print('Open Intent Discovery Finished...')
 

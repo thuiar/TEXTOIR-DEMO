@@ -6,42 +6,6 @@ TIMESTAMP = "{0:%Y-%m-%dT%H-%M-%S/}".format(datetime.now())
 train_log_dir = 'logs/train/' + TIMESTAMP
 test_log_dir = 'logs/test/'   + TIMESTAMP
 
-def euclidean_metric(a, b):
-    n = a.shape[0]
-    m = b.shape[0]
-    a = a.unsqueeze(1).expand(n, m, -1)
-    b = b.unsqueeze(0).expand(n, m, -1)
-    logits = -((a - b)**2).sum(dim=2)
-    return logits
-
-class BoundaryLoss(nn.Module):
-
-    def __init__(self, num_labels=10, feat_dim=2):
-        super(BoundaryLoss, self).__init__()
-        self.num_labels = num_labels
-        self.feat_dim = feat_dim
-        self.delta = nn.Parameter(torch.randn(num_labels).cuda())
-        nn.init.normal_(self.delta)
-        
-    def forward(self, pooled_output, centroids, labels):
-        
-        logits = euclidean_metric(pooled_output, centroids)
-        probs, preds = F.softmax(logits.detach(), dim=1).max(dim=1) 
-        delta = F.softplus(self.delta)
-        c = centroids[labels]
-        d = delta[labels]
-        x = pooled_output
-        
-        euc_dis = torch.norm(x - c,2, 1).view(-1)
-        pos_mask = (euc_dis > d).type(torch.cuda.FloatTensor)
-#         print(pos_mask)
-        neg_mask = (euc_dis < d).type(torch.cuda.FloatTensor)
-#         print(neg_mask)
-        pos_loss = (euc_dis - d) * pos_mask
-        neg_loss = (d - euc_dis) * neg_mask
-        loss = pos_loss.mean() + neg_loss.mean()
-        
-        return loss, delta 
         
 class ModelManager:
     
@@ -49,12 +13,13 @@ class ModelManager:
         
         Model = Backbone.__dict__[args.backbone]
         self.model = Model.from_pretrained(args.bert_model, cache_dir = "", num_labels = data.num_labels)
-        self.model = self.pre_train(args, data)
 
         os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu_id     
-        
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model.to(self.device)
+
+        self.num_train_optimization_steps = int(len(data.train_examples) / args.train_batch_size) * args.num_train_epochs
+        self.optimizer = self.get_optimizer(args)
         
         self.best_eval_score = 0
         self.delta = None
@@ -65,42 +30,26 @@ class ModelManager:
         self.predictions = None
         self.true_labels = None
 
-    def pre_train(self, args, data):
-        
-        args.pretrain_dir = os.path.join(args.type, 'methods', args.method, args.pretrain_dir)
-        manager_p = PretrainModelManager(args, data)
-        manager_p.train(args, data)
-        print('Pretraining finished...')
-        return manager_p.model
-
-    def open_classify(self, data, features):
-
-        logits = euclidean_metric(features, self.centroids)
-        probs, preds = F.softmax(logits.detach(), dim = 1).max(dim = 1)
-        euc_dis = torch.norm(features - self.centroids[preds], 2, 1).view(-1)
-        preds[euc_dis >= self.delta[preds]] = data.unseen_token_id
-
-        return preds
 
     def get_pred_label(self, data, dataloader):
         self.model.eval()
         total_labels = torch.empty(0,dtype=torch.long).to(self.device)
-        total_preds = torch.empty(0,dtype=torch.long).to(self.device)
+        total_logits = torch.empty((0, data.num_labels)).to(self.device)
 
         for batch in tqdm(dataloader, desc="Iteration"):
             batch = tuple(t.to(self.device) for t in batch)
             input_ids, input_mask, segment_ids, label_ids = batch
             with torch.set_grad_enabled(False):
-                pooled_output, _ = self.model(input_ids, segment_ids, input_mask)
-                preds = self.open_classify(data, pooled_output)
-
+                _, logits = self.model(input_ids, segment_ids, input_mask)
                 total_labels = torch.cat((total_labels,label_ids))
-                total_preds = torch.cat((total_preds, preds))
-        
+                total_logits = torch.cat((total_logits, logits))
+
+        total_probs, total_preds = F.softmax(total_logits.detach(), dim=1).max(dim = 1)
         y_pred = total_preds.cpu().numpy()
         y_true = total_labels.cpu().numpy()
+        y_prob = total_probs.cpu().numpy()
 
-        return y_true, y_pred
+        return y_true, y_pred, y_prob
 
     def evaluation(self, args, data, mode="eval"):
 
@@ -109,9 +58,7 @@ class ModelManager:
         elif mode == 'test':
             dataloader = data.test_dataloader
 
-        y_true, y_pred = self.get_pred_label(data, dataloader)
-
-     
+        y_true, y_pred, y_prob = self.get_pred_label(data, dataloader)
 
         if mode == 'eval':
             acc = round(accuracy_score(y_true, y_pred) * 100, 2)
@@ -119,7 +66,9 @@ class ModelManager:
             return acc
 
         elif mode == 'test':
-            
+
+            y_pred[y_prob < args.threshold] = data.unseen_token_id
+
             self.predictions = list([data.label_list[idx] for idx in y_pred])
             self.true_labels = list([data.label_list[idx] for idx in y_true])
             
@@ -130,14 +79,20 @@ class ModelManager:
             self.test_results = results
 
 
-    def train(self, args, data):     
-        
-        criterion_boundary = BoundaryLoss(num_labels = data.num_labels, feat_dim = args.feat_dim)
-        self.delta = F.softplus(criterion_boundary.delta)
-        delta_last = copy.deepcopy(self.delta.detach())
-        optimizer = torch.optim.Adam(criterion_boundary.parameters(), lr = args.lr_boundary)
-        self.centroids = self.centroids_cal(args, data)
+    def get_optimizer(self, args):
+        param_optimizer = list(self.model.named_parameters())
+        no_decay = ['bias', 'LayerNorm.bias', 'LayerNorm.weight']
+        optimizer_grouped_parameters = [
+            {'params': [p for n, p in param_optimizer if not any(nd in n for nd in no_decay)], 'weight_decay': 0.01},
+            {'params': [p for n, p in param_optimizer if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}
+        ]
+        optimizer = BertAdam(optimizer_grouped_parameters,
+                         lr = args.lr,
+                         warmup = args.warmup_proportion,
+                         t_total=self.num_train_optimization_steps)   
+        return optimizer
 
+    def train(self, args, data):     
         best_model = None
         wait = 0
 
@@ -150,19 +105,16 @@ class ModelManager:
                 batch = tuple(t.to(self.device) for t in batch)
                 input_ids, input_mask, segment_ids, label_ids = batch
                 with torch.set_grad_enabled(True):
-                    features = self.model(input_ids, segment_ids, input_mask, feature_ext=True)
-                    loss, self.delta = criterion_boundary(features, self.centroids, label_ids)
+                    loss = self.model(input_ids, segment_ids, input_mask, label_ids, mode='train')
 
-                    optimizer.zero_grad()
+                    self.optimizer.zero_grad()
                     loss.backward()
-                    optimizer.step()
+                    self.optimizer.step()
                     
                     tr_loss += loss.item()
                     
                     nb_tr_examples += input_ids.size(0)
                     nb_tr_steps += 1
-
-            self.delta_points.append(self.delta)
 
             loss = tr_loss / nb_tr_steps
             print('train_loss',loss)
@@ -175,38 +127,12 @@ class ModelManager:
                 best_model = copy.deepcopy(self.model)
                 wait = 0
                 self.best_eval_score = eval_score
-            else:
-                wait += 1
-                if wait >= args.wait_patient:
-                    break
+            # else:
+            #     wait += 1
+            #     if wait >= args.wait_patient:
+            #         break
         
         self.model = best_model 
-
-    def class_count(self, labels):
-        class_data_num = []
-        for l in np.unique(labels):
-            num = len(labels[labels == l])
-            class_data_num.append(num)
-        return class_data_num
-
-    def centroids_cal(self, args, data):
-        centroids = torch.zeros(data.num_labels, args.feat_dim).cuda()
-        total_labels = torch.empty(0, dtype=torch.long).to(self.device)
-
-        with torch.set_grad_enabled(False):
-            for batch in data.train_dataloader:
-                batch = tuple(t.to(self.device) for t in batch)
-                input_ids, input_mask, segment_ids, label_ids = batch
-                features = self.model(input_ids, segment_ids, input_mask, feature_ext=True)
-                total_labels = torch.cat((total_labels, label_ids))
-                for i in range(len(label_ids)):
-                    label = label_ids[i]
-                    centroids[label] += features[i]
-                
-        total_labels = total_labels.cpu().numpy()
-        centroids /= torch.tensor(self.class_count(total_labels)).float().unsqueeze(1).cuda()
-        
-        return centroids
 
     def restore_model(self, args):
         output_model_file = os.path.join(args.pretrain_dir, WEIGHTS_NAME)

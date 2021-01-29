@@ -32,6 +32,8 @@ class Param:
         
         parser.add_argument('--type', type=str, default='open_intent_discovery', help="Type for methods")
 
+        parser.add_argument("--pipe_results_path", type=str, default='pipe_results', help="the path to save results of pipeline methods")
+        
         return parser
 
     def bert(self, parser):

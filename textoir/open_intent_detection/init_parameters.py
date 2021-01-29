@@ -9,8 +9,11 @@ class Param:
         
         if args.backbone == 'bert':
             parser = self.bert(parser)
+
         if args.method == 'ADB':
             parser = self.ADB(parser)
+        elif args.method == 'MSP':
+            parser = self.MSP(parser)
 
         self.args = parser.parse_args()  
 
@@ -30,12 +33,20 @@ class Param:
 
         parser.add_argument('--type', type=str, default='open_intent_detection', help="Type for methods")
 
+        parser.add_argument("--pipe_results_path", type=str, default='pipe_results', help="the path to save results of pipeline methods")
+        
         return parser
 
     def ADB(self, parser):
         parser.add_argument("--lr_boundary", type=float, default=0.05, help="The learning rate of the decision boundary.")
         
         return parser
+
+    def MSP(self, parser):
+        parser.add_argument("--threshold", type=float, default=0.5, help="The probability threshold.")
+        
+        return parser
+
 
     def bert(self, parser):
         ##############Your Location for Pretrained Bert Model#####################

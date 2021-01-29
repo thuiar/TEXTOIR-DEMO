@@ -20,7 +20,7 @@ class PretrainModelManager:
         if n_gpu > 1:
             self.model = torch.nn.DataParallel(self.model)
         
-        self.num_train_optimization_steps = int(len(data.train_examples) / args.train_batch_size) * args.num_train_epochs
+        self.num_train_optimization_steps = int(len(data.train_examples) / args.train_batch_size + 1) * args.num_train_epochs
         
         self.optimizer = self.get_optimizer(args)
         

@@ -1,0 +1,3 @@
+ACC,ARI,NMI,Seen,Unseen,Overall,dataset,detect_method,discover_method,known_cls_ratio,labeled_ratio,seed
+31.95,17.48,50.95,29.3891,0,29.0123,banking,ADB,DeepAligned,0.75,1.0,0
+26.95,14.96,44.69,22.8469,0,22.554,banking,ADB,DeepAligned,0.75,1.0,0

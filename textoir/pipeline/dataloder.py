@@ -5,6 +5,7 @@ import torch
 import random
 import csv
 import sys
+import copy
 from pytorch_pretrained_bert.tokenization import BertTokenizer
 from torch.utils.data import (DataLoader, RandomSampler, SequentialSampler, TensorDataset)
 
@@ -15,65 +16,167 @@ def set_seed(seed):
     
 class Data:
     
-    def __init__(self, args):
+    
+    def __init__(self, args, mode='detect'):
         set_seed(args.seed)
-        max_seq_lengths = {'clinc':30, 'stackoverflow':45,'banking':55}
+        max_seq_lengths = {'oos':30, 'stackoverflow':45,'banking':55}
         args.max_seq_length = max_seq_lengths[args.dataset]
 
+        self.mode = mode
         processor = DatasetProcessor()
-        self.data_dir = os.path.join(args.data_dir, args.dataset)
-        self.all_label_list = processor.get_labels(self.data_dir)
-        self.n_known_cls = round(len(self.all_label_list) * args.known_cls_ratio)
-        self.known_label_list = list(np.random.choice(np.array(self.all_label_list), self.n_known_cls, replace=False))
         
-        self.num_labels = int(len(self.all_label_list) * args.cluster_num_factor)
+        if args.dataset == 'oos':
+            self.unseen_token = 'oos'
+        else:
+            self.unseen_token = '<UNK>'
 
-        self.train_labeled_examples, self.train_unlabeled_examples = self.get_examples(processor, args, 'train')
-        print('num_labeled_samples',len(self.train_labeled_examples))
-        print('num_unlabeled_samples',len(self.train_unlabeled_examples))
-        self.eval_examples = self.get_examples(processor, args, 'eval')
-        self.test_examples = self.get_examples(processor, args, 'test')
+        if self.mode == 'detect':
 
-        self.train_labeled_dataloader = self.get_loader(self.train_labeled_examples, args, 'train')
+            self.data_dir = os.path.join(args.data_dir, args.dataset)
 
-        self.semi_input_ids, self.semi_input_mask, self.semi_segment_ids, self.semi_label_ids = self.get_semi(self.train_labeled_examples, self.train_unlabeled_examples, args)
-        self.train_semi_dataloader = self.get_semi_loader(self.semi_input_ids, self.semi_input_mask, self.semi_segment_ids, self.semi_label_ids, args)
-
-        self.eval_dataloader = self.get_loader(self.eval_examples, args, 'eval')
-        self.test_dataloader = self.get_loader(self.test_examples, args, 'test')
+            all_label_list = processor.get_labels(self.data_dir)
+            self.n_known_cls = round(len(all_label_list) * args.known_cls_ratio)
+            self.known_label_list = list(np.random.choice(np.array(all_label_list), self.n_known_cls, replace=False))    
         
-    def get_examples(self, processor, args, mode = 'train'):
+            self.all_label_list = copy.copy(self.known_label_list)
+            for label in all_label_list:
+                if label not in self.known_label_list:
+                    self.all_label_list.append(label)
+            
+            print('len_labels',len(self.all_label_list))
+            self.label_list = self.known_label_list + [self.unseen_token]
+            self.all_label_list.append(self.unseen_token)
+
+            self.save_npy(np.array(self.all_label_list), args.pipe_results_path, 'labels.npy')
+            self.save_npy(np.array(self.known_label_list), args.pipe_results_path, 'known_labels.npy')
+
+            self.unseen_token_id = len(self.known_label_list)
+            self.num_labels = len(self.known_label_list)
+
+            self.train_labeled_examples, self.train_unlabeled_examples = self.get_examples(processor, args, 'train')
+            print('num_labeled_samples',len(self.train_labeled_examples))
+            print('num_unlabeled_samples',len(self.train_unlabeled_examples))
+            self.train_examples = self.train_labeled_examples
+
+            self.train_labeled_dataloader = self.get_loader(self.train_labeled_examples, args, self.known_label_list, 'train')
+            self.train_unlabeled_dataloader = self.get_loader(self.train_unlabeled_examples, args, self.label_list, 'train')
+            self.train_dataloader = self.train_labeled_dataloader
+            
+            self.eval_examples = self.get_examples(processor, args, 'eval')
+            self.test_examples = self.get_examples(processor, args, 'test')
+            self.test_true_examples = self.get_examples(processor, args, 'test', test_true=True)
+
+            self.eval_dataloader = self.get_loader(self.eval_examples, args, self.known_label_list ,'eval')
+            self.test_dataloader = self.get_loader(self.test_examples, args, self.label_list, 'test')
+            self.test_true_dataloader = self.get_loader(self.test_true_examples, args, self.all_label_list, 'test')
+
+        elif self.mode == 'discover':
+
+            self.data_dir = args.data_dir
+            self.all_label_list = list(self.load_npy(args.pipe_results_path, 'labels.npy'))
+            self.known_label_list = list(self.load_npy(args.pipe_results_path, 'known_labels.npy'))
+            self.n_known_cls = len(self.known_label_list)
+            self.num_labels = int((len(self.all_label_list)) * args.cluster_num_factor)
+
+            self.all_label_list.append(self.unseen_token)
+            self.train_labeled_examples, self.train_unlabeled_examples = self.get_examples(processor, args, 'train')
+            print('num_labeled_samples',len(self.train_labeled_examples))
+            print('num_unlabeled_samples',len(self.train_unlabeled_examples))
+            
+            # for example in train_labeled_examples:
+            #     print('text',example.text_a)
+            #     print('label',example.label)
+            #     if example.label in self.known_label_list:
+            #         print('yes')
+            #     else:
+            #         print('no')
+
+            self.train_labeled_dataloader = self.get_loader(self.train_labeled_examples, args, self.known_label_list, 'train')
+            self.semi_input_ids, self.semi_input_mask, self.semi_segment_ids, self.semi_label_ids = self.get_semi(self.train_labeled_examples, self.train_unlabeled_examples, args)
+            self.train_semi_dataloader = self.get_semi_loader(self.semi_input_ids, self.semi_input_mask, self.semi_segment_ids, self.semi_label_ids, args)
+
+            self.eval_examples = self.get_examples(processor, args, 'eval')
+            self.test_examples = self.get_examples(processor, args, 'test')
+
+            self.eval_dataloader = self.get_loader(self.eval_examples, args, self.known_label_list ,'eval')
+            self.test_dataloader = self.get_loader(self.test_examples, args, self.all_label_list, 'test')
+
+    def get_examples(self, processor, args, mode = 'train', test_true = False):
 
         ori_examples = processor.get_examples(self.data_dir, mode)
         
         if mode == 'train':
-            train_labels = np.array([example.label for example in ori_examples])
-            train_labeled_ids = []
-            for label in self.known_label_list:
-                num = round(len(train_labels[train_labels == label]) * args.labeled_ratio)
-                pos = list(np.where(train_labels == label)[0])                
-                train_labeled_ids.extend(random.sample(pos, num))
+            if self.mode == 'detect':
+                labeled_examples, unlabeled_examples = [], []
+                train_labels = np.array([example.label for example in ori_examples])
+                train_labeled_ids, train_unlabeled_ids = [], []
+                
+                for label in self.known_label_list:
+                    num = round(len(train_labels[train_labels == label]) * args.labeled_ratio)
+                    pos = list(np.where(train_labels == label)[0])                
+                    train_labeled_ids.extend(random.sample(pos, num))
 
-            train_labeled_examples, train_unlabeled_examples = [], []
-            for idx, example in enumerate(ori_examples):
-                if idx in train_labeled_ids:
-                    train_labeled_examples.append(example)
-                else:
-                    train_unlabeled_examples.append(example)
+                for idx, example in enumerate(ori_examples):
+                    if idx in train_labeled_ids:
+                        labeled_examples.append(example)
+                    else:
+                        example.label = self.unseen_token
+                        unlabeled_examples.append(example)
+                return labeled_examples, unlabeled_examples
 
-            return train_labeled_examples, train_unlabeled_examples
+            elif self.mode == 'discover':
+                labeled_examples, unlabeled_examples = [], []
+                for example in ori_examples:
+                    if example.label in self.known_label_list:
+                        labeled_examples.append(example)
+                    else:
+                        example.label = self.unseen_token
+                        unlabeled_examples.append(example)
+                return labeled_examples, unlabeled_examples
 
         elif mode == 'eval':
-            eval_examples = []
+            examples = []
             for example in ori_examples:
                 if example.label in self.known_label_list:
-                    eval_examples.append(example)
-            return eval_examples
+                    examples.append(example)        
+            return examples
 
         elif mode == 'test':
-            return ori_examples
+            
+            examples = []
+            if self.mode == 'detect' and not test_true:
+                for example in ori_examples:
+                    if (example.label in self.label_list) and (example.label is not self.unseen_token):
+                        examples.append(example)
+                    else:
+                        example.label = self.unseen_token
+                        examples.append(example) 
+            else:     
+                for example in ori_examples:
+                    examples.append(example)        
+                return examples  
 
-        return examples
+            return examples            
+    
+    def get_loader(self, examples, args, label_list, mode = 'train'):
+
+        tokenizer = BertTokenizer.from_pretrained(args.bert_model, do_lower_case=True)    
+        features = convert_examples_to_features(examples, label_list, args.max_seq_length, tokenizer)
+
+        input_ids = torch.tensor([f.input_ids for f in features], dtype=torch.long)
+        input_mask = torch.tensor([f.input_mask for f in features], dtype=torch.long)
+        segment_ids = torch.tensor([f.segment_ids for f in features], dtype=torch.long)
+        label_ids = torch.tensor([f.label_id for f in features], dtype=torch.long)
+        datatensor = TensorDataset(input_ids, input_mask, segment_ids, label_ids)
+        
+        if mode == 'train':
+            sampler = RandomSampler(datatensor)
+            dataloader = DataLoader(datatensor, sampler=sampler, batch_size = args.train_batch_size)    
+        elif mode == 'eval' or mode == 'test':
+            sampler = SequentialSampler(datatensor)
+            dataloader = DataLoader(datatensor, sampler=sampler, batch_size = args.eval_batch_size) 
+        
+        return dataloader
 
     def get_semi(self, labeled_examples, unlabeled_examples, args):
         
@@ -95,39 +198,25 @@ class Data:
         semi_input_mask = torch.cat([labeled_input_mask, unlabeled_input_mask])
         semi_segment_ids = torch.cat([labeled_segment_ids, unlabeled_segment_ids])
         semi_label_ids = torch.cat([labeled_label_ids, unlabeled_label_ids])
+
         return semi_input_ids, semi_input_mask, semi_segment_ids, semi_label_ids
 
     def get_semi_loader(self, semi_input_ids, semi_input_mask, semi_segment_ids, semi_label_ids, args):
+
         semi_data = TensorDataset(semi_input_ids, semi_input_mask, semi_segment_ids, semi_label_ids)
         semi_sampler = SequentialSampler(semi_data)
         semi_dataloader = DataLoader(semi_data, sampler=semi_sampler, batch_size = args.train_batch_size) 
 
         return semi_dataloader
 
-
-    def get_loader(self, examples, args, mode = 'train'):
-        tokenizer = BertTokenizer.from_pretrained(args.bert_model, do_lower_case=True)    
-        
-        if mode == 'train' or mode == 'eval':
-            features = convert_examples_to_features(examples, self.known_label_list, args.max_seq_length, tokenizer)
-        elif mode == 'test':
-            features = convert_examples_to_features(examples, self.all_label_list, args.max_seq_length, tokenizer)
-
-        input_ids = torch.tensor([f.input_ids for f in features], dtype=torch.long)
-        input_mask = torch.tensor([f.input_mask for f in features], dtype=torch.long)
-        segment_ids = torch.tensor([f.segment_ids for f in features], dtype=torch.long)
-        label_ids = torch.tensor([f.label_id for f in features], dtype=torch.long)
-        data = TensorDataset(input_ids, input_mask, segment_ids, label_ids)
-        
-        if mode == 'train':
-            sampler = RandomSampler(data)
-            dataloader = DataLoader(data, sampler=sampler, batch_size = args.train_batch_size)    
-        elif mode == 'eval' or mode == 'test':
-            sampler = SequentialSampler(data)
-            dataloader = DataLoader(data, sampler=sampler, batch_size = args.eval_batch_size) 
-        
-        return dataloader
-
+    def save_npy(self, npy_file, path, file_name):
+        npy_path = os.path.join(path, file_name)
+        np.save(npy_path, npy_file)
+    
+    def load_npy(self, path, file_name):
+        npy_path = os.path.join(path, file_name)
+        npy_file = np.load(npy_path)
+        return npy_file
 
 class InputExample(object):
     """A single training/test example for simple sequence classification."""
@@ -162,6 +251,19 @@ class InputFeatures(object):
 
 class DataProcessor(object):
     """Base class for data converters for sequence classification data sets."""
+
+    def get_train_examples(self, data_dir):
+        """Gets a collection of `InputExample`s for the train set."""
+        raise NotImplementedError()
+
+    def get_dev_examples(self, data_dir):
+        """Gets a collection of `InputExample`s for the dev set."""
+        raise NotImplementedError()
+
+    def get_labels(self):
+        """Gets the list of labels for this data set."""
+        raise NotImplementedError()
+
     @classmethod
     def _read_tsv(cls, input_file, quotechar=None):
         """Reads a tab separated value file."""
@@ -186,15 +288,14 @@ class DatasetProcessor(DataProcessor):
         elif mode == 'test':
             return self._create_examples(
                 self._read_tsv(os.path.join(data_dir, "test.tsv")), "test")
-        elif mode == 'pipe':
-            return self._create_examples(
-                self._read_tsv(os.path.join(data_dir, "predictions.tsv")), "pipe")
 
     def get_labels(self, data_dir):
         """See base class."""
-        import pandas as pd
-        test = pd.read_csv(os.path.join(data_dir, "train.tsv"), sep="\t")
-        labels = np.unique(np.array(test['label']))
+        if os.path.exists(os.path.join(data_dir, 'labels.npy')):
+            labels = np.load(os.path.join(data_dir, 'labels.npy'))
+        else:
+            test = pd.read_csv(os.path.join(data_dir, "test.tsv"), sep="\t")
+            labels = np.unique(np.array(test['label']))
             
         return labels
 
@@ -209,15 +310,9 @@ class DatasetProcessor(DataProcessor):
             guid = "%s-%s" % (set_type, i)
             text_a = line[0]
             label = line[1]
-            
-            if set_type == 'pipe':
-                if label == '<UNK>':
-                    truth = line[2]
-                    examples.append(
-                        InputExample(guid=guid, text_a=text_a, text_b=None, label=truth))        
-            else:
-                examples.append(
-                    InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
+
+            examples.append(
+                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
         return examples
 
 def convert_examples_to_features(examples, label_list, max_seq_length, tokenizer):

@@ -8,9 +8,9 @@ def run(args):
     if test:
         print("Notice: ****This is test mode****")
         args.dataset = 'banking'
-        args.labeled_ratio = 0.1
+        args.labeled_ratio = 1.0
         args.known_cls_ratio = 0.25
-        args.num_train_epochs = 1
+        args.num_train_epochs = 100
 
     print('Data Preparation...')
     data = Data(args)
@@ -26,9 +26,11 @@ def run(args):
     manager.evaluation(args, data, mode='test')
     print('Evaluation finished...')
 
+    manager.save_results(args)
+    
     debug(data, manager, args)
     print('Open Intent Detection Finished...')
-
+    
 if __name__ == '__main__':
     print('Open Intent Detection Begin...')
 

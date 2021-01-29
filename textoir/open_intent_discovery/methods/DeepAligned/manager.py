@@ -101,30 +101,35 @@ class ModelManager:
                          t_total = self.num_train_optimization_steps)   
         return optimizer
 
-    def evaluation(self, args, data):
+    def evaluation(self, args, data, show=True):
 
         feats, labels = self.get_features_labels(data.test_dataloader, self.model, args)
         feats = feats.cpu().numpy()
+
         km = KMeans(n_clusters = self.num_labels).fit(feats)
 
         y_pred = km.labels_
         y_true = labels.cpu().numpy()
 
         results = clustering_score(y_true, y_pred)
-        print('results',results)
         
         ind, _ = hungray_aligment(y_true, y_pred)
         map_ = {i[0]:i[1] for i in ind}
         y_pred = np.array([map_[idx] for idx in y_pred])
-
+        
         self.predictions = list([data.all_label_list[idx] for idx in y_pred])
         self.true_labels = list([data.all_label_list[idx] for idx in y_true])
         
-        cm = confusion_matrix(y_true,y_pred)   
-        print('confusion matrix',cm)
+        cm = confusion_matrix(y_true,y_pred) 
+        
+        if show:
+            print('results',results)
+            print('y_pred',y_pred)
+            print('y_true',y_true)
+            print('confusion matrix',cm)
 
         self.test_results = results
-        self.save_results(args)
+
 
     def alignment(self, km, args):
 
@@ -253,5 +258,5 @@ class ModelManager:
         data_diagram = pd.read_csv(results_path)
         
         print('test_results', data_diagram)
-
+        
     

@@ -49,13 +49,22 @@ class Data:
         
         examples = []
         if mode == 'train':
-            for example in ori_examples:
-                if (example.label in self.known_label_list) and (np.random.uniform(0, 1) <= args.labeled_ratio):
+            train_labels = np.array([example.label for example in ori_examples])
+            train_labeled_ids = []
+            for label in self.known_label_list:
+                num = round(len(train_labels[train_labels == label]) * args.labeled_ratio)
+                pos = list(np.where(train_labels == label)[0])                
+                train_labeled_ids.extend(random.sample(pos, num))
+
+            for idx, example in enumerate(ori_examples):
+                if idx in train_labeled_ids:
                     examples.append(example)
+        
         elif mode == 'eval':
             for example in ori_examples:
                 if (example.label in self.known_label_list):
                     examples.append(example)
+
         elif mode == 'test':
             for example in ori_examples:
                 if (example.label in self.label_list) and (example.label is not self.unseen_token):
@@ -63,6 +72,7 @@ class Data:
                 else:
                     example.label = self.unseen_token
                     examples.append(example)
+                    
         return examples
     
     def get_loader(self, examples, args, mode = 'train'):
