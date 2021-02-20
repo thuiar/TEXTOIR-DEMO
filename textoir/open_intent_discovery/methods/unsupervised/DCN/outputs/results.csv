@@ -1,0 +1,2 @@
+ACC,ARI,NMI,dataset,method,known_cls_ratio,labeled_ratio,cluster_num_factor,seed,K
+11.99,0.72,37.17,banking,DCN,0.25,0.1,1.0,0,77

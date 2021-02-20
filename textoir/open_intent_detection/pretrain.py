@@ -60,7 +60,8 @@ class PretrainModelManager:
                 batch = tuple(t.to(self.device) for t in batch)
                 input_ids, input_mask, segment_ids, label_ids = batch
                 with torch.set_grad_enabled(True):
-                    loss = self.model(input_ids, segment_ids, input_mask, label_ids, mode = "train")
+                    loss_fct = nn.CrossEntropyLoss()
+                    loss = self.model(input_ids, segment_ids, input_mask, label_ids, mode = "train", loss_fct=loss_fct)
                     self.optimizer.zero_grad()
                     loss.backward()
                     self.optimizer.step()

@@ -10,11 +10,17 @@ def run(args):
         args.dataset = 'banking'
         args.labeled_ratio = 0.1
         args.known_cls_ratio = 0.25
-        args.num_train_epochs = 100
+        args.num_train_epochs = 1
 
     print('Data Preparation...')
-    data = Data(args)
-    method = importlib.import_module('open_intent_discovery.methods.' + args.method + '.manager')
+    if args.setting == 'unsupervised':
+        data = Unsup_Data(args)
+        method = importlib.import_module('open_intent_discovery.methods.' + args.setting + '.' + args.method + '.manager')
+
+    elif args.setting == 'semi_supervised':
+        data = Data(args)
+        method = importlib.import_module('open_intent_discovery.methods.' + args.setting + '.' + args.method + '.manager')
+
     manager = method.ModelManager(args, data)   
     
 
@@ -23,12 +29,12 @@ def run(args):
     print('Training Finished...')
 
     print('Evaluation begin...')
-    manager.evaluation(args, data)
+    manager.evaluation(data, args)
     print('Evaluation finished...')
 
     manager.save_results(args)
     
-    debug(data, manager, args)
+    # debug(data, manager, args)
     print('Open Intent Discovery Finished...')
 
 if __name__ == '__main__':

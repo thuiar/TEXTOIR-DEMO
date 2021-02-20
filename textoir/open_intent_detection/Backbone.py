@@ -1,7 +1,13 @@
-from pytorch_pretrained_bert.modeling import BertPreTrainedModel, BertModel
-from torch import nn
+from open_intent_detection.utils import *
 
-        
+def l2_norm(input,axis=1):
+    norm = torch.norm(input,2,axis,True)
+    output = torch.div(input, norm)
+    return output
+    
+class L2_normalization(nn.Module):
+    def forward(self, input):
+        return l2_norm(input)
 
 class bert(BertPreTrainedModel):
     def __init__(self,config,num_labels):
@@ -15,7 +21,7 @@ class bert(BertPreTrainedModel):
         self.apply(self.init_bert_weights)
 
     def forward(self, input_ids = None, token_type_ids = None, attention_mask=None , labels = None,
-                feature_ext = False, mode = None, centroids = None):
+                feature_ext = False, mode = None, loss_fct = None):
 
         encoded_layer_12, pooled_output = self.bert(input_ids, token_type_ids, attention_mask, output_all_encoded_layers = True)
         pooled_output = self.dense(encoded_layer_12[-1].mean(dim = 1))
@@ -23,11 +29,12 @@ class bert(BertPreTrainedModel):
         pooled_output = self.dropout(pooled_output)
         logits = self.classifier(pooled_output)
         
+        
         if feature_ext:
             return pooled_output
         else:
             if mode == 'train':
-                loss = nn.CrossEntropyLoss()(logits,labels)
+                loss = loss_fct(logits.view(-1, self.num_labels), labels.view(-1))
                 return loss
             else:
                 return pooled_output, logits

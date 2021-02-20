@@ -13,6 +13,8 @@ class ModelManager:
         
         Model = Backbone.__dict__[args.backbone]
         self.model = Model.from_pretrained(args.bert_model, cache_dir = "", num_labels = data.num_labels)
+        if args.freeze_bert_parameters:
+            self.freeze_bert_parameters(self.model)
 
         os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu_id     
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -22,9 +24,6 @@ class ModelManager:
         self.optimizer = self.get_optimizer(args)
         
         self.best_eval_score = 0
-        self.delta = None
-        self.delta_points = []
-        self.centroids = None
 
         self.test_results = None
         self.predictions = None
@@ -54,18 +53,15 @@ class ModelManager:
     def evaluation(self, args, data, mode="eval"):
 
         if mode == 'eval':
-            dataloader = data.eval_dataloader
-        elif mode == 'test':
-            dataloader = data.test_dataloader
+            
+            y_true, y_pred, y_prob = self.get_pred_label(data, data.eval_dataloader)
 
-        y_true, y_pred, y_prob = self.get_pred_label(data, dataloader)
-
-        if mode == 'eval':
             acc = round(accuracy_score(y_true, y_pred) * 100, 2)
-            # close_pro = round((len(y_pred[y_pred != -1]) / len(y_pred))*100, 2)
             return acc
 
         elif mode == 'test':
+
+            y_true, y_pred, y_prob = self.get_pred_label(data, data.test_dataloader)
 
             y_pred[y_prob < args.threshold] = data.unseen_token_id
 
@@ -105,7 +101,8 @@ class ModelManager:
                 batch = tuple(t.to(self.device) for t in batch)
                 input_ids, input_mask, segment_ids, label_ids = batch
                 with torch.set_grad_enabled(True):
-                    loss = self.model(input_ids, segment_ids, input_mask, label_ids, mode='train')
+                    loss_fct = nn.CrossEntropyLoss()
+                    loss = self.model(input_ids, segment_ids, input_mask, label_ids, mode='train', loss_fct=loss_fct)
 
                     self.optimizer.zero_grad()
                     loss.backward()
@@ -127,13 +124,20 @@ class ModelManager:
                 best_model = copy.deepcopy(self.model)
                 wait = 0
                 self.best_eval_score = eval_score
-            # else:
-            #     wait += 1
-            #     if wait >= args.wait_patient:
-            #         break
+            else:
+                wait += 1
+                if wait >= args.wait_patient:
+                    break
         
         self.model = best_model 
+        self.save_model(args)
 
+    def freeze_bert_parameters(self, model):
+        for name, param in model.bert.named_parameters():  
+            param.requires_grad = False
+            if "encoder.layer.11" in name or "pooler" in name:
+                param.requires_grad = True
+        
     def restore_model(self, args):
         output_model_file = os.path.join(args.pretrain_dir, WEIGHTS_NAME)
         self.model.load_state_dict(torch.load(output_model_file))
@@ -171,8 +175,19 @@ class ModelManager:
         
         print('test_results', data_diagram)
 
-     
+    def save_model(self, args):
+        args.pretrain_dir = os.path.join(args.type, 'methods', args.method, args.pretrain_dir)
+        if not os.path.exists(args.pretrain_dir):
+            os.makedirs(args.pretrain_dir)
+        self.save_model = self.model.module if hasattr(self.model, 'module') else self.model  
+        model_file = os.path.join(args.pretrain_dir, WEIGHTS_NAME)
+        model_config_file = os.path.join(args.pretrain_dir, CONFIG_NAME)
+        torch.save(self.save_model.state_dict(), model_file)
+        with open(model_config_file, "w") as f:
+            f.write(self.save_model.config.to_json_string())  
 
+
+    
 
 
 

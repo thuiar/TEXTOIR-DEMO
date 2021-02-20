@@ -1,0 +1,7 @@
+Seen,Unseen,Overall,Acc,dataset,method,known_cls_ratio,labeled_ratio,seed
+61.5314,63.5171,61.6307,58.96,banking,DeepUnk,0.25,1.0,1
+61.3501,64.4058,61.5029,59.45,banking,DeepUnk,0.25,1.0,0
+61.3501,64.4058,61.5029,59.45,banking,DeepUnk,0.25,1.0,0
+66.6117,82.5221,67.0196,75.63,oos,DeepUnk,0.25,1.0,0
+40.4043,1.5422,33.9273,24.15,stackoverflow,DeepUnk,0.25,1.0,0
+78.3217,94.7688,78.7434,91.51,oos,DeepUnk,0.25,1.0,0

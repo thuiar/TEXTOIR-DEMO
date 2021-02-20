@@ -105,21 +105,17 @@ class ModelManager:
     def evaluation(self, args, data, mode="eval"):
 
         if mode == 'eval':
-            dataloader = data.eval_dataloader
-        elif mode == 'test':
-            dataloader = data.test_dataloader
+            
+            y_true, y_pred = self.get_pred_label(data, data.eval_dataloader)
 
-        y_true, y_pred = self.get_pred_label(data, dataloader)
-
-     
-
-        if mode == 'eval':
             acc = round(accuracy_score(y_true, y_pred) * 100, 2)
             # close_pro = round((len(y_pred[y_pred != -1]) / len(y_pred))*100, 2)
             return acc
 
         elif mode == 'test':
             
+            y_true, y_pred = self.get_pred_label(data, data.test_dataloader)
+
             self.predictions = list([data.label_list[idx] for idx in y_pred])
             self.true_labels = list([data.label_list[idx] for idx in y_true])
             

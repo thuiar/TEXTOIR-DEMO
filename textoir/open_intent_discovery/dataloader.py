@@ -1,18 +1,105 @@
-import os
-import numpy as np
-import pandas as pd
-import torch
-import random
-import csv
-import sys
-from pytorch_pretrained_bert.tokenization import BertTokenizer
-from torch.utils.data import (DataLoader, RandomSampler, SequentialSampler, TensorDataset)
+from open_intent_discovery.utils import *
+from open_intent_discovery.Backbone import *
 
 def set_seed(seed):
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
-    
+
+class Unsup_Data:
+
+    def __init__(self, args):
+        
+
+        set_seed(args.seed)
+        max_seq_lengths = {'clinc':30, 'stackoverflow':45,'banking':55}
+        args.max_seq_length = max_seq_lengths[args.dataset]
+
+        self.data_dir = os.path.join(args.data_dir, args.dataset)
+        
+        self.all_data = self.read_csv(args)
+        self.all_data['words'] = self.all_data['text'].apply(word_tokenize)
+        self.le = LabelEncoder() 
+        
+        self.all_data['y_true'] = self.le.fit_transform(self.all_data['label'])
+        self.all_data['text'] = self.all_data['words'].apply(lambda l: " ".join(l))
+        self.texts = self.all_data['words'].tolist()
+
+        tk = Tokenizer(num_words = args.max_num_words, oov_token="<UNK>", filters='!"#$%&()*+-/:;<=>@[\]^_`{|}~') 
+        tk.fit_on_texts(self.texts)
+
+        tk.word_index = {e:i for e,i in tk.word_index.items() if i <= args.max_num_words} # <= because tokenizer is 1 indexed
+        tk.word_index[tk.oov_token] = args.max_num_words + 1
+
+        self.word_index = tk.word_index
+        self.index_word = {v: k for k, v in self.word_index.items()}
+        self.max_features = min(args.max_num_words + 1, len(self.word_index)) + 1
+        
+        self.sequences = tk.texts_to_sequences(self.texts)
+        self.sequences_pad = pad_sequences(self.sequences, maxlen = args.max_seq_length, padding='post', truncating='post')
+
+        self.X_train, self.X_test, self.y_train, self.y_test, self.df_train, self.df_test = self.get_train_test(args.seed)
+        self.num_labels = int(len(set(self.y_train)) * args.cluster_num_factor)
+
+    def get_train_test(self, seed):
+
+        df_train, df_test = train_test_split(self.all_data, test_size=0.1, stratify=self.all_data.label, shuffle=True, random_state=seed)
+        X_train = self.sequences_pad[df_train.index]
+        X_test = self.sequences_pad[df_test.index]
+        y_train = df_train.y_true.values
+        y_test = df_test.y_true.values
+
+        return X_train, X_test, y_train, y_test, df_train, df_test
+
+    def get_glove(self, args, X_train, X_test):
+        
+        print("Building GloVe (D=300)...")
+        
+        embedding_matrix, embeddings_index = get_glove(args.glove_model, self.max_features, self.word_index)
+        gev = GloVeEmbeddingVectorizer(embedding_matrix, self.index_word, X_train)
+        emb_train = gev.transform(X_train, method='mean')
+        emb_test = gev.transform(X_test, method='mean')
+
+        return emb_train, emb_test
+
+    def get_tfidf(self, args):
+        vec_tfidf = TfidfVectorizer(max_features=args.feat_dim)
+        tfidf_train = vec_tfidf.fit_transform(self.df_train['text'].tolist()).todense()
+        tfidf_test = vec_tfidf.transform(self.df_test['text'].tolist()).todense()
+
+        return tfidf_train, tfidf_test
+
+    def get_sae(self, args, sae_emb, tfidf_train, tfidf_test):
+
+        print("Training: SAE(emb)")
+        
+        sae_emb.fit(tfidf_train, tfidf_train, epochs=1, batch_size=4096, shuffle=True, 
+                    validation_data=(tfidf_test, tfidf_test), verbose=1)
+        # sae_emb.save_weights('data/SAE_' + dataset + '_' + seed + '.h5')
+
+        emb_train_sae = get_encoded(sae_emb, [tfidf_train], 3)
+        emb_test_sae = get_encoded(sae_emb, [tfidf_test], 3)
+
+        return emb_train_sae, emb_test_sae
+
+    def read_csv(self, args):
+        train = pd.read_csv(os.path.join(self.data_dir, 'train.tsv'), sep = '\t')
+        dev = pd.read_csv(os.path.join(self.data_dir, 'dev.tsv'), sep = '\t')
+        test = pd.read_csv(os.path.join(self.data_dir, 'test.tsv'), sep = '\t')
+
+        l_train = [[x,y] for x,y in zip(train['text'], train['label'])]
+        l_dev = [[x,y] for x,y in zip(dev['text'], dev['label'])]
+        l_test = [[x,y] for x,y in zip(test['text'], test['label'])]
+        
+        l_all = l_train + l_dev + l_test
+        df_all = pd.DataFrame(l_all, columns=['text', 'label'])
+
+        set_allow_growth(args.gpu_id)
+
+        return df_all
+
+
+
 class Data:
     
     def __init__(self, args):
@@ -36,9 +123,10 @@ class Data:
 
         self.train_labeled_dataloader = self.get_loader(self.train_labeled_examples, args, 'train')
 
-        self.semi_input_ids, self.semi_input_mask, self.semi_segment_ids, self.semi_label_ids = self.get_semi(self.train_labeled_examples, self.train_unlabeled_examples, args)
-        self.train_semi_dataloader = self.get_semi_loader(self.semi_input_ids, self.semi_input_mask, self.semi_segment_ids, self.semi_label_ids, args)
-
+        self.input_ids, self.input_mask, self.segment_ids, self.label_ids = self.get_semi(self.train_labeled_examples, self.train_unlabeled_examples, args)
+        self.train_semi_dataloader = self.get_semi_loader(self.input_ids, self.input_mask, self.segment_ids, self.label_ids, args)
+        
+        self.train_dataloader = self.train_semi_dataloader
         self.eval_dataloader = self.get_loader(self.eval_examples, args, 'eval')
         self.test_dataloader = self.get_loader(self.test_examples, args, 'test')
         
@@ -317,3 +405,5 @@ def _truncate_seq_pair(tokens_a, tokens_b, max_length):
             tokens_a.pop(0)  # For dialogue context
         else:
             tokens_b.pop()
+
+
