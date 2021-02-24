@@ -121,7 +121,8 @@ class Data:
         self.eval_examples = self.get_examples(processor, args, 'eval')
         self.test_examples = self.get_examples(processor, args, 'test')
 
-        self.train_labeled_dataloader = self.get_loader(self.train_labeled_examples, args, 'train')
+        self.train_labeled_dataloader = self.get_loader(self.train_labeled_examples, args, 'train_l')
+        self.train_unlabeled_dataloader = self.get_loader(self.train_unlabeled_examples, args, 'train_u')
 
         self.input_ids, self.input_mask, self.segment_ids, self.label_ids = self.get_semi(self.train_labeled_examples, self.train_unlabeled_examples, args)
         self.train_semi_dataloader = self.get_semi_loader(self.input_ids, self.input_mask, self.segment_ids, self.label_ids, args)
@@ -193,21 +194,22 @@ class Data:
         return semi_dataloader
 
 
-    def get_loader(self, examples, args, mode = 'train'):
+    def get_loader(self, examples, args, mode = None):
         tokenizer = BertTokenizer.from_pretrained(args.bert_model, do_lower_case=True)    
         
-        if mode == 'train' or mode == 'eval':
+        if mode == 'train_l' or mode == 'eval':
             features = convert_examples_to_features(examples, self.known_label_list, args.max_seq_length, tokenizer)
-        elif mode == 'test':
+        elif mode == 'test' or mode == 'train_u':
             features = convert_examples_to_features(examples, self.all_label_list, args.max_seq_length, tokenizer)
 
         input_ids = torch.tensor([f.input_ids for f in features], dtype=torch.long)
         input_mask = torch.tensor([f.input_mask for f in features], dtype=torch.long)
         segment_ids = torch.tensor([f.segment_ids for f in features], dtype=torch.long)
+    
         label_ids = torch.tensor([f.label_id for f in features], dtype=torch.long)
         data = TensorDataset(input_ids, input_mask, segment_ids, label_ids)
         
-        if mode == 'train':
+        if mode == 'train_l' or mode == 'train_u':
             sampler = RandomSampler(data)
             dataloader = DataLoader(data, sampler=sampler, batch_size = args.train_batch_size)    
         elif mode == 'eval' or mode == 'test':

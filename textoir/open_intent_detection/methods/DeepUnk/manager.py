@@ -77,7 +77,7 @@ class ModelManager:
 
     def classify_lof(self, args, data, preds, feat_train, feat_pred):
         
-        lof = LocalOutlierFactor(contamination = 0.05,novelty=True, n_jobs=-1)
+        lof = LocalOutlierFactor(contamination = 0.05,  novelty=True, n_jobs=-1)
         lof.fit(feat_train)
         y_pred_lof = pd.Series(lof.predict(feat_pred))
         preds[y_pred_lof[y_pred_lof == -1].index] = data.unseen_token_id

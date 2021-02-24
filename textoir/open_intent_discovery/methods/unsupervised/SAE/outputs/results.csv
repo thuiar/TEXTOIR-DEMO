@@ -1,4 +1,0 @@
-ACC,ARI,NMI,dataset,method,known_cls_ratio,labeled_ratio,cluster_num_factor,seed,K
-11.61,0.69,36.39,banking,SAE,0.25,0.1,1.0,0,77
-11.99,0.66,37.62,banking,SAE,0.25,0.1,1.0,0,77
-12.83,1.03,38.29,banking,SAE,0.25,0.1,1.0,0,77

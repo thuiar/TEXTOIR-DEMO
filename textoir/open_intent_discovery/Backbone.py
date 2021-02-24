@@ -1,55 +1,27 @@
 from .utils import *
 
-class bert(BertPreTrainedModel):
-    def __init__(self,config,num_labels):
-        super(bert, self).__init__(config)
-        self.num_labels = num_labels
-        self.bert = BertModel(config)
-        self.dense = nn.Linear(config.hidden_size, config.hidden_size)
-        self.activation = nn.ReLU()
-        self.dropout = nn.Dropout(config.hidden_dropout_prob)
-        self.classifier = nn.Linear(config.hidden_size,num_labels)
-        self.apply(self.init_bert_weights)
-
-    def forward(self, input_ids = None, token_type_ids = None, attention_mask=None , labels = None,
-                feature_ext = False, mode = None, centroids = None, loss_fct=None):
-
-        encoded_layer_12, pooled_output = self.bert(input_ids, token_type_ids, attention_mask, output_all_encoded_layers = False)
-        pooled_output = self.dense(encoded_layer_12.mean(dim = 1))
-        pooled_output = self.activation(pooled_output)
-        pooled_output = self.dropout(pooled_output)
-        logits = self.classifier(pooled_output)
-        
-        if feature_ext:
-            return pooled_output
-        else:
-            if mode == 'train':
-                loss = nn.CrossEntropyLoss()(logits,labels)
-                return loss
-            else:
-                return pooled_output, logits
-
 ###################################################################################################
 def get_glove(base_dir, MAX_FEATURES, word_index):
     EMBEDDING_DIM = 300
     EMBEDDING_FILE = os.path.join(base_dir, 'glove.6B.' + str(EMBEDDING_DIM) +'d.txt')
     def get_coefs(word,*arr): return word, np.asarray(arr, dtype='float32')
-    #将词嵌入读出来，去掉换行符，按空格分开形成列表，再把整体变成一个字典，一个词对应一个向量
+    #read token embedding and process, form a dict (one word -> one vector)
     embeddings_index = dict(get_coefs(*o.strip().split()) for o in open(EMBEDDING_FILE,encoding="utf-8"))
-    #取出字典的value值变成一个列表
+    #get value from dict
     all_embs = np.stack(embeddings_index.values())
-    #计算所有值的平均值和标准差
+    #cal mean and std
     emb_mean, emb_std = all_embs.mean(), all_embs.std()
-    """按照词向量均值和标准差拟合正态分布
+    """Guassian distribution
     """
-    # embedding_matrix的长度多一行，不存在embedding的词的值都为0 (pad)  10002,300
+    # pad zero to none 10002, 300
     embedding_matrix = np.random.normal(emb_mean, emb_std, (MAX_FEATURES+1, EMBEDDING_DIM))
     #
     for word, i in word_index.items():
         if i >= MAX_FEATURES: continue
         embedding_vector = embeddings_index.get(word)
         if embedding_vector is not None: embedding_matrix[i] = embedding_vector
-    #embedding_matrix对应前MAX_FEATURES个词，每个词的词向量，如果是未登录词就是随机初始化的
+
+    #embedding_matrix (MAX_FEATURES, ) random initialization for unmarked token
     return embedding_matrix, embeddings_index
     
 class GloVeEmbeddingVectorizer(object):
@@ -192,6 +164,36 @@ class ClusteringLayer(Layer):
         config = {'n_clusters': self.n_clusters}
         base_config = super(ClusteringLayer, self).get_config()
         return dict(list(base_config.items()) + list(config.items()))
+
+################################################################
+class bert(BertPreTrainedModel):
+    def __init__(self,config,num_labels):
+        super(bert, self).__init__(config)
+        self.num_labels = num_labels
+        self.bert = BertModel(config)
+        self.dense = nn.Linear(config.hidden_size, config.hidden_size)
+        self.activation = nn.ReLU()
+        self.dropout = nn.Dropout(config.hidden_dropout_prob)
+        self.classifier = nn.Linear(config.hidden_size,num_labels)
+        self.apply(self.init_bert_weights)
+
+    def forward(self, input_ids = None, token_type_ids = None, attention_mask=None , labels = None,
+                feature_ext = False, mode = None, centroids = None, loss_fct=None):
+
+        encoded_layer_12, pooled_output = self.bert(input_ids, token_type_ids, attention_mask, output_all_encoded_layers = False)
+        pooled_output = self.dense(encoded_layer_12.mean(dim = 1))
+        pooled_output = self.activation(pooled_output)
+        pooled_output = self.dropout(pooled_output)
+        logits = self.classifier(pooled_output)
+        
+        if feature_ext:
+            return pooled_output
+        else:
+            if mode == 'train':
+                loss = loss_fct(logits,labels)
+                return loss
+            else:
+                return pooled_output, logits
 
 ################################################################
 def PairEnum(x,mask=None):
@@ -375,3 +377,98 @@ class MCLForBert(BertPreTrainedModel):
         else:
             pred_labels = torch.argmax(p,dim=1)
             return pred_labels
+
+#######################################################################################
+class DTCForBert(BertPreTrainedModel):
+    def __init__(self, config, num_labels):
+        super(DTCForBert, self).__init__(config)
+        self.num_labels = num_labels
+        self.bert = BertModel(config)
+
+        #train
+        self.dense = nn.Linear(config.hidden_size, config.hidden_size)
+        self.activation = nn.ReLU()
+        self.dropout = nn.Dropout(config.hidden_dropout_prob)
+        self.classifier = nn.Linear(config.hidden_size,num_labels)
+        self.apply(self.init_bert_weights)
+        
+        #finetune
+        self.alpha = 1.0
+        self.cluster_layer = Parameter(torch.Tensor(num_labels, num_labels))
+
+    def forward(self, input_ids = None, token_type_ids = None, attention_mask=None , labels = None,
+                feature_ext = False, mode = None, centroids = None, loss_fct=None):
+
+        encoded_layer_12, pooled_output = self.bert(input_ids, token_type_ids, attention_mask, output_all_encoded_layers = False)
+        pooled_output = self.dense(encoded_layer_12.mean(dim = 1))
+        pooled_output = self.activation(pooled_output)
+        pooled_output = self.dropout(pooled_output)
+        logits = self.classifier(pooled_output)
+        
+        if feature_ext:
+            return pooled_output
+        else:
+            q = 1.0 / (1.0 + torch.sum(torch.pow(logits.unsqueeze(1) - self.cluster_layer, 2), 2) / self.alpha)
+            q = q.pow((self.alpha + 1.0) / 2.0)
+            q = (q.t() / torch.sum(q, 1)).t() # Make sure each sample's n_values add up to 1.
+            return logits, q       
+    
+    #########################CDAC+##########################
+class BertForConstrainClustering(BertPreTrainedModel):
+    def __init__(self, config, num_labels):
+        super(BertForConstrainClustering, self).__init__(config)
+        self.num_labels = num_labels
+        self.bert = BertModel(config)
+        
+        # train
+        self.dense = nn.Linear(config.hidden_size, config.hidden_size) # Pooling-mean
+        self.activation = nn.Tanh()
+        self.dropout = nn.Dropout(config.hidden_dropout_prob)
+        self.classifier = nn.Linear(config.hidden_size, num_labels)
+        self.apply(self.init_bert_weights)
+        
+        # finetune
+        self.alpha = 1.0
+        self.cluster_layer = Parameter(torch.Tensor(num_labels, num_labels))
+        torch.nn.init.xavier_normal_(self.cluster_layer.data)
+
+    def forward(self, input_ids, token_type_ids=None, attention_mask=None, 
+                u_threshold=None, l_threshold=None, mode=None, labels=None, semi=False):
+        eps = 1e-10
+        encoded_layer_12, pooled_output = self.bert(input_ids, token_type_ids, attention_mask, output_all_encoded_layers=False)
+        pooled_output = self.dense(encoded_layer_12.mean(dim=1)) # Pooling-mean
+        pooled_output = self.activation(pooled_output)
+        pooled_output = self.dropout(pooled_output)
+        logits = self.classifier(pooled_output)
+        if mode=='train':
+            logits_norm = F.normalize(logits, p=2, dim=1)
+            sim_mat = torch.matmul(logits_norm, logits_norm.transpose(0, -1))
+            label_mat = labels.view(-1,1) - labels.view(1,-1)    
+            label_mat[label_mat!=0] = -1 # dis-pair: label=-1
+            label_mat[label_mat==0] = 1  # sim-pair: label=1
+            label_mat[label_mat==-1] = 0 # dis-pair: label=0
+            if not semi:
+                pos_mask = (label_mat > u_threshold).type(torch.cuda.FloatTensor)
+                neg_mask = (label_mat < l_threshold).type(torch.cuda.FloatTensor)
+                pos_entropy = -torch.log(torch.clamp(sim_mat, eps, 1.0)) * pos_mask
+                neg_entropy = -torch.log(torch.clamp(1-sim_mat, eps, 1.0)) * neg_mask
+                loss = (pos_entropy.mean() + neg_entropy.mean())*5
+                return loss
+            else:
+                label_mat[labels==-1, :] = -1
+                label_mat[:, labels==-1] = -1
+                label_mat[label_mat==0] = 0
+                label_mat[label_mat==1] = 1
+                pos_mask = (sim_mat > u_threshold).type(torch.cuda.FloatTensor)
+                neg_mask = (sim_mat < l_threshold).type(torch.cuda.FloatTensor)
+                pos_mask[label_mat==1] = 1
+                neg_mask[label_mat==0] = 1
+                pos_entropy = -torch.log(torch.clamp(sim_mat, eps, 1.0)) * pos_mask
+                neg_entropy = -torch.log(torch.clamp(1-sim_mat, eps, 1.0)) * neg_mask
+                loss = pos_entropy.mean() + neg_entropy.mean() + u_threshold - l_threshold
+                return loss
+        else:
+            q = 1.0 / (1.0 + torch.sum(torch.pow(logits.unsqueeze(1) - self.cluster_layer, 2), 2) / self.alpha)
+            q = q.pow((self.alpha + 1.0) / 2.0)
+            q = (q.t() / torch.sum(q, 1)).t() # Make sure each sample's n_values add up to 1.
+            return logits, q

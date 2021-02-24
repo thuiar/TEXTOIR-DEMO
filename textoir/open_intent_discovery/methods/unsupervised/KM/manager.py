@@ -1,5 +1,4 @@
 from open_intent_discovery.utils import *
-from open_intent_discovery.pretrain import *
 import open_intent_discovery.Backbone as Backbone
 
 TIMESTAMP = "{0:%Y-%m-%dT%H-%M-%S/}".format(datetime.now())

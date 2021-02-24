@@ -12,17 +12,25 @@ import torch.nn.functional as F
 import random
 import csv
 import sys
+import logging
 from torch import nn
+from torch.nn.parameter import Parameter
+from torch.autograd import Variable
+from torch.utils.data import (DataLoader, RandomSampler, SequentialSampler, TensorDataset)
 from tqdm import tqdm_notebook, trange, tqdm
 from pytorch_pretrained_bert.optimization import BertAdam
 from pytorch_pretrained_bert.modeling import WEIGHTS_NAME,CONFIG_NAME,BertPreTrainedModel,BertModel
 from pytorch_pretrained_bert.tokenization import BertTokenizer
-from torch.utils.data import (DataLoader, RandomSampler, SequentialSampler, TensorDataset)
 from datetime import datetime
 from sklearn.cluster import KMeans
 from sklearn.metrics import confusion_matrix,normalized_mutual_info_score, adjusted_rand_score, accuracy_score
 from scipy.optimize import linear_sum_assignment
 from sklearn import metrics
+
+logging.basicConfig(format='%(asctime)s - %(levelname)s - %(name)s -   %(message)s',
+                    datefmt='%m/%d/%Y %H:%M:%S',
+                    level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 def debug(data, manager, args):
 
@@ -143,23 +151,6 @@ def create_logger(app_name="root", level=logging.DEBUG):
     logging.getLogger('').addHandler(console)
     logger = logging.getLogger(app_name)
     return logger
-
-
-def load_single(dataset):
-    texts = []
-    labels = []
-    partition_to_n_row = {}
-    for partition in ['train', 'valid', 'test']:
-        with open("../data/" + dataset + "/" + partition + ".seq.in", encoding="utf-8") as fp:
-            lines = fp.read().splitlines()
-            texts.extend(lines)
-            partition_to_n_row[partition] = len(lines)
-        with open("../data/" + dataset + "/" + partition + ".label", encoding="utf-8") as fp:
-            labels.extend(fp.read().splitlines())
-
-    df = pd.DataFrame([texts, labels]).T
-    df.columns = ['text', 'label']
-    return df, partition_to_n_row
 
 
 def plot_cluster_pie(results, k, n_cols, df_plot, y_pred):

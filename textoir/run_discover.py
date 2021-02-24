@@ -1,6 +1,8 @@
-from open_intent_discovery.init_parameters import Param
+import open_intent_discovery.init_parameters as init
+# from open_intent_discovery.init_parameters import Param
 from open_intent_discovery.dataloader import *
 from open_intent_discovery.utils import debug
+# import init_parameters as init
 import importlib
 
 def run(args):
@@ -41,7 +43,7 @@ if __name__ == '__main__':
     print('Open Intent Discovery Begin...')
 
     print('Parameters Initialization...')
-    param = Param()
-    args = param.args 
+    param = init.Param()
+    args = param.args
 
     run(args)

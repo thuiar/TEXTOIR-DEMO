@@ -1,2 +1,0 @@
-ACC,ARI,NMI,dataset,method,known_cls_ratio,labeled_ratio,cluster_num_factor,seed,K
-9.29,2.66,21.29,banking,MCL-BERT,0.25,0.1,1.0,0,77
