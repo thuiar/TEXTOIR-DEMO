@@ -17,16 +17,17 @@ def run(args):
     method = importlib.import_module('open_intent_detection.methods.' + args.method + '.manager')
     manager = method.ModelManager(args, data)   
     
-
-    print('Training Begin...')
-    manager.train(args, data)
-    print('Training Finished...')
+    if args.train:
+        
+        print('Training Begin...')
+        manager.train(args, data)
+        print('Training Finished...')
 
     print('Evaluation begin...')
     manager.evaluation(args, data, mode='test')
     print('Evaluation finished...')
 
-    manager.save_results(args)
+    manager.save_results(args, data)
     
     debug(data, manager, args)
     print('Open Intent Detection Finished...')

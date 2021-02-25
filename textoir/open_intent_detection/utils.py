@@ -9,6 +9,7 @@ import random
 import csv
 import sys
 import math
+import json
 import torch.nn.functional as F
 from torch import nn
 from tqdm import tqdm_notebook, trange, tqdm
@@ -39,7 +40,10 @@ def debug(data, manager, args):
         print(k,':',vars(args)[k])
 
     print('-----------------Manager--------------------')
-    manager_attrs = ["device","best_eval_score","test_results"]
+    if args.train:
+        manager_attrs = ["device","best_eval_score","test_results"]
+    else:
+        manager_attrs = ["device", "test_results"]
 
     for attr in manager_attrs:
         attr_name = attr

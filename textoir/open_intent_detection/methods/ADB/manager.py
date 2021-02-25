@@ -49,25 +49,38 @@ class ModelManager:
         
         Model = Backbone.__dict__[args.backbone]
         self.model = Model.from_pretrained(args.bert_model, cache_dir = "", num_labels = data.num_labels)
-        self.model = self.pre_train(args, data)
 
         os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu_id     
         
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.model.to(self.device)
         
-        self.best_eval_score = 0
-        self.delta = None
-        self.delta_points = []
-        self.centroids = None
+        self.model.to(self.device)
 
+        method_dir = os.path.join(args.type, 'methods', args.method)
+        args.save_results_path = os.path.join(method_dir, args.save_results_path)
+        args.pretrain_dir = os.path.join(method_dir, args.pretrain_dir)
+        
         self.test_results = None
         self.predictions = None
         self.true_labels = None
 
+        if args.train:
+            
+            self.best_eval_score = 0 
+            self.delta = None
+            self.delta_points = []
+            self.centroids = None
+
+        else:
+
+            self.restore_model(args)
+            self.delta = np.load(os.path.join(args.save_results_path, 'deltas.npy'))
+            self.delta = torch.from_numpy(self.delta).cuda()
+            self.centroids = np.load(os.path.join(args.save_results_path, 'centroids.npy'))
+            self.centroids = torch.from_numpy(self.centroids).cuda()
+
     def pre_train(self, args, data):
         
-        args.pretrain_dir = os.path.join(args.type, 'methods', args.method, args.pretrain_dir)
         manager_p = PretrainModelManager(args, data)
         manager_p.train(args, data)
         print('Pretraining finished...')
@@ -83,6 +96,7 @@ class ModelManager:
         return preds
 
     def get_pred_label(self, data, dataloader):
+
         self.model.eval()
         total_labels = torch.empty(0,dtype=torch.long).to(self.device)
         total_preds = torch.empty(0,dtype=torch.long).to(self.device)
@@ -126,7 +140,9 @@ class ModelManager:
             self.test_results = results
 
 
-    def train(self, args, data):     
+    def train(self, args, data):  
+
+        self.model = self.pre_train(args, data)   
         
         criterion_boundary = BoundaryLoss(num_labels = data.num_labels, feat_dim = args.feat_dim)
         self.delta = F.softplus(criterion_boundary.delta)
@@ -207,15 +223,39 @@ class ModelManager:
     def restore_model(self, args):
         output_model_file = os.path.join(args.pretrain_dir, WEIGHTS_NAME)
         self.model.load_state_dict(torch.load(output_model_file))
-    
-    def save_results(self, args):
 
-        method_dir = os.path.join(args.type, 'methods', args.method)
-        args.save_results_path = os.path.join(method_dir, args.save_results_path)
+    def cal_true_false(self):
+        
+        results = {}
+        trues = np.array(self.true_labels)
+        preds = np.array(self.predictions)
+
+        for label in np.unique(trues):
+            pos = np.array(np.where(trues == label)[0])
+            num_pos = np.sum(preds[pos] == trues[pos])
+            num_neg = np.sum(preds[pos] != trues[pos])
+
+            results[label] = (str(num_pos), str(num_neg))
+        
+        return results
+
+    def save_results(self, args, data):
+
         if not os.path.exists(args.save_results_path):
             os.makedirs(args.save_results_path)
 
+        #save known intents
+        np.save(os.path.join(args.save_results_path, 'labels.npy'), data.label_list)
+
+        #save true_false predictions
+        predict_t_f = self.cal_true_false()
+
+        with open(os.path.join(args.save_results_path, 'ture_false.json'), 'w') as f:
+            json.dump(predict_t_f, f)
+
         #save centroids, delta_points
+        np.save(os.path.join(args.save_results_path, 'centroids.npy'), self.centroids.detach().cpu().numpy())
+        np.save(os.path.join(args.save_results_path, 'deltas.npy'), self.delta.detach().cpu().numpy())
 
         var = [args.dataset, args.method, args.known_cls_ratio, args.labeled_ratio, args.seed]
         names = ['dataset', 'method', 'known_cls_ratio', 'labeled_ratio', 'seed']

@@ -35,6 +35,8 @@ class Param:
         parser.add_argument("--num_train_epochs", default=100.0, type=float,
                             help="Total number of training epochs to perform.") 
 
+        parser.add_argument("--train", action="store_true", help="Whether train the model")
+
         ###########################special parameters######################################
         #ADB
         parser.add_argument("--lr_boundary", type=float, default=0.05, help="The learning rate of the decision boundary.")
