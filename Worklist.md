@@ -14,5 +14,4 @@
 
 ## Video
 + [ ] Manuscript
-+ [ ] 
 
