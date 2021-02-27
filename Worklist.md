@@ -8,7 +8,7 @@
 ## Frontend
 ### Model Analysis
 + [ ] Probability threshold error
-+ [ ] Probability threshold score
++ [ ] score with different probability threshold
 
 
 ## Paper
