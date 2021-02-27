@@ -6,7 +6,9 @@
 + [ ] Keywords Extraction
 
 ## Frontend
-+ [ ] Demo Test: Threshold
+### Model Analysis
++ [ ] Probability threshold error
++ [ ] Probability threshold score
 
 
 ## Paper
