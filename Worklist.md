@@ -9,10 +9,10 @@
 + [ ] 系统和后端完善
 
 ## Backend
-+ [ ] Predictions of OIDiscovery
-+ [ ] Path
-+ [ ] Pipeline Framework
-+ [ ] Keywords Extraction
++ [ ] 开放意图发现的预测结果的保存
++ [ ] 路径配置
++ [ ] 整体框架确认
++ [ ] 关键词抽取算法
 
 ## Frontend
 ### Model Analysis
