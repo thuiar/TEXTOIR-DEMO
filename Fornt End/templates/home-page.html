@@ -1,0 +1,95 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>New Intent Discovery System</title>
+        <meta charset="utf-8" />
+        <meta name="description" content="" />
+        <meta name="keywords" content="" />
+        <link rel="stylesheet" href="/static/lib/xadmin/css/font.css">
+        <link rel="stylesheet" href="/static/lib/xadmin/css/main.css" />
+        <link rel="stylesheet" href="/static/lib/layui/css/layui.css" media="all">
+        <script type="text/javascript" src="/static/lib/layui/layui.js" charset="utf-8"></script>
+        <script type="text/javascript" src="/static/lib/xadmin/js/xadmin.js"></script>
+    </head>
+    <body >
+        <div id="container" style="align:center;">
+            
+
+            <div id="header" style="background-color:#009688;text-align:center;height:340px;width:100%;margin: auto;">
+                <h1 style="padding-top:60px;">TEXTOIR</h1>
+                <p style="padding-top:20px;margin-left:30px;margin-right:30px;font-size:25px;color:#FFFFFF;">An Integrated and Visualized Platform for Text Open Intent Recognition</p>
+                
+                <a href="https://github.com/thuiar/DeepAligned-Clustering" target="_blank" style="margin:20px;margin-top:26px;" class="layui-btn layui-btn-radius layui-btn-normal">Get Started</a>
+                
+                <a href="https://github.com/thuiar/DeepAligned-Clustering/archive/main.zip" target="_blank" style="margin:20px;margin-top:26px;" class="layui-btn layui-btn-radius layui-btn-primary">Download</a>
+            </div>
+            
+            
+            <div class="layui-carousel" style="height: 440px; width: 80%; margin: auto;margin-top:30px;padding:30px;">
+              <div class="layui-carousel" id="carousel01" style="height: 100%; width: 100%; margin: auto;">
+				<div carousel-item="" style="height:380px;width:100%;margin: auto;">
+					<div style="height:100%;width:100%;margin: auto;"><img style="align:middle;height:100%;width:100%;" src="/static/img/homepage/homepage-01.png"></div>
+					<div style="height:100%;width:100%;margin: auto;"><img style="align:middle;height:100%;width:100%;" src="/static/img/homepage/homepage-02.png"></div>
+					<div style="height:100%;width:100%;margin: auto;"><img style="align:middle;height:100%;width:100%;" src="/static/img/homepage/homepage-03.png"></div>
+					<div style="height:100%;width:100%;margin: auto;"><img style="align:middle;height:100%;width:100%;" src="/static/img/homepage/homepage-04.png"></div>
+				</div>
+				</div>
+            </div>
+            
+            
+            <div id="wrapper" style="text-align:left;height:200px;width:100%;margin: auto;margin-top:10px;padding:60px;">
+                <ul class="feature-icons">
+                    <li class="icon solid fa-cog"><p style="font-size:25px;">Dataset Management</p></li>
+                    <li class="icon solid fa-laptop"><p style="font-size:25px;">New Intent Detection</p></li>
+                    <li class="icon solid fa-bolt"><p style="font-size:25px;">New Intent Discovery</p></li>
+                    <li class="icon solid fa-signal"><p style="font-size:25px;">Data Annotation</p></li>
+                </ul>
+            </div>
+            
+            
+
+            <div id="header" style="text-align:center;height:330px;width:100%;margin: auto;margin-top:50px;">
+                <div id="menu" style="height:100%;text-align:left;width:23%;float:left;padding-left:20px;padding-right:20px;margin-left:25px;margin-right:5px;">
+                    <p style="font-size:25px;">Dataset Management</p><br><br>
+                    <p style="font-size:17px;"><strong>The New Intent Detection</strong><br>
+                         module divides the input text into known intent and unknown intent, classifies the known intent and assigns the known intent label.</p>
+                </div>
+                <div id="menu" style="height:100%;text-align:left;width:23%;float:left;padding-left:20px;padding-right:20px;margin-left:5px;margin-right:5px;">
+                    <p style="font-size:25px;">New Intent Detection</p><br><br>
+                    <p style="font-size:17px;"><strong>The New Intent Detection</strong><br>
+                         module divides the input text into known intent and unknown intent, classifies the known intent and assigns the known intent label.</p>
+                </div>
+                <div id="menu" style="height:100%;text-align:left;width:23%;float:left;padding-left:20px;padding-right:20px;margin-left:5px;margin-right:5px;">
+                    <p style="font-size:25px;">New Intent Discovery</p><br><br>
+                    <p style="font-size:17px;"><strong>The New Intent Detection</strong><br>
+                         module takes the identified unknown intent as input and performs cluster analysis on the unknown intent. Then, cluster merging algorithm and keyword extraction algorithm are used to assign pseudo-tags to each cluster.</p>
+                </div>
+                <div id="menu" style="height:100%;text-align:left;width:23%;float:left;padding-left:20px;padding-right:20px;margin-left:5px;margin-right:25px;">
+                    <p style="font-size:25px;">Data <br>Annotation</p><br><br>
+                    <p style="font-size:17px;"><strong>The New Intent Detection</strong><br>
+                        module takes the identified unknown intent as input and performs cluster analysis on the unknown intent. Then, cluster merging algorithm and keyword extraction algorithm are used to assign pseudo-tags to each cluster.</p>
+                </div>
+            </div>
+            
+            <div class="copyright" style="margin:40px;text-align:center;">&copy;  THUIAR 2020</div>
+
+        </div>
+        
+        
+        
+        
+        <script>layui.use(['carousel'],
+            function() {
+                var carousel = layui.carousel;
+                //图片轮播
+                carousel.render({
+                    elem: '#carousel01'
+                    ,width: '95%'
+                    ,hight: "100%"
+                    ,interval: 3000
+                }); 
+
+            });
+        </script>
+    </body>
+</html>
