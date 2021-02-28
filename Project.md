@@ -2,7 +2,7 @@
 
 ```
 .
-├── thedataset 			//Dataset Management
+├── dataset 			//Dataset Management
 ├── detection			//Open Intent Detection
 ├── discovery			//Open Intent Discovery
 ├── annotation			//Data Annotaion
@@ -10,7 +10,7 @@
 │   ├── test_data		//Test Data
 │   ├── img			//image
 │   ├── lib			//Front Style
-│   ├── log			//Run Logd
+│   ├── log			//Run Log
 │   └── models			//Intention Recognition Models
 │       ├── result		//json
 │       ├── data		  //Datasets
@@ -29,7 +29,7 @@
 
 **Naming Scheme of json**：Detection_Overall_Performance_Error_Analyze.json
 
-**Naming Scheme of Key Words**：DatasetNmae_Klr_LR_ModelName_ overall_performance
+**Naming Scheme of Key Words**：DatasetName_Klr_LR_ModelName_ overall_performance
   
 **Example**
   
