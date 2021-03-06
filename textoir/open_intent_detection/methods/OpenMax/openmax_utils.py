@@ -34,15 +34,10 @@ def computeOpenMaxProbability(openmax_fc8, openmax_score_u, n_classes):
        
     prob_scores = sp.asarray(prob_scores)
     prob_unknowns = sp.asarray(prob_unknowns) 
-#     print('prob_scores',prob_scores)
-#     print('prob_unknowns',prob_unknowns)
     
     scores = sp.mean(prob_scores, axis = 0)
     unknowns = sp.mean(prob_unknowns, axis=0)
-#     print('scores',scores)
-#     print('unknowns',unknowns)
     modified_scores =  scores.tolist() + [unknowns]
-#     print('modified_scores',modified_scores)
     return modified_scores
 
 def compute_distance(MAV, query_channel, distance_type):#MAV是每个类的平均激活向量，query_channel是每个句子的激活向量
@@ -52,7 +47,6 @@ def compute_distance(MAV, query_channel, distance_type):#MAV是每个类的平�
     elif distance_type == 'euclidean':
         query_distance = spd.euclidean(MAV, query_channel)
     elif distance_type == 'cosine':
-#         print(type(MAV), type(query_channel), MAV.shape, query_channel.shape)
         query_distance = spd.cosine(MAV, query_channel)
     else:
         print ("distance type not known: enter either of eucos, euclidean or cosine")
@@ -122,7 +116,6 @@ def recalibrate_scores(weibull_model, num_labels, textarr, layer = 'fc8', alphar
         # being unknown wrt to mean training vector and channel distances for
         # category and channel under consideration
         wscore = category_weibull[2].w_score(distance)#category_weibull[2]是得到的weibull模型参数
-        #print("wscore:",wscore, " ranked_alpha[categoryid]:",ranked_alpha[categoryid])
         
         modified_fc8_score = cha_scores[categoryid] * ( 1 - wscore * ranked_alpha[categoryid] )
         openmax_fc8_channel += [modified_fc8_score]
@@ -138,5 +131,5 @@ def recalibrate_scores(weibull_model, num_labels, textarr, layer = 'fc8', alphar
     # Pass the recalibrated fc8 scores for the image into openmax    
     openmax_probab = computeOpenMaxProbability(openmax_fc8, openmax_score_u, num_labels)
     softmax_probab = textarr['scores'].ravel() 
-#     print('softmax_probab',softmax_probab)
+    
     return sp.asarray(openmax_probab), sp.asarray(softmax_probab)

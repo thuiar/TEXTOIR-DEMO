@@ -24,15 +24,20 @@ class ModelManager:
         self.num_train_optimization_steps = int(len(data.train_examples) / args.train_batch_size) * args.num_train_epochs
         self.optimizer = self.get_optimizer(args)
         
-        self.best_eval_score = 0
-        
-        self.weibull_model = None
 
         self.test_results = None
         self.predictions = None
         self.true_labels = None
 
-  
+        method_dir = os.path.join(args.type, 'methods', args.method)
+        args.save_results_path = os.path.join(method_dir, args.save_results_path)
+        args.pretrain_dir = os.path.join(method_dir, args.pretrain_dir)
+
+        if args.train:
+            self.best_eval_score = 0
+        else:
+            self.weibull_model = None
+            self.restore_model(args)
 
     def cal_vec_dis(self, args, data, centroids, y_logit, y_true):
         mean_vectors = [x for x in centroids]
@@ -97,9 +102,6 @@ class ModelManager:
 
         else:
             return y_true, y_pred, y_prob, y_logit
-
-        
-        
 
     def evaluation(self, args, data, mode="eval"):
 
@@ -181,7 +183,7 @@ class ModelManager:
                 self.best_eval_score = eval_score
             else:
                 wait += 1
-                if wait >= 20:
+                if wait >= args.wait_patient:
                     break
         
         self.model = best_model 
@@ -210,14 +212,34 @@ class ModelManager:
         output_model_file = os.path.join(args.pretrain_dir, WEIGHTS_NAME)
         self.model.load_state_dict(torch.load(output_model_file))
     
-    def save_results(self, args):
+    def cal_true_false(self):
+        
+        results = {}
+        trues = np.array(self.true_labels)
+        preds = np.array(self.predictions)
 
-        method_dir = os.path.join(args.type, 'methods', args.method)
-        args.save_results_path = os.path.join(method_dir, args.save_results_path)
+        for label in np.unique(trues):
+            pos = np.array(np.where(trues == label)[0])
+            num_pos = np.sum(preds[pos] == trues[pos])
+            num_neg = np.sum(preds[pos] != trues[pos])
+
+            results[label] = (str(num_pos), str(num_neg))
+        
+        return results
+
+    def save_results(self, args, data = None):
+
         if not os.path.exists(args.save_results_path):
             os.makedirs(args.save_results_path)
 
-        #save centroids, delta_points
+        #save known intents
+        np.save(os.path.join(args.save_results_path, 'labels.npy'), data.label_list)
+
+        #save true_false predictions
+        predict_t_f = self.cal_true_false()
+
+        with open(os.path.join(args.save_results_path, 'ture_false.json'), 'w') as f:
+            json.dump(predict_t_f, f)
 
         var = [args.dataset, args.method, args.known_cls_ratio, args.labeled_ratio, args.seed]
         names = ['dataset', 'method', 'known_cls_ratio', 'labeled_ratio', 'seed']
@@ -244,15 +266,17 @@ class ModelManager:
         print('test_results', data_diagram)
 
     def save_model(self, args):
-        args.pretrain_dir = os.path.join(args.type, 'methods', args.method, args.pretrain_dir)
         if not os.path.exists(args.pretrain_dir):
             os.makedirs(args.pretrain_dir)
+
         self.save_model = self.model.module if hasattr(self.model, 'module') else self.model  
         model_file = os.path.join(args.pretrain_dir, WEIGHTS_NAME)
         model_config_file = os.path.join(args.pretrain_dir, CONFIG_NAME)
         torch.save(self.save_model.state_dict(), model_file)
         with open(model_config_file, "w") as f:
             f.write(self.save_model.config.to_json_string())  
+
+        
 
 
     

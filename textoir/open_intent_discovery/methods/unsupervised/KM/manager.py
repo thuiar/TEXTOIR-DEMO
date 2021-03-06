@@ -18,9 +18,11 @@ class ModelManager:
     def train(self, args, data):
 
         emb_train, emb_test = data.get_glove(args, data.X_train, data.X_test)
-
+        
+        print('Clustering start...')
         km = KMeans(n_clusters=self.num_labels, n_jobs=-1, random_state = args.seed)
         km.fit(emb_train)
+        print('Clustering finished...')
 
         self.km = km
         self.emb_test = emb_test

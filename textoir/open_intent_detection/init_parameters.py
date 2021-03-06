@@ -63,10 +63,11 @@ class Param:
         
         parser.add_argument("--save_results_path", type=str, default='outputs', help="the path to save results")
 
-        parser.add_argument("--pretrain", action="store_true", default = 'pretrain', help="Pretrain the model")
-
-        parser.add_argument("--pretrain_dir", default='pretrain_models', type=str, 
+        parser.add_argument("--model_dir", default='models', type=str, 
                             help="The output directory where the model predictions and checkpoints will be written.") 
+
+        parser.add_argument("--train_data_dir", default='/home/zhl/train', type=str, 
+                            help="The output directory where all train data will be written.") 
         
         parser.add_argument("--max_seq_length", default=None, type=int,
                             help="The maximum total input sequence length after tokenization. Sequences longer "
@@ -78,9 +79,7 @@ class Param:
 
         parser.add_argument("--freeze_bert_parameters", action="store_true", default="freeze", help="Freeze the last parameters of BERT")
 
-        parser.add_argument("--save_model", action="store_true", help="save trained-model")
-
-        parser.add_argument("--save_results", action="store_true", help="save test results")
+        parser.add_argument("--save", action="store_true", help="save trained-model")
         
         parser.add_argument("--gpu_id", type=str, default='0', help="Select the GPU id")
 

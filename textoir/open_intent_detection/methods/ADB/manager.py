@@ -34,9 +34,8 @@ class BoundaryLoss(nn.Module):
         
         euc_dis = torch.norm(x - c,2, 1).view(-1)
         pos_mask = (euc_dis > d).type(torch.cuda.FloatTensor)
-#         print(pos_mask)
         neg_mask = (euc_dis < d).type(torch.cuda.FloatTensor)
-#         print(neg_mask)
+        
         pos_loss = (euc_dis - d) * pos_mask
         neg_loss = (d - euc_dis) * neg_mask
         loss = pos_loss.mean() + neg_loss.mean()
@@ -56,13 +55,14 @@ class ModelManager:
         
         self.model.to(self.device)
 
-        method_dir = os.path.join(args.type, 'methods', args.method)
-        args.save_results_path = os.path.join(method_dir, args.save_results_path)
-        args.pretrain_dir = os.path.join(method_dir, args.pretrain_dir)
+        self.test_results, self.predictions,  self.true_labels = None, None, None
         
-        self.test_results = None
-        self.predictions = None
-        self.true_labels = None
+        #Save models and trainined data
+        concat_names = [args.method, args.dataset, args.known_cls_ratio, args.labeled_ratio, args.backbone]
+        output_file_name = "_".join([str(x) for x in concat_names])
+        output_dir = os.path.join(args.train_data_dir, args.type, output_file_name)
+        self.output_file_dir = os.path.join(output_dir, args.type, args.save_results_path)
+        self.model_dir = os.path.join(output_dir, args.model_dir)
 
         if args.train:
             
@@ -74,28 +74,30 @@ class ModelManager:
         else:
 
             self.restore_model(args)
-            self.delta = np.load(os.path.join(args.save_results_path, 'deltas.npy'))
+            self.delta = np.load(os.path.join(self.output_file_dir, 'deltas.npy'))
             self.delta = torch.from_numpy(self.delta).cuda()
-            self.centroids = np.load(os.path.join(args.save_results_path, 'centroids.npy'))
+            self.centroids = np.load(os.path.join(self.output_file_dir, 'centroids.npy'))
             self.centroids = torch.from_numpy(self.centroids).cuda()
-
+        
+    
     def pre_train(self, args, data):
         
         manager_p = PretrainModelManager(args, data)
+        manager_p.model_dir = self.model_dir
         manager_p.train(args, data)
         print('Pretraining finished...')
         return manager_p.model
 
-    def open_classify(self, data, features):
+    def open_classify(self, data, features, delta, centroids):
 
-        logits = euclidean_metric(features, self.centroids)
+        logits = euclidean_metric(features, centroids)
         probs, preds = F.softmax(logits.detach(), dim = 1).max(dim = 1)
-        euc_dis = torch.norm(features - self.centroids[preds], 2, 1).view(-1)
-        preds[euc_dis >= self.delta[preds]] = data.unseen_token_id
+        euc_dis = torch.norm(features - centroids[preds], 2, 1).view(-1)
+        preds[euc_dis >= delta[preds]] = data.unseen_token_id
 
         return preds
 
-    def get_pred_label(self, data, dataloader):
+    def get_pred_label(self, data, dataloader, delta, centroids):
 
         self.model.eval()
         total_labels = torch.empty(0,dtype=torch.long).to(self.device)
@@ -106,7 +108,7 @@ class ModelManager:
             input_ids, input_mask, segment_ids, label_ids = batch
             with torch.set_grad_enabled(False):
                 pooled_output, _ = self.model(input_ids, segment_ids, input_mask)
-                preds = self.open_classify(data, pooled_output)
+                preds = self.open_classify(data, pooled_output, delta, centroids)
 
                 total_labels = torch.cat((total_labels,label_ids))
                 total_preds = torch.cat((total_preds, preds))
@@ -116,28 +118,18 @@ class ModelManager:
 
         return y_true, y_pred
 
-    def evaluation(self, args, data, mode="eval"):
-
-        if mode == 'eval':
+    def evaluation(self, args, data):
             
-            y_true, y_pred = self.get_pred_label(data, data.eval_dataloader)
+        y_true, y_pred = self.get_pred_label(data, data.test_dataloader, self.delta, self.centroids)
 
-            acc = round(accuracy_score(y_true, y_pred) * 100, 2)
-            # close_pro = round((len(y_pred[y_pred != -1]) / len(y_pred))*100, 2)
-            return acc
-
-        elif mode == 'test':
-            
-            y_true, y_pred = self.get_pred_label(data, data.test_dataloader)
-
-            self.predictions = list([data.label_list[idx] for idx in y_pred])
-            self.true_labels = list([data.label_list[idx] for idx in y_true])
-            
-            cm = confusion_matrix(y_true,y_pred)
-            results = F_measure(cm)
-            acc = round(accuracy_score(y_true, y_pred) * 100, 2)
-            results['Acc'] = acc
-            self.test_results = results
+        self.predictions = list([data.label_list[idx] for idx in y_pred])
+        self.true_labels = list([data.label_list[idx] for idx in y_true])
+        
+        cm = confusion_matrix(y_true,y_pred)
+        results = F_measure(cm)
+        acc = round(accuracy_score(y_true, y_pred) * 100, 2)
+        results['Acc'] = acc
+        self.test_results = results
 
 
     def train(self, args, data):  
@@ -145,10 +137,9 @@ class ModelManager:
         self.model = self.pre_train(args, data)   
         
         criterion_boundary = BoundaryLoss(num_labels = data.num_labels, feat_dim = args.feat_dim)
-        self.delta = F.softplus(criterion_boundary.delta)
-        delta_last = copy.deepcopy(self.delta.detach())
+        delta = F.softplus(criterion_boundary.delta)
         optimizer = torch.optim.Adam(criterion_boundary.parameters(), lr = args.lr_boundary)
-        self.centroids = self.centroids_cal(args, data)
+        centroids = self.centroids_cal(args, data)
 
         best_model = None
         wait = 0
@@ -163,7 +154,7 @@ class ModelManager:
                 input_ids, input_mask, segment_ids, label_ids = batch
                 with torch.set_grad_enabled(True):
                     features = self.model(input_ids, segment_ids, input_mask, feature_ext=True)
-                    loss, self.delta = criterion_boundary(features, self.centroids, label_ids)
+                    loss, delta = criterion_boundary(features, centroids, label_ids)
 
                     optimizer.zero_grad()
                     loss.backward()
@@ -174,25 +165,24 @@ class ModelManager:
                     nb_tr_examples += input_ids.size(0)
                     nb_tr_steps += 1
 
-            self.delta_points.append(self.delta)
+            self.delta_points.append(delta)
 
             loss = tr_loss / nb_tr_steps
             print('train_loss',loss)
             
-            eval_score = self.evaluation(args, data, mode="eval")
-            print('eval_score',eval_score)
-            
+            y_true, y_pred = self.get_pred_label(data, data.eval_dataloader, delta, centroids)
+            eval_score = round(accuracy_score(y_true, y_pred) * 100, 2)
+            print('eval_score', eval_score)
             
             if eval_score >= self.best_eval_score:
-                best_model = copy.deepcopy(self.model)
                 wait = 0
                 self.best_eval_score = eval_score
+                self.delta = copy.copy(delta)
+                self.centroids = copy.copy(centroids)
             else:
                 wait += 1
                 if wait >= args.wait_patient:
                     break
-        
-        self.model = best_model 
 
     def class_count(self, labels):
         class_data_num = []
@@ -221,7 +211,7 @@ class ModelManager:
         return centroids
 
     def restore_model(self, args):
-        output_model_file = os.path.join(args.pretrain_dir, WEIGHTS_NAME)
+        output_model_file = os.path.join(self.model_dir, WEIGHTS_NAME)
         self.model.load_state_dict(torch.load(output_model_file))
 
     def cal_true_false(self):
@@ -240,22 +230,22 @@ class ModelManager:
         return results
 
     def save_results(self, args, data):
-
-        if not os.path.exists(args.save_results_path):
-            os.makedirs(args.save_results_path)
+        
+        if not os.path.exists(self.output_file_dir):
+            os.makedirs(self.output_file_dir)
 
         #save known intents
-        np.save(os.path.join(args.save_results_path, 'labels.npy'), data.label_list)
+        np.save(os.path.join(self.output_file_dir, 'labels.npy'), data.label_list)
 
         #save true_false predictions
         predict_t_f = self.cal_true_false()
 
-        with open(os.path.join(args.save_results_path, 'ture_false.json'), 'w') as f:
+        with open(os.path.join(self.output_file_dir, 'ture_false.json'), 'w') as f:
             json.dump(predict_t_f, f)
 
         #save centroids, delta_points
-        np.save(os.path.join(args.save_results_path, 'centroids.npy'), self.centroids.detach().cpu().numpy())
-        np.save(os.path.join(args.save_results_path, 'deltas.npy'), self.delta.detach().cpu().numpy())
+        np.save(os.path.join(self.output_file_dir, 'centroids.npy'), self.centroids.detach().cpu().numpy())
+        np.save(os.path.join(self.output_file_dir, 'deltas.npy'), self.delta.detach().cpu().numpy())
 
         var = [args.dataset, args.method, args.known_cls_ratio, args.labeled_ratio, args.seed]
         names = ['dataset', 'method', 'known_cls_ratio', 'labeled_ratio', 'seed']
@@ -265,7 +255,7 @@ class ModelManager:
         values = list(results.values())
         
         result_file = 'results.csv'
-        results_path = os.path.join(args.save_results_path, result_file)
+        results_path = os.path.join(self.output_file_dir, result_file)
         
         if not os.path.exists(results_path):
             ori = []

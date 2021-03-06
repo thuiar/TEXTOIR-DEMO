@@ -23,13 +23,16 @@ class ModelManager:
         self.num_train_optimization_steps = int(len(data.train_examples) / args.train_batch_size) * args.num_train_epochs
         self.optimizer = self.get_optimizer(args)
 
-        method_dir = os.path.join(args.type, 'methods', args.method)
-        args.save_results_path = os.path.join(method_dir, args.save_results_path)
-        args.pretrain_dir = os.path.join(method_dir, args.pretrain_dir)
         
-        self.test_results = None
-        self.predictions = None
-        self.true_labels = None
+        self.test_results, self.predictions,  self.true_labels = None, None, None
+        
+        #Save models and trainined data
+        concat_names = [args.method, args.dataset, args.known_cls_ratio, args.labeled_ratio, args.backbone]
+        output_file_name = "_".join([str(x) for x in concat_names])
+        output_dir = os.path.join(args.train_data_dir, args.type, output_file_name)
+        self.output_file_dir = os.path.join(output_dir, args.save_results_path)
+        self.model_dir = os.path.join(output_dir, args.model_dir)
+
         self.loss_fct = AMSoftmax(n_classes = data.num_labels, in_feats = args.feat_dim)
 
         if args.train:
@@ -40,7 +43,7 @@ class ModelManager:
         else:
             
             self.restore_model(args)
-            self.best_features = np.load(os.path.join(args.save_results_path, 'features.npy'))
+            self.best_features = np.load(os.path.join(self.output_file_dir, 'features.npy'))
 
 
     def classify_lof(self, args, data, preds, feat_train, feat_pred):
@@ -81,37 +84,23 @@ class ModelManager:
     
         return y_true, y_pred, features
 
-    def evaluation(self, args, data, mode="eval", show=False, feat_train=None):
+    def evaluation(self, args, data, show=False):
+    
+        y_true, y_pred, feat_pred = self.get_feat_label(data, args, data.test_dataloader)
+
+        y_pred = self.classify_lof(args, data, y_pred, self.best_features, feat_pred)
+
+        self.predictions = list([data.label_list[idx] for idx in y_pred])
+        self.true_labels = list([data.label_list[idx] for idx in y_true])
         
-        if mode == 'train':
-            _, _, features = self.get_feat_label(data, args, data.train_dataloader)
-            
-            return features
+        cm = confusion_matrix(y_true,y_pred)
+        results = F_measure(cm)
+        acc = round(accuracy_score(y_true, y_pred) * 100, 2)
+        results['Acc'] = acc
+        self.test_results = results
 
-        elif mode == 'eval':
-
-            y_true, y_pred, features = self.get_feat_label(data, args, data.eval_dataloader) 
-            acc = round(accuracy_score(y_true, y_pred) * 100, 2)
-
-            return acc
-
-        elif mode == 'test':
-            
-            y_true, y_pred, feat_pred = self.get_feat_label(data, args, data.test_dataloader)
-
-            y_pred = self.classify_lof(args, data, y_pred, self.best_features, feat_pred)
-
-            self.predictions = list([data.label_list[idx] for idx in y_pred])
-            self.true_labels = list([data.label_list[idx] for idx in y_true])
-            
-            cm = confusion_matrix(y_true,y_pred)
-            results = F_measure(cm)
-            acc = round(accuracy_score(y_true, y_pred) * 100, 2)
-            results['Acc'] = acc
-            self.test_results = results
-
-            if show:
-                print('test_results',results)
+        if show:
+            print('test_results',results)
 
     def get_optimizer(self, args):
         param_optimizer = list(self.model.named_parameters())
@@ -154,12 +143,13 @@ class ModelManager:
             loss = tr_loss / nb_tr_steps
             print('train_loss',loss)
             
-            eval_score = self.evaluation(args, data, mode='eval')
-            print('eval_acc', eval_score)
+            y_true, y_pred, _ = self.get_feat_label(data, args, data.eval_dataloader) 
+            eval_score = round(accuracy_score(y_true, y_pred) * 100, 2)
+            print('eval_score', eval_score)
             
             if eval_score >= self.best_eval_score:
                 
-                features = self.evaluation(args, data, mode = 'train')
+                _, _, features = self.get_feat_label(data, args, data.train_dataloader)
                 self.best_features = features
                 self.best_eval_score = eval_score
                 best_model = copy.deepcopy(self.model)
@@ -172,10 +162,12 @@ class ModelManager:
                         
             print('cur_wait', wait)
 
-            self.evaluation(args, data, mode="test", feat_train = self.best_features, show=True)
+            # self.evaluation(args, data, show=True)
                 
         self.model = best_model 
-        self.save_model(args)
+        
+        if args.save:
+            self.save_model(args)
     
     def freeze_bert_parameters(self, model):
         for name, param in model.bert.named_parameters():  
@@ -184,9 +176,9 @@ class ModelManager:
                 param.requires_grad = True
 
     def restore_model(self, args):
-        output_model_file = os.path.join(args.pretrain_dir, WEIGHTS_NAME)
+        output_model_file = os.path.join(self.model_dir, WEIGHTS_NAME)
         self.model.load_state_dict(torch.load(output_model_file))
-        output_loss_file = os.path.join(args.pretrain_dir, 'loss', WEIGHTS_NAME)
+        output_loss_file = os.path.join(self.model_dir, 'loss', WEIGHTS_NAME)
         self.loss_fct.load_state_dict(torch.load(output_loss_file))
     
     def cal_true_false(self):
@@ -206,17 +198,17 @@ class ModelManager:
     
     def save_model(self, args):
         
-        if not os.path.exists(args.pretrain_dir):
-            os.makedirs(args.pretrain_dir)
+        if not os.path.exists(self.model_dir):
+            os.makedirs(self.model_dir)
 
         self.save_model = self.model.module if hasattr(self.model, 'module') else self.model  
-        model_file = os.path.join(args.pretrain_dir, WEIGHTS_NAME)
-        model_config_file = os.path.join(args.pretrain_dir, CONFIG_NAME)
+        model_file = os.path.join(self.model_dir, WEIGHTS_NAME)
+        model_config_file = os.path.join(self.model_dir, CONFIG_NAME)
         torch.save(self.save_model.state_dict(), model_file)
         with open(model_config_file, "w") as f:
             f.write(self.save_model.config.to_json_string())
         
-        loss_dir = os.path.join(args.pretrain_dir, 'loss')
+        loss_dir = os.path.join(self.model_dir, 'loss')
         if not os.path.exists(loss_dir):
             os.makedirs(loss_dir)
 
@@ -226,19 +218,19 @@ class ModelManager:
 
     def save_results(self, args, data = None):
 
-        if not os.path.exists(args.save_results_path):
-            os.makedirs(args.save_results_path)
+        if not os.path.exists(self.output_file_dir):
+            os.makedirs(self.output_file_dir)
 
         #save known intents
-        np.save(os.path.join(args.save_results_path, 'labels.npy'), data.label_list)
+        np.save(os.path.join(self.output_file_dir, 'labels.npy'), data.label_list)
 
         #save true_false predictions
         predict_t_f = self.cal_true_false()
 
-        with open(os.path.join(args.save_results_path, 'ture_false.json'), 'w') as f:
+        with open(os.path.join(self.output_file_dir, 'ture_false.json'), 'w') as f:
             json.dump(predict_t_f, f)
 
-        np.save(os.path.join(args.save_results_path, 'features.npy'), self.best_features)
+        np.save(os.path.join(self.output_file_dir, 'features.npy'), self.best_features)
 
         var = [args.dataset, args.method, args.known_cls_ratio, args.labeled_ratio, args.seed]
         names = ['dataset', 'method', 'known_cls_ratio', 'labeled_ratio', 'seed']
@@ -248,7 +240,7 @@ class ModelManager:
         values = list(results.values())
         
         result_file = 'results.csv'
-        results_path = os.path.join(args.save_results_path, result_file)
+        results_path = os.path.join(self.output_file_dir, result_file)
         
         if not os.path.exists(results_path):
             ori = []

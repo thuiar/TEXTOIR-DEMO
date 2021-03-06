@@ -25,6 +25,7 @@ class PretrainModelManager:
         self.optimizer = self.get_optimizer(args)
         
         self.best_eval_score = 0
+        self.model_dir = None
 
     def eval(self, args, data):
         self.model.eval()
@@ -86,7 +87,9 @@ class PretrainModelManager:
                     break
                 
         self.model = best_model
-        self.save_model(args)
+
+        if args.save:
+            self.save_model(args)
 
     def get_optimizer(self, args):
         param_optimizer = list(self.model.named_parameters())
@@ -102,11 +105,12 @@ class PretrainModelManager:
         return optimizer
     
     def save_model(self, args):
-        if not os.path.exists(args.pretrain_dir):
-            os.makedirs(args.pretrain_dir)
+        if not os.path.exists(self.model_dir):
+            os.makedirs(self.model_dir)
+
         self.save_model = self.model.module if hasattr(self.model, 'module') else self.model  
-        model_file = os.path.join(args.pretrain_dir, WEIGHTS_NAME)
-        model_config_file = os.path.join(args.pretrain_dir, CONFIG_NAME)
+        model_file = os.path.join(self.model_dir, WEIGHTS_NAME)
+        model_config_file = os.path.join(self.model_dir, CONFIG_NAME)
         torch.save(self.save_model.state_dict(), model_file)
         with open(model_config_file, "w") as f:
             f.write(self.save_model.config.to_json_string())

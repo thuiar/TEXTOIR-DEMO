@@ -34,10 +34,6 @@ logger = logging.getLogger(__name__)
 
 def debug(data, manager, args):
 
-    # args_attrs = ["max_seq_length","feat_dim","warmup_proportion","freeze_bert_parameters","task_name",
-    #               "known_cls_ratio","labeled_ratio","method","seed","gpu_id","num_train_epochs","lr",
-    #               "train_batch_size","eval_batch_size","wait_patient","threshold"]
-
     print('-----------------Data--------------------')
     data_attrs = ["data_dir","n_known_cls","num_labels","all_label_list","known_label_list"]
 
