@@ -15,7 +15,13 @@ class ModelManager:
         self.test_results = None
         self.num_labels = data.num_labels
 
-    def train(self, args, data):
+        #Save models and trainined data
+        concat_names = [args.method, args.dataset, args.known_cls_ratio, args.labeled_ratio, args.cluster_num_factor, args.backbone]
+        output_file_name = "_".join([str(x) for x in concat_names])
+        self.output_dir = os.path.join(args.train_data_dir, args.type, output_file_name)
+        self.output_file_dir = os.path.join(self.output_dir, args.save_results_path)
+
+    def evaluation(self, args, data, show=False):
 
         emb_train, emb_test = data.get_glove(args, data.X_train, data.X_test)
         
@@ -24,26 +30,74 @@ class ModelManager:
         km.fit(emb_train)
         print('Clustering finished...')
 
-        self.km = km
-        self.emb_test = emb_test
-
-    def evaluation(self, data, show=False):
-        y_pred = self.km.predict(self.emb_test)
+        y_pred = km.predict(emb_test)
         y_true = data.y_test
         results = clustering_score(y_true, y_pred)
         cm = confusion_matrix(y_true,y_pred) 
+
+        self.predictions = list([data.label_list[idx] for idx in y_pred])
+        self.true_labels = list([data.label_list[idx] for idx in y_true])
+        
 
         if show:
             print('results',results)
             print('confusion matrix', cm)
 
         self.test_results = results
+    
+    # def cal_true_false(self):
+            
+    #     results = {"intent_class":[], "left":[], "right":[]}
+    #     trues = np.array(self.true_labels)
+    #     preds = np.array(self.predictions)
 
-    def save_results(self, args):
-        method_dir = os.path.join(args.type, 'methods', args.setting, args.method)
-        args.save_results_path = os.path.join(method_dir, args.save_results_path)
-        if not os.path.exists(args.save_results_path):
-            os.makedirs(args.save_results_path)
+    #     labels = np.unique(trues)
+
+    #     results_fine = {}
+    #     label2id = {x:i for i,x in enumerate(labels)}
+
+    #     for label in labels:
+    #         pos = np.array(np.where(trues == label)[0])
+    #         num_pos = int(np.sum(preds[pos] == trues[pos]))
+    #         num_neg = int(np.sum(preds[pos] != trues[pos]))
+
+    #         results["intent_class"].append(label)
+    #         results["left"].append(-num_neg)
+    #         results["right"].append(num_pos)
+
+    #         tmp_list = [0] * len(labels)
+            
+    #         for fine_label in labels:
+    #             if fine_label != label:
+                    
+    #                 num = int(np.sum(preds[pos] == fine_label))
+    #                 tmp_list[label2id[fine_label]] = num
+                    
+    #         results_fine[label] = tmp_list
+
+    #     return results, results_fine
+
+    # def json_read(self, path):
+    
+    #     with open(path, 'r')  as f:
+    #         json_r = json.load(f)
+
+    #     return json_r
+    
+    # def json_add(self, predict_t_f, path):
+        
+    #     with open(path, 'w') as f:
+    #         json.dump(predict_t_f, f, indent=4)
+
+
+    def save_results(self, args, data):
+        
+        
+        if not os.path.exists(self.output_file_dir):
+            os.makedirs(self.output_file_dir)
+
+        #save known intents
+        np.save(os.path.join(self.output_file_dir, 'labels.npy'), data.label_list)
 
         var = [args.dataset, args.method, args.known_cls_ratio, args.labeled_ratio, args.cluster_num_factor, args.seed, self.num_labels]
         names = ['dataset', 'method', 'known_cls_ratio', 'labeled_ratio', 'cluster_num_factor','seed', 'K']
@@ -52,9 +106,10 @@ class ModelManager:
         keys = list(results.keys())
         values = list(results.values())
         
-        file_name = 'results'  + '.csv'
-        results_path = os.path.join(args.save_results_path, file_name)
-        
+        result_file = 'results.csv'
+        results_path = os.path.join(args.train_data_dir, args.type, result_file)
+
+
         if not os.path.exists(results_path):
             ori = []
             ori.append(values)
@@ -66,6 +121,32 @@ class ModelManager:
             df1 = df1.append(new,ignore_index=True)
             df1.to_csv(results_path,index=False)
         data_diagram = pd.read_csv(results_path)
+
+        static_dir = os.path.join(args.frontend_dir, args.type)
+        if not os.path.exists(static_dir):
+            os.makedirs(static_dir)
+
+        #save true_false predictions
+        predict_t_f, predict_t_f_fine = cal_true_false(self.true_labels, self.predictions)
+        csv_to_json(results_path, static_dir)
+
+        tf_overall_path = os.path.join(static_dir, 'ture_false_overall.json')
+        tf_fine_path = os.path.join(static_dir, 'ture_false_fine.json')
+
+        results = {}
+        results_fine = {}
+        key = str(args.dataset) + '_' + str(args.known_cls_ratio) + '_' + str(args.labeled_ratio) + '_' + str(args.method)
+        if os.path.exists(tf_overall_path):
+            results = json_read(tf_overall_path)
+
+        results[key] = predict_t_f
+
+        if os.path.exists(tf_fine_path):
+            results_fine = json_read(tf_fine_path)
+        results_fine[key] = predict_t_f_fine
+
+        json_add(results, tf_overall_path)
+        json_add(results_fine, tf_fine_path)
         
         print('test_results', data_diagram)
         

@@ -25,16 +25,16 @@ def run(args):
 
     manager = method.ModelManager(args, data)   
     
-
-    print('Training Begin...')
-    manager.train(args, data)
-    print('Training Finished...')
+    if args.train:
+        print('Training Begin...')
+        manager.train(args, data)
+        print('Training Finished...')
 
     print('Evaluation begin...')
-    manager.evaluation(data, args)
+    manager.evaluation(args, data)
     print('Evaluation finished...')
 
-    manager.save_results(args)
+    manager.save_results(args, data)
     
     # debug(data, manager, args)
     print('Open Intent Discovery Finished...')

@@ -13,6 +13,7 @@ import random
 import csv
 import sys
 import logging
+import json
 from torch import nn
 from torch.nn.parameter import Parameter
 from torch.autograd import Variable
@@ -85,6 +86,101 @@ def clustering_score(y_true, y_pred):
             'ARI': round(adjusted_rand_score(y_true, y_pred)*100, 2),
             'NMI': round(normalized_mutual_info_score(y_true, y_pred)*100, 2)}
 
+def produce_json(df, method, dataset, select_type, sort_type, select_terms, metricList):
+    import csv
+    if sort_type == 'known_cls_ratio':
+        axis_len = 3
+        pos_map = {'0.25':0, '0.5':1, '0.75':2}
+    elif sort_type == 'cluster_num_factor':
+        axis_len = 4
+        pos_map = {'1':0, '2':1, '3':2, '4':3}
+        
+    dic = {}
+    for i, dataset in dataset.items():
+        for metric in metricList:
+            for j, select_term in select_terms.items():
+                dic_tmp = {}
+                for k, method_val in method.items():
+                    _list = df[ (df["dataset"].str[:]==(dataset)) & (df[select_type] == select_term) & (df["method"].str[:]==(method_val))  ].sort_values(sort_type)
+                    select_tmp = _list.drop_duplicates(subset=[sort_type],keep='first')[sort_type]
+                    val=[0] * axis_len
+                    
+                    for l,item in select_tmp.items():
+                        val[pos_map[str(item)]] = _list[ (_list[sort_type] == item) ][metric].mean()
+                    dic_tmp[method_val]=val
+                # print(dic_1)
+                dic['discovery_'+str(dataset)+'_'+str(select_term)+'_'+str(metric)] = dic_tmp
+
+    return dic
+
+def csv_to_json(csv_file, frontend_dir):
+    df = pd.read_csv(csv_file)
+
+    dataset = df.drop_duplicates(subset=['dataset'],keep='first')['dataset']
+    known_cls_ratio = df.drop_duplicates(subset=['known_cls_ratio'],keep='first')['known_cls_ratio']
+    labeled_ratio = df.drop_duplicates(subset=['labeled_ratio'],keep='first')['cluster_num_factor']
+    method = df.drop_duplicates(subset=['method'],keep='first')['method']   
+
+    metricList=['ACC','ARI','NMI']
+
+    select_types = ['known_cls_ratio', 'cluster_num_factor']
+    select_terms = [known_cls_ratio, labeled_ratio]
+    select_files = ['json_discovery_IOKIR.json','json_discovery_IONOC.json' ]
+
+    for i in range(len(select_types)):
+        select_type = select_types[i]
+        sort_type = select_types[(i + 1) % 2]
+        select_term = select_terms[i]
+        select_file = select_files[i] 
+        
+        dic = produce_json(df, method, dataset, select_type,  sort_type, select_term, metricList)
+        select_path = os.path.join(frontend_dir, select_files[(i + 1) % 2] )
+        with open(select_path,'w+') as f:
+            json.dump(dic,f,indent=4)
+
+def json_read(path):
+    
+    with open(path, 'r')  as f:
+        json_r = json.load(f)
+
+    return json_r
+
+def json_add(predict_t_f, path):
+    
+    with open(path, 'w') as f:
+        json.dump(predict_t_f, f, indent=4)
+
+def cal_true_false(true_labels, predictions):
+            
+    results = {"intent_class":[], "left":[], "right":[]}
+    trues = np.array(true_labels)
+    preds = np.array(predictions)
+
+    labels = np.unique(trues)
+
+    results_fine = {}
+    label2id = {x:i for i,x in enumerate(labels)}
+
+    for label in labels:
+        pos = np.array(np.where(trues == label)[0])
+        num_pos = int(np.sum(preds[pos] == trues[pos]))
+        num_neg = int(np.sum(preds[pos] != trues[pos]))
+
+        results["intent_class"].append(label)
+        results["left"].append(-num_neg)
+        results["right"].append(num_pos)
+
+        tmp_list = [0] * len(labels)
+        
+        for fine_label in labels:
+            if fine_label != label:
+                
+                num = int(np.sum(preds[pos] == fine_label))
+                tmp_list[label2id[fine_label]] = num
+                
+        results_fine[label] = tmp_list
+
+    return results, results_fine
 
 ####################################Unsupervised Utils#######################################################
 import re

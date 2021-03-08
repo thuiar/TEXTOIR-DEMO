@@ -4,13 +4,13 @@ from open_intent_detection.utils import debug
 import importlib
 
 def run(args):
-    # test = True
-    # if test:
-    #     print("Notice: ****This is test mode****")
-    #     args.dataset = 'banking'
-    #     args.labeled_ratio = 1
-    #     args.known_cls_ratio = 0.25
-    #     args.num_train_epochs = 1
+    test = True
+    if test:
+        print("Notice: ****This is test mode****")
+        args.dataset = 'banking'
+        args.labeled_ratio = 0.4
+        args.known_cls_ratio = 0.5
+        args.num_train_epochs = 1
 
     print('Data and Model Preparation...')
     data = Data(args)
@@ -42,32 +42,32 @@ if __name__ == '__main__':
     print('Open Intent Detection Begin...')
 
     print('Parameters Initialization...')
-    # param = Param()
+    param = Param()
 
-    # args = param.args 
+    args = param.args 
     
-    # run(args)
+    run(args)
 
-    datasets = ['oos', 'stackoverflow', 'banking']
-    known_cls_ratios = [0.25, 0.5, 0.75]
-    labeled_ratios = [0.2, 0.4, 0.6, 0.8, 1.0]
-    seeds = [i for i in range(10)]
+    # datasets = ['oos', 'stackoverflow', 'banking']
+    # known_cls_ratios = [0.25, 0.5, 0.75]
+    # labeled_ratios = [0.2, 0.4, 0.6, 0.8, 1.0]
+    # seeds = [i for i in range(10)]
     
 
-    for seed in seeds:
-        for dataset in datasets:
-            for known_cls_ratio in known_cls_ratios:
-                for labeled_ratio in labeled_ratios:
-                    param = Param()
-                    args = param.args 
+    # for seed in seeds:
+    #     for dataset in datasets:
+    #         for known_cls_ratio in known_cls_ratios:
+    #             for labeled_ratio in labeled_ratios:
+    #                 param = Param()
+    #                 args = param.args 
         
-                    args.method = 'DeepUnk'
-                    args.dataset = dataset
-                    args.known_cls_ratio = known_cls_ratio
-                    args.labeled_ratio = labeled_ratio
-                    args.seed = seed 
-                    args.gpu_id = '1'
-                    args.train = True
-                    args.freeze_bert_parameters = True
+    #                 args.method = 'DeepUnk'
+    #                 args.dataset = dataset
+    #                 args.known_cls_ratio = known_cls_ratio
+    #                 args.labeled_ratio = labeled_ratio
+    #                 args.seed = seed 
+    #                 args.gpu_id = '1'
+    #                 args.train = True
+    #                 args.freeze_bert_parameters = True
 
-                    run(args)
+    #                 run(args)

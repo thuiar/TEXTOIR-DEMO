@@ -10,18 +10,45 @@ class ModelManager:
     
     def __init__(self, args, data):
         
-        Model = Backbone.__dict__[args.backbone]
-        pretrained_model = self.pre_train(args, data)
-
-        if args.cluster_num_factor > 1:
-            self.num_labels = self.predict_k(args, data, pretrained_model) 
-        else:
-            self.num_labels = data.num_labels   
+        #Save models and trainined data
+        concat_names = [args.method, args.dataset, args.known_cls_ratio, args.labeled_ratio, args.backbone]
+        output_file_name = "_".join([str(x) for x in concat_names])
+        output_dir = os.path.join(args.train_data_dir, args.type, output_file_name)
+        self.output_file_dir = os.path.join(output_dir, args.save_results_path)
+        self.model_dir = os.path.join(output_dir, args.model_dir)
+        self.pretrain_model_dir = os.path.join(output_dir, 'pretrain')
 
         os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu_id    
-    
-        self.model = Model.from_pretrained(args.bert_model, cache_dir = "", num_labels = self.num_labels)
-        self.load_pretrained_model(args, pretrained_model)
+
+        Model = Backbone.__dict__[args.backbone]
+        
+        if args.train:
+            
+            self.best_eval_score = 0
+            self.centroids = None
+            pretrained_model = self.pre_train(args, data) 
+        
+            if args.cluster_num_factor > 1:
+                self.num_labels = self.predict_k(args, data, pretrained_model) 
+            else:
+                self.num_labels = data.num_labels  
+            
+            self.model = Model.from_pretrained(args.bert_model, cache_dir = "", num_labels = self.num_labels)
+            self.load_pretrained_model(args, pretrained_model)
+
+        else:
+            
+            pretrained_model = Model.from_pretrained(args.bert_model, cache_dir = "", num_labels = data.n_known_cls)
+            pretrained_model = self.restore_model(pretrained_model, self.pretrain_model_dir)
+
+            if args.cluster_num_factor > 1:
+                self.num_labels = self.predict_k(args, data, pretrained_model) 
+            else:
+                self.num_labels = data.num_labels 
+
+            self.model = Model.from_pretrained(args.bert_model, cache_dir = "", num_labels = self.num_labels)
+            self.model = self.restore_model(self.model, self.model_dir)
+        
 
         if args.freeze_bert_parameters:
             self.freeze_parameters(self.model)   
@@ -33,20 +60,16 @@ class ModelManager:
         self.num_train_optimization_steps = int(num_train_examples / args.train_batch_size) * args.num_train_epochs
         self.optimizer = self.get_optimizer(args)
 
-        self.best_eval_score = 0
-        self.centroids = None
-
-        self.test_results = None
-        self.predictions = None
-        self.true_labels = None
+        self.test_results, self.predictions, self.true_labels = None, None, None
 
     def pre_train(self, args, data):
         
-        method_dir = os.path.join(args.type, 'methods', args.setting, args.method)
-        args.pretrain_dir = os.path.join(method_dir, args.pretrain_dir)
         manager_p = PretrainModelManager(args, data)
         manager_p.train(args, data)
         print('Pretraining finished...')
+
+        if args.save:
+            self.save_model(manager_p.model, self.pretrain_model_dir)
 
         return manager_p.model
 
@@ -101,7 +124,7 @@ class ModelManager:
                          t_total = self.num_train_optimization_steps)   
         return optimizer
 
-    def evaluation(self, data, args = None, show=True):
+    def evaluation(self, args, data, show=True):
 
         feats, labels = self.get_features_labels(data.test_dataloader, self.model, args)
         feats = feats.cpu().numpy()
@@ -129,7 +152,6 @@ class ModelManager:
             print('confusion matrix',cm)
 
         self.test_results = results
-
 
     def alignment(self, km, args):
 
@@ -179,8 +201,6 @@ class ModelManager:
             
             eval_score = metrics.silhouette_score(feats, km.labels_)
             print('eval_score',eval_score)
-            
-            self.evaluation(data, args)  ####debug
 
             if eval_score > self.best_eval_score:
                 best_model = copy.deepcopy(self.model)
@@ -219,23 +239,47 @@ class ModelManager:
         
         self.model = best_model
 
+        if args.save:
+            self.save_model(self.model, self.model_dir)
+            
+
     def load_pretrained_model(self, args, pretrained_model):
         pretrained_dict = pretrained_model.state_dict()
         classifier_params = ['classifier.weight','classifier.bias']
         pretrained_dict =  {k: v for k, v in pretrained_dict.items() if k not in classifier_params}
         self.model.load_state_dict(pretrained_dict, strict=False)
-    
+
+    def restore_model(self, model, model_dir):
+        output_model_file = os.path.join(model_dir, WEIGHTS_NAME)
+        model.load_state_dict(torch.load(output_model_file))
+
+        return model
+
+
     def freeze_parameters(self,model):
         for name, param in model.bert.named_parameters():  
             param.requires_grad = False
             if "encoder.layer.11" in name or "pooler" in name:
                 param.requires_grad = True
 
-    def save_results(self, args):
-        method_dir = os.path.join(args.type, 'methods', args.setting, args.method)
-        args.save_results_path = os.path.join(method_dir, args.save_results_path)
-        if not os.path.exists(args.save_results_path):
-            os.makedirs(args.save_results_path)
+    def save_model(self, model, model_dir):
+            
+        if not os.path.exists(model_dir):
+            os.makedirs(model_dir)
+        
+        save_model = model.module if hasattr(model, 'module') else model  
+        model_file = os.path.join(model_dir, WEIGHTS_NAME)
+        model_config_file = os.path.join(model_dir, CONFIG_NAME)
+        torch.save(save_model.state_dict(), model_file)
+        with open(model_config_file, "w") as f:
+            f.write(save_model.config.to_json_string())  
+
+    def save_results(self, args, data):
+        if not os.path.exists(self.output_file_dir):
+            os.makedirs(self.output_file_dir)
+
+        #save known intents
+        np.save(os.path.join(self.output_file_dir, 'labels.npy'), data.all_label_list)
 
         var = [args.dataset, args.method, args.known_cls_ratio, args.labeled_ratio, args.cluster_num_factor, args.seed, self.num_labels]
         names = ['dataset', 'method', 'known_cls_ratio', 'labeled_ratio', 'cluster_num_factor','seed', 'K']
@@ -244,8 +288,8 @@ class ModelManager:
         keys = list(results.keys())
         values = list(results.values())
         
-        file_name = 'results'  + '.csv'
-        results_path = os.path.join(args.save_results_path, file_name)
+        result_file = 'results.csv'
+        results_path = os.path.join(args.train_data_dir, args.type, result_file)
         
         if not os.path.exists(results_path):
             ori = []
@@ -259,6 +303,34 @@ class ModelManager:
             df1.to_csv(results_path,index=False)
         data_diagram = pd.read_csv(results_path)
         
+        print('test_results', data_diagram)
+        
+        static_dir = os.path.join(args.frontend_dir, args.type)
+        if not os.path.exists(static_dir):
+            os.makedirs(static_dir)
+
+        #save true_false predictions
+        predict_t_f, predict_t_f_fine = cal_true_false(self.true_labels, self.predictions)
+        csv_to_json(results_path, static_dir)
+
+        tf_overall_path = os.path.join(static_dir, 'ture_false_overall.json')
+        tf_fine_path = os.path.join(static_dir, 'ture_false_fine.json')
+
+        results = {}
+        results_fine = {}
+        key = str(args.dataset) + '_' + str(args.known_cls_ratio) + '_' + str(args.cluster_num_factor) + '_' + str(args.method)
+        if os.path.exists(tf_overall_path):
+            results = json_read(tf_overall_path)
+
+        results[key] = predict_t_f
+
+        if os.path.exists(tf_fine_path):
+            results_fine = json_read(tf_fine_path)
+        results_fine[key] = predict_t_f_fine
+
+        json_add(results, tf_overall_path)
+        json_add(results_fine, tf_fine_path)
+
         print('test_results', data_diagram)
         
     

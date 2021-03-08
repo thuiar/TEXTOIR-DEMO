@@ -1,5 +1,7 @@
 import argparse
 import importlib
+import sys
+import os
 
 class Param:
 
@@ -25,7 +27,7 @@ class Param:
 
         parser.add_argument("--backbone", default='bert', type=str, help="which model to use")
 
-        parser.add_argument("--cluster_num_factor", default=1.0, type=float, help="The factor (magnification) of the number of clusters K.")
+        parser.add_argument("--cluster_num_factor", default=1, type=int, help="The factor (magnification) of the number of clusters K.")
 
         parser.add_argument("--feat_dim", default=768, type=int, help="The feature dimension.")
 
@@ -39,17 +41,21 @@ class Param:
 
         parser.add_argument("--save_results_path", type=str, default='outputs', help="the path to save results")
 
-        parser.add_argument("--data_dir", default='data', type=str,
+        parser.add_argument("--data_dir", default=sys.path[0]+'/data', type=str,
                             help="The input data dir. Should contain the .csv files (or other data files) for the task.")
          
         parser.add_argument("--gpu_id", type=str, default='0', help="Select the GPU id")
+
+        parser.add_argument("--frontend_dir", type=str, default=os.path.join(sys.path[0],'../frontend/static/jsons') , help="the path of the frontend")
+
+        parser.add_argument("--train", action="store_true", help="Whether train the model")
 
         #####################################unsupervised parameters##################################
         parser.add_argument("--max_num_words", default=10000, type=int, help="The maximum number of words.")
         
         # parser.add_argument("--feat_dim", default=2000, type=int, help="The feature dimension.")
 
-        parser.add_argument("--glove_model", default="/home/zhl/pretrained_models/glove", type=str, help="The path for the pre-trained bert model.")
+        parser.add_argument("--glove_model", default='/home/sharing/pretrained_embedding/glove', type=str, help="The path for the pre-trained bert model.")
 
         #####################################DEC & DCN parameters###########################################
         parser.add_argument("--maxiter", default=12000, type=int, help="The training epochs for DEC.")
@@ -65,17 +71,21 @@ class Param:
 
         parser.add_argument("--rampup_length", default=5, type=int, help="The rampup length.")
 
-        parser.add_argument("--num_warmup_train_epochs", default=10, type=int, help="The number of warm-up training epochs.")
+        parser.add_argument("--num_warmup_train_epochs", default=1, type=int, help="The number of warm-up training epochs.")
 
         parser.add_argument("--alpha", default=0.6, type=float)
 
         ##############BERT parameters#####################
-        parser.add_argument("--bert_model", default="/home/zhl/pretrained_models/uncased_L-12_H-768_A-12", type=str, help="The path for the pre-trained bert model.")
+
+        parser.add_argument("--train_data_dir", default= os.path.join(sys.path[0],'..', 'train'), type=str, 
+                            help="The output directory where all train data will be written.") 
+
+        parser.add_argument("--bert_model", default="/home/lxt/tdes/pretrained_models/uncased_L-12_H-768_A-12", type=str, help="The path for the pre-trained bert model.")
 
         parser.add_argument("--pretrain", action="store_true", default = 'pretrain', help="Pretrain the model")
 
-        parser.add_argument("--pretrain_dir", default='pretrain_models', type=str, 
-                            help="The output directory where the model checkpoints will be written.") 
+        parser.add_argument("--model_dir", default='models', type=str, 
+                            help="The output directory where the model predictions and checkpoints will be written.") 
         
         parser.add_argument("--max_seq_length", default=None, type=int,
                             help="The maximum total input sequence length after tokenization. Sequences longer "
@@ -85,9 +95,7 @@ class Param:
 
         parser.add_argument("--freeze_bert_parameters", action="store_true", default = True, help="Freeze the last parameters of BERT")
 
-        parser.add_argument("--save_results", action="store_true", default = 'save_results', help="save test results")
-        
-        parser.add_argument("--save_model", action="store_true", help="save trained-model")
+        parser.add_argument("--save", action="store_true", help="save trained-model")
 
         parser.add_argument("--lr", default=5e-5, type=float,
                             help="The learning rate of BERT.")    
@@ -121,16 +129,22 @@ class AG:
 class DEC:
     def __init__(self, args):
         args.feat_dim = 2000
+        args.maxiter = 500
+        args.backbone = 'SAE'
         self.args = args
 
 class DCN:
     def __init__(self, args):
         args.feat_dim = 2000
+        args.maxiter = 12000
         self.args = args
 
 class SAE:
     def __init__(self, args):
         args.feat_dim = 2000
+        args.num_train_epochs = 150
+        args.batch_size = 4096
+        args.backbone = 'SAE'
         self.args = args
 
 class KCL_BERT:

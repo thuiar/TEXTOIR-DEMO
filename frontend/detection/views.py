@@ -34,6 +34,8 @@ from django.db import connection
 # 查询数据库结果转字典。
 from django.forms.models import model_to_dict
 
+backend_engine_linux = '/../textoir/run_detect.py '
+backend_engine_win = '\\..\\textoir\\run_detect.py '
 
 @xframe_options_exempt
 def model_management(request):
@@ -206,10 +208,10 @@ def add_model_training_log(request):
         os.makedirs(local_path)
         str_run = ''
         if platform.system() == 'Linux':
-            str_run = 'python ' + sys.path[0]+'/static/textoir/run_detect.py '+  para_str_python
+            str_run = 'python ' + sys.path[0]+ backend_engine_linux +  para_str_python
             
         elif platform.system() == 'Windows':
-            str_run = 'python ' + sys.path[0]+'\\static\\TEXTOIR\\textoir\\run_detect.py ' + para_str_python
+            str_run = 'python ' + sys.path[0]+ backend_engine_win + para_str_python
         # run model
         str_run = shlex.split(str_run)
         process = subprocess.Popen(str_run)
@@ -294,9 +296,9 @@ def getModelAnalysisExampleData(request):
     ## genernate local_path
     local_path = ''
     if platform.system() == 'Linux':
-        local_path = sys.path[0]+'/static/data/test_data/'+  str_path + '/test.tsv'
+        local_path = sys.path[0]+'/static/test_data/test_data/'+  str_path + '/test.tsv'
     elif platform.system() == 'Windows':
-        local_path = sys.path[0]+'\\static\\data\\test_data\\'+  str_path + '\\test.tsv'
+        local_path = sys.path[0]+'\\static\\test_data\\test_data\\'+  str_path + '\\test.tsv'
     ##
     text = read(local_path)
     ## return msg

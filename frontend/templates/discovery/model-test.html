@@ -46,32 +46,19 @@
                                             <select id = 'Known_Intent_Ratio_1' name="Known_Intent_Ratio">
                                                
                                                 <option value="0" selected>Known Intent Ratio</option>
-                                                <option value="0.1" >10%</option>
-                                                <option value="0.2">20%</option>
-                                                <option value="0.3">30%</option>
-                                                <option value="0.4" >40%</option>
-                                                <option value="0.5">50%</option>
-                                                <option value="0.6">60%</option>
-                                                <option value="0.7" >70%</option>
-                                                <option value="0.8">80%</option>
-                                                <option value="0.9">90%</option>
-                                                <option value="1">100%</option>
-                                                
+                                                <option value="0.1" >25%</option>
+                                                <option value="0.2">50%</option>
+                                                <option value="0.3">75%</option>
                                             </select>
                                         </div>
 
                                         <div class="layui-input-inline">
                                             <select id = 'Annotated_Ratio_1' name="Annotated_Ratio">
                                                 <option value="0" selected>Labeled Ratio</option>
-                                                <option value="0.1" >10%</option>
                                                 <option value="0.2">20%</option>
-                                                <option value="0.3">30%</option>
-                                                <option value="0.4" >40%</option>
-                                                <option value="0.5">50%</option>
-                                                <option value="0.6">60%</option>
-                                                <option value="0.7" >70%</option>
+                                                <option value="0.4">40%</option>  
+                                                <option value="0.6">60%</option>                                             
                                                 <option value="0.8">80%</option>
-                                                <option value="0.9">90%</option>
                                                 <option value="1">100%</option>
                                             </select>
                                         </div>
@@ -153,28 +140,22 @@
                                             </div>
 
                                             <div class="layui-input-inline">
-                                                <select id = 'Known_Intent_Ratio_2' name="Known_Intent_Ratio">
-                                                    <option value="0" selected>Known Intent Ratio</option>
-                                                    <option value="0.1" >10%</option>
-                                                    <option value="0.2">20%</option>
-                                                    <option value="0.3">30%</option>
-                                                    <option value="0.4" >40%</option>
-                                                    <option value="0.5">50%</option>
-                                                    <option value="0.6">60%</option>
-                                                    <option value="0.7" >70%</option>
-                                                    <option value="0.8">80%</option>
-                                                    <option value="0.9">90%</option>
-                                                    <option value="1">100%</option>
-                                                </select>
+                                            <select id = 'Label_Ratio_2' name="Label_Ratio">
+                                                <option value="0" selected>Label Ratio</option>                                                
+                                                <option value="0.2">20%</option>                                              
+                                                <option value="0.4" >40%</option>                                                
+                                                <option value="0.6">60%</option>                                              
+                                                <option value="0.8">80%</option>
+                                                <option value="1">100%</option>
+                                            </select>
                                             </div>
 
                                             <div class="layui-input-inline">
                                                 <select id = 'Evaluation_Metrics_2' name="Evaluation_Metrics">
                                                     <option value="0" selected>Evaluation Metrics</option>
-                                                    <option value="1" >F1</option>
-                                                    <option value="2">ACC</option>
-                                                    <option value="3">Recall</option>
-                                                  
+                                                    <option value="ACC">ACC</option>
+                                                    <option value="ARI" >ARI</option>
+                                                    <option value="NMI">NMI</option>
                                                 </select>
                                             </div>
                                             <div class="layui-inline layui-show-xs-block">
@@ -206,27 +187,21 @@
                                         </div>
 
                                         <div class="layui-input-inline">
-                                            <select id = 'Label_Ratio_3' name="Label_Ratio">
-                                                <option value="0" selected>Number of Clusters</option>
-                                                <option value="0.1" >10%</option>
-                                                <option value="0.2">20%</option>
-                                                <option value="0.3">30%</option>
-                                                <option value="0.4" >40%</option>
-                                                <option value="0.5">50%</option>
-                                                <option value="0.6">60%</option>
-                                                <option value="0.7" >70%</option>
-                                                <option value="0.8">80%</option>
-                                                <option value="0.9">90%</option>
-                                                <option value="1">100%</option>
-                                            </select>
+                                                <select id = 'Known_Intent_Ratio_3' name="Known_Intent_Ratio">
+                                                    <option value="0" selected>Known Intent Ratio</option>
+                                                    <option value="0.25" >25%</option>
+                                                    <option value="0.5">50%</option>
+                                                    <option value="0.75">75%</option>
+                                                    
+                                                </select>
                                         </div>
 
                                         <div class="layui-input-inline">
                                             <select id = 'Evaluation_Metrics_3' name="Evaluation_Metrics">
                                                 <option value="0" selected>Evaluation Metrics</option>
-                                                <option value="1" >F1</option>
-                                                <option value="2">ACC</option>
-                                                <option value="3">Recall</option>
+                                                <option value="ACC">ACC</option>
+                                                <option value="ARI" >ARI</option>
+                                                <option value="NMI">NMI</option>
                                                 
                                             </select>
                                         </div>
@@ -282,6 +257,7 @@
                     } else if(model_discovery_1 == 'model_discovery_1'){
                         layer.msg('Please select New Intent Discovery');
                     } else{// 渲染图表
+                        
                         var myChart1 = echarts.init(document.getElementById('image1'));
                         $.get('/static/json/my_json.json', function (data) {
                             data_chart_1 = data["two_way_bar"];
@@ -357,6 +333,7 @@
                         }, 
                         'json');
                     //image2
+                    
                       var myChart2 = echarts.init(document.getElementById('image2'));
                         $.get('/static/json/my_json.json', function (data) {
                             data_chart_2 = data["detection_error_analysis"];
@@ -428,19 +405,22 @@
                   form.on('submit(show2)',function(data) {
                     //console.log('first show clicked')
                     dataset_name_select_2 = $('#dataset_name_select_2').val()
-                    Known_Intent_Ratio_2 = $('#Known_Intent_Ratio_2').val()
+                    Label_Ratio_2 = $('#Label_Ratio_2').val()
                     Evaluation_Metrics_2 = $('#Evaluation_Metrics_2').val()
                    
                     if(dataset_name_select_2 == 'Dataset'){
                         layer.msg('Please select Dataset');
-                    } else if(Known_Intent_Ratio_2 == 0){
+                    } else if(Label_Ratio_2 == 0){
                         layer.msg('Please select Known Intent Ratio');
                     } else if(Evaluation_Metrics_2 == 0){
                         layer.msg('Please select Evaluation Metrics');
                     }else{// 渲染图表
+                        iok_data_str = "discovery_"+dataset_name_select_2+"_"+Label_Ratio_2+"_"+Evaluation_Metrics_2
+                        console.log(iok_data_str)
                         var myChart3 = echarts.init(document.getElementById('image3'));
-                        $.get('/static/json/my_json.json', function (data) {
-                            data_chart_3 = data["detection_known_intent_ratio"];
+                       
+                        $.get('/static/jsons/open_intent_discovery/json_discovery_IOKIR.json', function (data) {
+                            data_chart_3 = data[iok_data_str];
                             myChart3.clear();//清除缓存
                             var mylegend = [];
                             var series = [];
@@ -467,11 +447,11 @@
                                 top:'28%'
                             },
                             xAxis: {
-                                name:'label ratio',
+                                name:'KR',
                                 padding:[0,0,0,0],//控制name位置
                                 type: 'category',
                                 boundaryGap: false,
-                                data: ['0.1', '0.2', '0.3', '0.4', '0.5', '0.6', '0.7','0.8','0.9','1.0']
+                                data: ['0.25', '0.5', '0.75']
                             },
                             yAxis: {name:'score',
                             padding:[0,0,0,0],
@@ -500,8 +480,10 @@
                         layer.msg('Please select Evaluation Metrics');
                     }else{// 渲染图表
                         var myChart4 = echarts.init(document.getElementById('image4'));
-                        $.get('/static/json/my_json.json', function (data) {
-                            data_chart_4 = data["detection_label_ratio"];
+                        ion_data_str = "discovery_"+dataset_name_select_3+"_"+Known_Intent_Ratio_3+"_"+Evaluation_Metrics_3
+                        $.get('/static/jsons/open_intent_discovery/json_discovery_IONOC.json', function (data) {
+                           console.log(ion_data_str)
+                            data_chart_4 = data[ion_data_str];
                             myChart4.clear();//清除缓存
                             var mylegend = [];
                             var series = [];
@@ -528,11 +510,11 @@
                                 top:'28%'
                             },
                             xAxis: {
-                                name:'Known ratio',
+                                name:'NOC',
                                 padding:[0,0,0,0],//控制name位置
                                 type: 'category',
                                 boundaryGap: false,
-                                data: ['0.1', '0.2', '0.3', '0.4', '0.5', '0.6', '0.7','0.8','0.9','1.0']
+                                data: [ '1', '2','3','4']
                             },
                             yAxis: {name:'score',
                             padding:[0,0,0,0],

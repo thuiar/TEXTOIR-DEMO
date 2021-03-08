@@ -181,20 +181,7 @@ class ModelManager:
         output_loss_file = os.path.join(self.model_dir, 'loss', WEIGHTS_NAME)
         self.loss_fct.load_state_dict(torch.load(output_loss_file))
     
-    def cal_true_false(self):
-        
-        results = {}
-        trues = np.array(self.true_labels)
-        preds = np.array(self.predictions)
 
-        for label in np.unique(trues):
-            pos = np.array(np.where(trues == label)[0])
-            num_pos = np.sum(preds[pos] == trues[pos])
-            num_neg = np.sum(preds[pos] != trues[pos])
-
-            results[label] = (str(num_pos), str(num_neg))
-        
-        return results
     
     def save_model(self, args):
         
@@ -216,6 +203,8 @@ class ModelManager:
         loss_file = os.path.join(loss_dir, WEIGHTS_NAME)
         torch.save(save_loss.state_dict(), loss_file)
 
+    
+
     def save_results(self, args, data = None):
 
         if not os.path.exists(self.output_file_dir):
@@ -224,12 +213,7 @@ class ModelManager:
         #save known intents
         np.save(os.path.join(self.output_file_dir, 'labels.npy'), data.label_list)
 
-        #save true_false predictions
-        predict_t_f = self.cal_true_false()
-
-        with open(os.path.join(self.output_file_dir, 'ture_false.json'), 'w') as f:
-            json.dump(predict_t_f, f)
-
+        
         np.save(os.path.join(self.output_file_dir, 'features.npy'), self.best_features)
 
         var = [args.dataset, args.method, args.known_cls_ratio, args.labeled_ratio, args.seed]
@@ -240,7 +224,7 @@ class ModelManager:
         values = list(results.values())
         
         result_file = 'results.csv'
-        results_path = os.path.join(self.output_file_dir, result_file)
+        results_path = os.path.join(args.train_data_dir, args.type, result_file)
         
         if not os.path.exists(results_path):
             ori = []
@@ -254,6 +238,36 @@ class ModelManager:
             df1.to_csv(results_path,index=False)
         data_diagram = pd.read_csv(results_path)
         
+        csv_to_json(results_path, os.path.join(args.frontend_dir, args.type))
+        print('test_results', data_diagram)
+
+
+        static_dir = os.path.join(args.frontend_dir, args.type)
+        if not os.path.exists(static_dir):
+            os.makedirs(static_dir)
+
+        #save true_false predictions
+        predict_t_f, predict_t_f_fine = cal_true_false(self.true_labels, self.predictions)
+        csv_to_json(results_path, static_dir)
+
+        tf_overall_path = os.path.join(static_dir, 'ture_false_overall.json')
+        tf_fine_path = os.path.join(static_dir, 'ture_false_fine.json')
+
+        results = {}
+        results_fine = {}
+        key = str(args.dataset) + '_' + str(args.known_cls_ratio) + '_' + str(args.labeled_ratio) + '_' + str(args.method)
+        if os.path.exists(tf_overall_path):
+            results = json_read(tf_overall_path)
+
+        results[key] = predict_t_f
+
+        if os.path.exists(tf_fine_path):
+            results_fine = json_read(tf_fine_path)
+        results_fine[key] = predict_t_f_fine
+
+        json_add(results, tf_overall_path)
+        json_add(results_fine, tf_fine_path)
+
         print('test_results', data_diagram)
 
   

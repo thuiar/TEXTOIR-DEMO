@@ -1,5 +1,5 @@
 from open_intent_discovery.utils import *
-from open_intent_discovery.pretrain import *
+# from open_intent_discovery.pretrain import *
 import open_intent_discovery.Backbone as Backbone
 
 TIMESTAMP = "{0:%Y-%m-%dT%H-%M-%S/}".format(datetime.now())
@@ -19,10 +19,34 @@ class ModelManager:
         self.num_labels = data.num_labels
         self.model = None
 
+        #Save models and trainined data
+        concat_names = [args.method, args.dataset, args.known_cls_ratio, args.labeled_ratio, args.cluster_num_factor, args.backbone]
+        output_file_name = "_".join([str(x) for x in concat_names])
+        self.output_dir = os.path.join(args.train_data_dir, args.type, output_file_name)
+        self.output_file_dir = os.path.join(self.output_dir, args.save_results_path)
+        self.model_dir = os.path.join(self.output_dir, args.model_dir)
+        
+        if args.train:
+            self.model = None
+        else:
+            self.sae_emb.load_weights(self.model_dir + '_SAE.h5')
+            clustering_layer = Backbone.ClusteringLayer(self.num_labels, name='clustering')(self.sae_emb.layers[3].output)
+            self.model = Model(inputs=self.sae_emb.input, outputs=[clustering_layer, self.sae_emb.output])   
+            self.model.load_weights(self.model_dir + '_DCN.h5')
+
+
     def train(self, args, data):
         
-        emb_train, emb_test = self.init_emb(args, data)
+        print("Training: DCN(emb)")
+
+        # emb_train, emb_test = self.init_emb(args, data)
         
+        self.sae_emb.fit(self.tfidf_train, self.tfidf_train, epochs = args.num_train_epochs, batch_size = args.batch_size, shuffle=True, 
+                    validation_data=(self.tfidf_test, self.tfidf_test), verbose=1)
+
+        emb_train, emb_test = data.get_sae(args, self.sae_emb, self.tfidf_train, self.tfidf_test)
+        
+
         clustering_layer = Backbone.ClusteringLayer(self.num_labels, name='clustering')(self.sae_emb.layers[3].output)
         model = Model(inputs=self.sae_emb.input, outputs=[clustering_layer, self.sae_emb.output])
         model.compile(loss=['kld', 'mse'], loss_weights=[0.1, 1], optimizer=SGD(0.01, 0.9))
@@ -50,7 +74,7 @@ class ModelManager:
                 delta_label = np.sum(y_pred != y_pred_last).astype(np.float32) / y_pred.shape[0]
                 y_pred_last = np.copy(y_pred)
                 if ite > 0 and delta_label < args.tol:
-                    print('delta_label ', delta_label, '< tol ', args,tol)
+                    print('delta_label ', delta_label, '< tol ', args.tol)
                     print('Reached tolerance threshold. Stopping training.')
                     break
 
@@ -59,6 +83,17 @@ class ModelManager:
             index = index + 1 if (index + 1) * args.batch_size <= self.tfidf_train.shape[0] else 0
 
         self.model = model
+
+        if args.save:
+        
+            if not os.path.exists(self.output_dir):
+                os.makedirs(self.output_dir)
+
+            sae_model_dir = self.model_dir + '_SAE.h5'
+            dec_model_dir = self.model_dir + '_DCN.h5'
+
+            self.sae_emb.save_weights(sae_model_dir)
+            self.model.save_weights(dec_model_dir)
 
     def init_emb(self, args, data):
         
@@ -69,24 +104,28 @@ class ModelManager:
         return emb_train, emb_test
 
 
-    def evaluation(self, data, show=False):
+    def evaluation(self, args, data, show=False):
         q, _ = self.model.predict(self.tfidf_test, verbose = 0)
         y_pred = q.argmax(1)
         y_true = data.y_test
         results = clustering_score(y_true, y_pred)
         cm = confusion_matrix(y_true,y_pred) 
 
+        self.predictions = list([data.label_list[idx] for idx in y_pred])
+        self.true_labels = list([data.label_list[idx] for idx in y_true])
+        
         if show:
             print('results',results)
             print('confusion matrix', cm)
 
         self.test_results = results
 
-    def save_results(self, args):
-        method_dir = os.path.join(args.type, 'methods', args.setting, args.method)
-        args.save_results_path = os.path.join(method_dir, args.save_results_path)
-        if not os.path.exists(args.save_results_path):
-            os.makedirs(args.save_results_path)
+    def save_results(self, args, data):
+        if not os.path.exists(self.output_file_dir):
+            os.makedirs(self.output_file_dir)
+
+        #save known intents
+        np.save(os.path.join(self.output_file_dir, 'labels.npy'), data.label_list)
 
         var = [args.dataset, args.method, args.known_cls_ratio, args.labeled_ratio, args.cluster_num_factor, args.seed, self.num_labels]
         names = ['dataset', 'method', 'known_cls_ratio', 'labeled_ratio', 'cluster_num_factor','seed', 'K']
@@ -95,8 +134,8 @@ class ModelManager:
         keys = list(results.keys())
         values = list(results.values())
         
-        file_name = 'results'  + '.csv'
-        results_path = os.path.join(args.save_results_path, file_name)
+        result_file = 'results.csv'
+        results_path = os.path.join(args.train_data_dir, args.type, result_file)
         
         if not os.path.exists(results_path):
             ori = []
@@ -109,6 +148,32 @@ class ModelManager:
             df1 = df1.append(new,ignore_index=True)
             df1.to_csv(results_path,index=False)
         data_diagram = pd.read_csv(results_path)
+
+        static_dir = os.path.join(args.frontend_dir, args.type)
+        if not os.path.exists(static_dir):
+            os.makedirs(static_dir)
+
+        #save true_false predictions
+        predict_t_f, predict_t_f_fine = cal_true_false(self.true_labels, self.predictions)
+        csv_to_json(results_path, static_dir)
+
+        tf_overall_path = os.path.join(static_dir, 'ture_false_overall.json')
+        tf_fine_path = os.path.join(static_dir, 'ture_false_fine.json')
+
+        results = {}
+        results_fine = {}
+        key = str(args.dataset) + '_' + str(args.known_cls_ratio) + '_' + str(args.cluster_num_factor) + '_' + str(args.method)
+        if os.path.exists(tf_overall_path):
+            results = json_read(tf_overall_path)
+
+        results[key] = predict_t_f
+
+        if os.path.exists(tf_fine_path):
+            results_fine = json_read(tf_fine_path)
+        results_fine[key] = predict_t_f_fine
+
+        json_add(results, tf_overall_path)
+        json_add(results_fine, tf_fine_path)
         
         print('test_results', data_diagram)
         

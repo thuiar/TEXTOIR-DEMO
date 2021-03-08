@@ -1,5 +1,7 @@
 import argparse
-import attr
+import sys
+import os
+
 
 class Param:
 
@@ -37,6 +39,7 @@ class Param:
 
         parser.add_argument("--train", action="store_true", help="Whether train the model")
 
+        parser.add_argument("--frontend_dir", type=str, default=os.path.join(sys.path[0],'../frontend/static/jsons') , help="the path of the frontend")
         ###########################special parameters######################################
         #ADB
         parser.add_argument("--lr_boundary", type=float, default=0.05, help="The learning rate of the decision boundary.")
@@ -56,9 +59,9 @@ class Param:
         parser.add_argument("--distance_type", type=str, default='cosine', help="The distance type.")
         
         #######################################################bert############################################################################
-        parser.add_argument("--bert_model", default="/home/zhl/pretrained_models/uncased_L-12_H-768_A-12", type=str, help="The path for the pre-trained bert model.")
+        parser.add_argument("--bert_model", default="/home/lxt/tdes/pretrained_models/uncased_L-12_H-768_A-12", type=str, help="The path for the pre-trained bert model.")
         
-        parser.add_argument("--data_dir", default='data', type=str,
+        parser.add_argument("--data_dir", default=sys.path[0]+'/data', type=str,
                             help="The input data dir. Should contain the .csv files (or other data files) for the task.")
         
         parser.add_argument("--save_results_path", type=str, default='outputs', help="the path to save results")
@@ -66,7 +69,7 @@ class Param:
         parser.add_argument("--model_dir", default='models', type=str, 
                             help="The output directory where the model predictions and checkpoints will be written.") 
 
-        parser.add_argument("--train_data_dir", default='/home/zhl/train', type=str, 
+        parser.add_argument("--train_data_dir", default= os.path.join(sys.path[0],'..', 'train'), type=str, 
                             help="The output directory where all train data will be written.") 
         
         parser.add_argument("--max_seq_length", default=None, type=int,

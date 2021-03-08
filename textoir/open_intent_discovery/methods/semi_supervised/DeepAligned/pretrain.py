@@ -82,7 +82,6 @@ class PretrainModelManager:
                     break
                 
         self.model = best_model
-        self.save_model(args)
 
     def get_optimizer(self, args):
         param_optimizer = list(self.model.named_parameters())
@@ -97,15 +96,15 @@ class PretrainModelManager:
                          t_total = self.num_train_optimization_steps)   
         return optimizer
     
-    def save_model(self, args):
-        if not os.path.exists(args.pretrain_dir):
-            os.makedirs(args.pretrain_dir)
-        self.save_model = self.model.module if hasattr(self.model, 'module') else self.model  
-        model_file = os.path.join(args.pretrain_dir, WEIGHTS_NAME)
-        model_config_file = os.path.join(args.pretrain_dir, CONFIG_NAME)
-        torch.save(self.save_model.state_dict(), model_file)
-        with open(model_config_file, "w") as f:
-            f.write(self.save_model.config.to_json_string())
+    # def save_model(self, args):
+    #     if not os.path.exists(args.pretrain_dir):
+    #         os.makedirs(args.pretrain_dir)
+    #     self.save_model = self.model.module if hasattr(self.model, 'module') else self.model  
+    #     model_file = os.path.join(args.pretrain_dir, WEIGHTS_NAME)
+    #     model_config_file = os.path.join(args.pretrain_dir, CONFIG_NAME)
+    #     torch.save(self.save_model.state_dict(), model_file)
+    #     with open(model_config_file, "w") as f:
+    #         f.write(self.save_model.config.to_json_string())
 
     def freeze_parameters(self, model):
         for name, param in model.bert.named_parameters():  

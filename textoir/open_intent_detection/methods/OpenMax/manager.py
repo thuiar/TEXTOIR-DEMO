@@ -24,14 +24,15 @@ class ModelManager:
         self.num_train_optimization_steps = int(len(data.train_examples) / args.train_batch_size) * args.num_train_epochs
         self.optimizer = self.get_optimizer(args)
         
+        self.test_results, self.predictions,  self.true_labels = None, None, None
 
-        self.test_results = None
-        self.predictions = None
-        self.true_labels = None
+        #Save models and trainined data
+        concat_names = [args.method, args.dataset, args.known_cls_ratio, args.labeled_ratio, args.backbone]
+        output_file_name = "_".join([str(x) for x in concat_names])
+        output_dir = os.path.join(args.train_data_dir, args.type, output_file_name)
+        self.output_file_dir = os.path.join(output_dir, args.save_results_path)
+        self.model_dir = os.path.join(output_dir, args.model_dir)
 
-        method_dir = os.path.join(args.type, 'methods', args.method)
-        args.save_results_path = os.path.join(method_dir, args.save_results_path)
-        args.pretrain_dir = os.path.join(method_dir, args.pretrain_dir)
 
         if args.train:
             self.best_eval_score = 0
@@ -103,33 +104,27 @@ class ModelManager:
         else:
             return y_true, y_pred, y_prob, y_logit
 
-    def evaluation(self, args, data, mode="eval"):
-
-        if mode == 'eval':
-
-            y_true, y_pred, _, _ = self.get_pred_label(data, data.eval_dataloader)
-            acc = round(accuracy_score(y_true, y_pred) * 100, 2)
-
-            return acc
-
-        elif mode == 'test':
+    def evaluation(self, args, data, show = False):
             
-            y_true, y_pred, _, y_logit, centroids = self.get_pred_label(data, data.train_dataloader, compute_centroids=True)
+        y_true, y_pred, _, y_logit, centroids = self.get_pred_label(data, data.train_dataloader, compute_centroids=True)
 
-            mean_vecs, dis_sorted = self.cal_vec_dis(args, data, centroids, y_logit, y_true)
-            self.weibull_model = weibull_tailfitting(mean_vecs, dis_sorted, data.num_labels, tailsize = args.weibull_tail_size)
+        mean_vecs, dis_sorted = self.cal_vec_dis(args, data, centroids, y_logit, y_true)
+        self.weibull_model = weibull_tailfitting(mean_vecs, dis_sorted, data.num_labels, tailsize = args.weibull_tail_size)
 
-            y_true, _, y_prob, y_logit = self.get_pred_label(data, data.test_dataloader)
-            y_pred = self.classify_openmax(data, args, len(y_true), y_prob, y_logit)
+        y_true, _, y_prob, y_logit = self.get_pred_label(data, data.test_dataloader)
+        y_pred = self.classify_openmax(data, args, len(y_true), y_prob, y_logit)
 
-            self.predictions = list([data.label_list[idx] for idx in y_pred])
-            self.true_labels = list([data.label_list[idx] for idx in y_true])
-            
-            cm = confusion_matrix(y_true,y_pred)
-            results = F_measure(cm)
-            acc = round(accuracy_score(y_true, y_pred) * 100, 2)
-            results['Acc'] = acc
-            self.test_results = results
+        self.predictions = list([data.label_list[idx] for idx in y_pred])
+        self.true_labels = list([data.label_list[idx] for idx in y_true])
+        
+        cm = confusion_matrix(y_true,y_pred)
+        results = F_measure(cm)
+        acc = round(accuracy_score(y_true, y_pred) * 100, 2)
+        results['Acc'] = acc
+        self.test_results = results
+
+        if show:
+            print(results)
 
 
     def get_optimizer(self, args):
@@ -172,8 +167,8 @@ class ModelManager:
 
             loss = tr_loss / nb_tr_steps
             print('train_loss',loss)
-            
-            eval_score = self.evaluation(args, data, mode="eval")
+            y_true, y_pred, _, _ = self.get_pred_label(data, data.eval_dataloader)
+            eval_score = round(accuracy_score(y_true, y_pred) * 100, 2)
             print('eval_score',eval_score)
             
             
@@ -186,8 +181,10 @@ class ModelManager:
                 if wait >= args.wait_patient:
                     break
         
-        self.model = best_model 
-        self.save_model(args)
+        self.model = best_model
+        
+        if args.save: 
+            self.save_model(args)
     
     def distance_compute(self, args, arr, mav):
         pre = []
@@ -209,37 +206,20 @@ class ModelManager:
                 param.requires_grad = True
         
     def restore_model(self, args):
-        output_model_file = os.path.join(args.pretrain_dir, WEIGHTS_NAME)
+        output_model_file = os.path.join(self.model_dir, WEIGHTS_NAME)
         self.model.load_state_dict(torch.load(output_model_file))
     
-    def cal_true_false(self):
-        
-        results = {}
-        trues = np.array(self.true_labels)
-        preds = np.array(self.predictions)
-
-        for label in np.unique(trues):
-            pos = np.array(np.where(trues == label)[0])
-            num_pos = np.sum(preds[pos] == trues[pos])
-            num_neg = np.sum(preds[pos] != trues[pos])
-
-            results[label] = (str(num_pos), str(num_neg))
-        
-        return results
-
+    
     def save_results(self, args, data = None):
+
+        if not os.path.exists(self.output_file_dir):
+            os.makedirs(self.output_file_dir)
+
+        #save known intents
+        np.save(os.path.join(self.output_file_dir, 'labels.npy'), data.label_list)
 
         if not os.path.exists(args.save_results_path):
             os.makedirs(args.save_results_path)
-
-        #save known intents
-        np.save(os.path.join(args.save_results_path, 'labels.npy'), data.label_list)
-
-        #save true_false predictions
-        predict_t_f = self.cal_true_false()
-
-        with open(os.path.join(args.save_results_path, 'ture_false.json'), 'w') as f:
-            json.dump(predict_t_f, f)
 
         var = [args.dataset, args.method, args.known_cls_ratio, args.labeled_ratio, args.seed]
         names = ['dataset', 'method', 'known_cls_ratio', 'labeled_ratio', 'seed']
@@ -249,7 +229,7 @@ class ModelManager:
         values = list(results.values())
         
         result_file = 'results.csv'
-        results_path = os.path.join(args.save_results_path, result_file)
+        results_path = os.path.join(args.train_data_dir, args.type, result_file)
         
         if not os.path.exists(results_path):
             ori = []
@@ -263,15 +243,41 @@ class ModelManager:
             df1.to_csv(results_path,index=False)
         data_diagram = pd.read_csv(results_path)
         
+        static_dir = os.path.join(args.frontend_dir, args.type)
+        if not os.path.exists(static_dir):
+            os.makedirs(static_dir)
+
+        #save true_false predictions
+        predict_t_f, predict_t_f_fine = cal_true_false(self.true_labels, self.predictions)
+        csv_to_json(results_path, static_dir)
+
+        tf_overall_path = os.path.join(static_dir, 'ture_false_overall.json')
+        tf_fine_path = os.path.join(static_dir, 'ture_false_fine.json')
+
+        results = {}
+        results_fine = {}
+        key = str(args.dataset) + '_' + str(args.known_cls_ratio) + '_' + str(args.labeled_ratio) + '_' + str(args.method)
+        if os.path.exists(tf_overall_path):
+            results = json_read(tf_overall_path)
+
+        results[key] = predict_t_f
+
+        if os.path.exists(tf_fine_path):
+            results_fine = json_read(tf_fine_path)
+        results_fine[key] = predict_t_f_fine
+
+        json_add(results, tf_overall_path)
+        json_add(results_fine, tf_fine_path)
+        
         print('test_results', data_diagram)
 
     def save_model(self, args):
-        if not os.path.exists(args.pretrain_dir):
-            os.makedirs(args.pretrain_dir)
+        if not os.path.exists(self.model_dir):
+            os.makedirs(self.model_dir)
 
         self.save_model = self.model.module if hasattr(self.model, 'module') else self.model  
-        model_file = os.path.join(args.pretrain_dir, WEIGHTS_NAME)
-        model_config_file = os.path.join(args.pretrain_dir, CONFIG_NAME)
+        model_file = os.path.join(self.model_dir, WEIGHTS_NAME)
+        model_config_file = os.path.join(self.model_dir, CONFIG_NAME)
         torch.save(self.save_model.state_dict(), model_file)
         with open(model_config_file, "w") as f:
             f.write(self.save_model.config.to_json_string())  

@@ -81,9 +81,9 @@ def F_measure(cm):
     f_seen = np.mean(fs[:-1]).round(4)
     f_unseen = round(fs[-1], 4)
     result = {}
-    result['Seen'] = f_seen
-    result['Unseen'] = f_unseen
-    result['Overall'] = f
+    result['F1-known'] = f_seen
+    result['F1-open'] = f_unseen
+    result['F1'] = f
         
     return result
 
@@ -183,5 +183,100 @@ def plot_curve(points):
     plt.title('50% Known Classes on StackOverflow')
     plt.show()
     plt.savefig('curve.pdf')
+
+def produce_json(df, method, dataset, select_type, sort_type, select_terms, metricList):
+    import csv
+    if sort_type == 'known_cls_ratio':
+        axis_len = 3
+        pos_map = {'0.25':0, '0.5':1, '0.75':2}
+    elif sort_type == 'labeled_ratio':
+        axis_len = 5
+        pos_map = {'0.2':0, '0.4':1, '0.6':2, '0.8':3, '1.0':4}
+        
+    dic = {}
+    for i, dataset in dataset.items():
+        for metric in metricList:
+            for j, select_term in select_terms.items():
+                dic_tmp = {}
+                for k, method_val in method.items():
+                    _list = df[ (df["dataset"].str[:]==(dataset)) & (df[select_type] == select_term) & (df["method"].str[:]==(method_val))  ].sort_values(sort_type)
+                    select_tmp = _list.drop_duplicates(subset=[sort_type],keep='first')[sort_type]
+                    val=[0] * axis_len
+                    
+                    for l,item in select_tmp.items():
+                        val[pos_map[str(item)]] = _list[ (_list[sort_type] == item) ][metric].mean()
+                    dic_tmp[method_val]=val
+                # print(dic_1)
+                dic['detection_'+str(dataset)+'_'+str(select_term)+'_'+str(metric)] = dic_tmp
+
+    return dic
+
+def csv_to_json(csv_file, frontend_dir):
+    df = pd.read_csv(csv_file)
+
+    dataset = df.drop_duplicates(subset=['dataset'],keep='first')['dataset']
+    known_cls_ratio = df.drop_duplicates(subset=['known_cls_ratio'],keep='first')['known_cls_ratio']
+    labeled_ratio = df.drop_duplicates(subset=['labeled_ratio'],keep='first')['labeled_ratio']
+    method = df.drop_duplicates(subset=['method'],keep='first')['method']   
+
+    metricList=['F1','F1-known','F1-open', 'Acc']
+
+    select_types = ['known_cls_ratio', 'labeled_ratio']
+    select_terms = [known_cls_ratio, labeled_ratio]
+    select_files = ['json_detection_IOKIR.json','json_detection_IOLR.json' ]
+
+    for i in range(len(select_types)):
+        select_type = select_types[i]
+        sort_type = select_types[(i + 1) % 2]
+        select_term = select_terms[i]
+        select_file = select_files[i] 
+        
+        dic = produce_json(df, method, dataset, select_type,  sort_type, select_term, metricList)
+        select_path = os.path.join(frontend_dir, select_files[(i + 1) % 2] )
+        with open(select_path,'w+') as f:
+            json.dump(dic,f,indent=4)
+        
+def json_read(path):
     
+    with open(path, 'r')  as f:
+        json_r = json.load(f)
+
+    return json_r
+
+def json_add(predict_t_f, path):
+    
+    with open(path, 'w') as f:
+        json.dump(predict_t_f, f, indent=4)
+
+def cal_true_false(true_labels, predictions):
+            
+    results = {"intent_class":[], "left":[], "right":[]}
+    trues = np.array(true_labels)
+    preds = np.array(predictions)
+
+    labels = np.unique(trues)
+
+    results_fine = {}
+    label2id = {x:i for i,x in enumerate(labels)}
+
+    for label in labels:
+        pos = np.array(np.where(trues == label)[0])
+        num_pos = int(np.sum(preds[pos] == trues[pos]))
+        num_neg = int(np.sum(preds[pos] != trues[pos]))
+
+        results["intent_class"].append(label)
+        results["left"].append(-num_neg)
+        results["right"].append(num_pos)
+
+        tmp_list = [0] * len(labels)
+        
+        for fine_label in labels:
+            if fine_label != label:
+                
+                num = int(np.sum(preds[pos] == fine_label))
+                tmp_list[label2id[fine_label]] = num
+                
+        results_fine[label] = tmp_list
+
+    return results, results_fine
 

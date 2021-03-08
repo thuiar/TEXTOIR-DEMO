@@ -16,10 +16,11 @@ class Unsup_Data:
         args.max_seq_length = max_seq_lengths[args.dataset]
 
         self.data_dir = os.path.join(args.data_dir, args.dataset)
-        
+
         self.all_data = self.read_csv(args)
         self.all_data['words'] = self.all_data['text'].apply(word_tokenize)
         self.le = LabelEncoder() 
+        self.label_list = list(np.unique(self.all_data.label))
         
         self.all_data['y_true'] = self.le.fit_transform(self.all_data['label'])
         self.all_data['text'] = self.all_data['words'].apply(lambda l: " ".join(l))
@@ -71,12 +72,6 @@ class Unsup_Data:
         return tfidf_train, tfidf_test
 
     def get_sae(self, args, sae_emb, tfidf_train, tfidf_test):
-
-        print("Training: SAE(emb)")
-        
-        sae_emb.fit(tfidf_train, tfidf_train, epochs=1, batch_size=4096, shuffle=True, 
-                    validation_data=(tfidf_test, tfidf_test), verbose=1)
-        # sae_emb.save_weights('data/SAE_' + dataset + '_' + seed + '.h5')
 
         emb_train_sae = get_encoded(sae_emb, [tfidf_train], 3)
         emb_test_sae = get_encoded(sae_emb, [tfidf_test], 3)
