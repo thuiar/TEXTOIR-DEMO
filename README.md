@@ -3,6 +3,7 @@
 ## :pushpin: What is TEXTOIR
 **TEXOIR** is the first integrated and visualized platform for text Open Intent Recognition (OIR). 
 
+It 
 ## :couple: Audiences
 
 * **Researchers:** With the help of **TEXTOIR**, you can quickly reproduce the open intention recognition models and analyze the effect of the comparison models.
