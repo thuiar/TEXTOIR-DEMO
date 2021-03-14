@@ -194,3 +194,97 @@
     }
 
 ```
+
+* * *
+### Data Annotation
+##### 1、file_name and file_path：
+/frontend/static/jsons/data_annotation/dataset_info.json
+
+##### 2、class_list 
+key："class_list_"+dataset_name+"_"+class_type
+value：list of class_info_object
+class_type："known" or "open"
+for example：
+```
+"class_list_banking_known": [
+    {
+        "label_name": "banking_known_0",
+        "label_text_num": 0,
+        "dataset_name": "banking",
+        "class_type": "known"
+    },
+    {
+        "label_name": "banking_known_2",
+        "label_text_num": 10,
+        "dataset_name": "banking",
+        "class_type": "known"
+    }
+],
+
+"class_list_banking_open": [
+    {
+        "label_name": "banking_open_1",
+        "label_text_num": 5,
+        "dataset_name": "banking",
+        "class_type": "open"
+    },
+    {
+        "label_name": "banking_open_8",
+        "label_text_num": 40,
+        "dataset_name": "banking",
+        "class_type": "open"
+    }
+]
+
+```
+
+##### 3、 text_list
+key："text_list_"+dataset_name+"_"+class_type+"_"+class_label
+value：list of text_info_object
+class_type："known" or "open"
+for example：
+```
+"text_list_banking_known_banking_known_1": [
+    {
+        "dataset_name": "banking",
+        "class_type": "known",
+        "label_name": "banking_known_1",
+        "can_1": "banking_known_1_1",
+        "can_2": "banking_known_1_2",
+        "can_3": "banking_known_1_3",
+        "text": "banking_known_text_0"
+    },
+    {
+        "dataset_name": "banking",
+        "class_type": "known",
+        "label_name": "banking_known_1",
+        "can_1": "banking_known_1_1",
+        "can_2": "banking_known_1_2",
+        "can_3": "banking_known_1_3",
+        "text": "banking_known_text_8"
+    }
+],
+
+"text_list_banking_open_banking_open_1": [
+    {
+        "dataset_name": "banking",
+        "class_type": "open",
+        "label_name": "banking_open_1",
+        "can_1": "banking_open_1_1",
+        "can_2": "banking_open_1_2",
+        "can_3": "banking_open_1_3",
+        "text": "banking_open_text_0"
+    },
+    {
+        "dataset_name": "banking",
+        "class_type": "open",
+        "label_name": "banking_open_1",
+        "can_1": "banking_open_1_1",
+        "can_2": "banking_open_1_2",
+        "can_3": "banking_open_1_3",
+        "text": "banking_open_text_8"
+    }
+]
+
+```
+
