@@ -71,7 +71,7 @@ Due to the large number of charts, we take the ADB method for model analysis mod
 ![image](https://user-images.githubusercontent.com/37832030/112452105-39893600-8d91-11eb-9afa-74125f130d79.png)
 
 ```
-"circle":
+            "circle":
             {
                 "Boundary#1": [[1.5,5.7,30]],
                 "Boundary#2": [[2.5,1.5,40]],
@@ -118,18 +118,28 @@ Open Intent Discovery module integrates the current mainstream 10 baselines.Amon
 * **Open Intent Discovery Semi-Supervised Baselines**
 
 [Discovering New Intents with Deep Aligned Clustering](https://github.com/thuiar/DeepAligned-Clustering)
+
 [Discovering New Intents via Constrained Deep Adaptive Clustering with Cluster Refinement](https://github.com/thuiar/CDAC-plus)
+
 [Learning to discover novel visual categories via deep transfer clustering](https://openaccess.thecvf.com/content_ICCV_2019/papers/Han_Learning_to_Discover_Novel_Visual_Categories_via_Deep_Transfer_Clustering_ICCV_2019_paper.pdf)
+
 [Multi-class classification without multi-class labels](https://arxiv.org/pdf/1901.00544.pdf)
+
 [Learning to cluster in order to transfer across domains and tasks](https://arxiv.org/pdf/1711.10125.pdf)
 
 * **Open Intent Discovery Unsupervised Baselines**
 
 [Some methods for classification and analysis of multivariate observations](https://www.cs.cmu.edu/~bhiksha/courses/mlsp.fall2010/class14/macqueen.pdf)
+
 [Agglomerative clustering using the concept of mutual nearest neighbourhood.](https://www.sciencedirect.com/science/article/abs/pii/0031320378900183)
+
 [Unsupervised deep embedding for clustering analysis](http://proceedings.mlr.press/v48/xieb16.pdf)
+
 [Multi-class classification without multi-class labels](https://arxiv.org/pdf/1901.00544.pdf)
+
 [Towards k-means-friendly spaces: Simultaneous deep learning and clustering](http://proceedings.mlr.press/v70/yang17b/yang17b.pdf)
+
+
 
 
 
