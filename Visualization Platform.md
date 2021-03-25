@@ -111,7 +111,25 @@ Due to the large number of charts, we take the ADB method for model analysis mod
             }
 ```
 
-* **Open Intent Discoveryt**
+* **Open Intent Discovery**
+
+Open Intent Discovery module integrates the current mainstream 10 baselines.Among them, there were 5 semi-supervised methods and 5 unsupervised methods. By defining the interface, a good code format is formed. If you want to add baseline, you can add your own baseline refer to our code format. On the other hand, in order to provide data support to the visual platform, the 10 baselines need to save the intermediate results of the model running. The following is the introduction of baseline and json format.
+
+* **Open Intent Discovery Semi-Supervised Baselines**
+
+[Discovering New Intents with Deep Aligned Clustering](https://github.com/thuiar/DeepAligned-Clustering)
+[Discovering New Intents via Constrained Deep Adaptive Clustering with Cluster Refinement](https://github.com/thuiar/CDAC-plus)
+[Learning to discover novel visual categories via deep transfer clustering](https://openaccess.thecvf.com/content_ICCV_2019/papers/Han_Learning_to_Discover_Novel_Visual_Categories_via_Deep_Transfer_Clustering_ICCV_2019_paper.pdf)
+[Multi-class classification without multi-class labels](https://arxiv.org/pdf/1901.00544.pdf)
+[Learning to cluster in order to transfer across domains and tasks](https://arxiv.org/pdf/1711.10125.pdf)
+
+* **Open Intent Discovery Unsupervised Baselines**
+
+[Some methods for classification and analysis of multivariate observations](https://www.cs.cmu.edu/~bhiksha/courses/mlsp.fall2010/class14/macqueen.pdf)
+[Agglomerative clustering using the concept of mutual nearest neighbourhood.](https://www.sciencedirect.com/science/article/abs/pii/0031320378900183)
+[Unsupervised deep embedding for clustering analysis](http://proceedings.mlr.press/v48/xieb16.pdf)
+[Multi-class classification without multi-class labels](https://arxiv.org/pdf/1901.00544.pdf)
+[Towards k-means-friendly spaces: Simultaneous deep learning and clustering](http://proceedings.mlr.press/v70/yang17b/yang17b.pdf)
 
 
 
