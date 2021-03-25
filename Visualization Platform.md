@@ -48,6 +48,22 @@ TEXTOIR Toolkit consists of four parts, which are Dialogue Texts,Open Intent Det
 ```
 
 ## :loudspeaker: How to use
+* **Open Intent Detection**
+Open Intent Detection module integrates the current mainstream 5 baselines. By defining the interface, a good code format is formed. If you want to add baseline, you can add your own baseline refer to our code format. On the other hand, in order to provide data support to the visual platform, the 5 baselines need to save the intermediate results of the model running. The following is the introduction of baseline and json format.
+
+**Baselines**
+
+[Discovering New Intents with Deep Aligned Clustering](https://github.com/thuiar/DeepAligned-Clustering)
+
+[Deep Unknown Intent Detection with Margin Loss](https://github.com/thuiar/DeepUnkID)
+
+[DOC: Deep Open Classification of Text Documents](https://www.aclweb.org/anthology/D17-1314.pdf)
+
+[A baseline for detecting misclassified and out-of-distribution examples in neural networks](https://arxiv.org/pdf/1610.02136.pdf)
+
+[Towards open set deep networks](https://www.cv-foundation.org/openaccess/content_cvpr_2016/html/Bendale_Towards_Open_Set_CVPR_2016_paper.html)
+
+
 
 
 
