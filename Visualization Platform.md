@@ -140,16 +140,11 @@ Open Intent Discovery module integrates the current mainstream 10 baselines.Amon
 
 Due to the large number of charts, We choose "Recommended Labels" in the model analysis module as an example. If you want to learn more,See chart format for more details from “frontend/static/jsons”.
 
-![image](https://user-images.githubusercontent.com/37832030/112453578-cf719080-8d92-11eb-9145-c435e74ae1c2.png)
 
 
 
 
-* **Open Intent Recognition**
 
-Model Management：This module collects the classic baseline and the current SOTA model of the Open Intent Detection. And the user can view information about the model.
-
-## 
 
 
 
