@@ -68,8 +68,6 @@ Open Intent Detection module integrates the current mainstream 5 baselines. By d
 
 Due to the large number of charts, we take the ADB method for model analysis module diagram as an example. If you want to learn more,See chart format for more details from “frontend/static/jsons”.
 
-![image](https://user-images.githubusercontent.com/37832030/112452105-39893600-8d91-11eb-9afa-74125f130d79.png)
-
     ```
                 "circle":
                 {
@@ -145,31 +143,8 @@ Due to the large number of charts, We choose "Recommended Labels" in the model a
 
 ![image](https://user-images.githubusercontent.com/37832030/112453578-cf719080-8d92-11eb-9145-c435e74ae1c2.png)
 
-```
-"discovery_pie":  [
-            {"value": 40, "name": "Intent#1",
-            "KeyWord1":"Play Movie","KeyWord2":"Movie","KeyWord3":"Movie Star",
-            "value1":"70%","value2":"21%","value3":"9%"},
-            {"value": 38, "name": "Intent#2",
-            "KeyWord1":"Book Ticket","KeyWord2":"Book","KeyWord3":"Ticket",
-            "value1":"50%","value2":"31%","value3":"19%"},
-            {"value": 32, "name": "Intent#3",
-            "KeyWord1":"Weather","KeyWord2":"Cold","KeyWord3":"Wind",
-            "value1":"65%","value2":"20%","value3":"15%"},
-            {"value": 30, "name": "Intent#4",
-            "KeyWord1":"PlayList","KeyWord2":"Add","KeyWord3":"Music",
-            "value1":"73%","value2":"20%","value3":"7%"},
-            {"value": 28, "name": "Intent#5",
-            "KeyWord1":"Movie","KeyWord2":"Play","KeyWord3":"Movie Star",
-            "value1":"80%","value2":"10%","value3":"10%"},
-            {"value": 26, "name": "Intent#6",
-            "KeyWord1":"Resturant","KeyWord2":"Book Resturant","KeyWord3":"Food",
-            "value1":"83%","value2":"10%","value3":"7%"},
-            {"value": 22, "name": "Intent#7",
-            "KeyWord1":"Book","KeyWord2":"Want","KeyWord3":"How much",
-            "value1":"71%","value2":"21%","value3":"8%"}
-        ]
-```
+
+
 
 * **Open Intent Recognition**
 
