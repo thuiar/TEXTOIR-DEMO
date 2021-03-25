@@ -70,45 +70,45 @@ Due to the large number of charts, we take the ADB method for model analysis mod
 
 ![image](https://user-images.githubusercontent.com/37832030/112452105-39893600-8d91-11eb-9afa-74125f130d79.png)
 
-```
-            "circle":
-            {
-                "Boundary#1": [[1.5,5.7,30]],
-                "Boundary#2": [[2.5,1.5,40]],
-                "Boundary#3": [[4.1,4.1,50]],
-                "Boundary#4": [[6,6.5,60]]
-                },
-                "cluster":{
-                "Cluster#1" : [
-                    [1.275154, 5.957587],
-                    [1.441611, 5.444826],
-                    [1.17768, 5.387793],
-                    [1.855808, 5.483301],
-                    [1.650821, 5.407572],  
-                    [1.513623, 5.841029]
-                ],
-                "Cluster#2":[
-                    [2.606999, 1.510312],
-                    [2.121904, 1.173988],
-                    [2.376754, 1.863579],
-                    [2.797787, 1.518662],
-                    [2.327224, 1.358778]
-                ],
-                "Cluster#3":[
-                    [3.919901, 4.439368],
-                    [3.598143, 5.07597],
-                    [3.914654, 4.559303],
-                    [4.148946, 3.345138],
-                    [4.629062, 3.535831]
-                ],
-                "Cluster#4":[
-                    [5.919901, 6.439368],
-                    [5.598143, 6.97597],
-                    [5.914654, 6.559303],
-                    [6.148946, 6.345138],
-                    [5.629062, 6.535831]
-                ]              
-            }
+    ```
+                "circle":
+                {
+                    "Boundary#1": [[1.5,5.7,30]],
+                    "Boundary#2": [[2.5,1.5,40]],
+                    "Boundary#3": [[4.1,4.1,50]],
+                    "Boundary#4": [[6,6.5,60]]
+                    },
+                    "cluster":{
+                    "Cluster#1" : [
+                        [1.275154, 5.957587],
+                        [1.441611, 5.444826],
+                        [1.17768, 5.387793],
+                        [1.855808, 5.483301],
+                        [1.650821, 5.407572],  
+                        [1.513623, 5.841029]
+                    ],
+                    "Cluster#2":[
+                        [2.606999, 1.510312],
+                        [2.121904, 1.173988],
+                        [2.376754, 1.863579],
+                        [2.797787, 1.518662],
+                        [2.327224, 1.358778]
+                    ],
+                    "Cluster#3":[
+                        [3.919901, 4.439368],
+                        [3.598143, 5.07597],
+                        [3.914654, 4.559303],
+                        [4.148946, 3.345138],
+                        [4.629062, 3.535831]
+                    ],
+                    "Cluster#4":[
+                        [5.919901, 6.439368],
+                        [5.598143, 6.97597],
+                        [5.914654, 6.559303],
+                        [6.148946, 6.345138],
+                        [5.629062, 6.535831]
+                    ]              
+                }
 ```
 
 * **Open Intent Discovery**
@@ -138,6 +138,45 @@ Open Intent Discovery module integrates the current mainstream 10 baselines.Amon
 [Multi-class classification without multi-class labels](https://arxiv.org/pdf/1901.00544.pdf)
 
 [Towards k-means-friendly spaces: Simultaneous deep learning and clustering](http://proceedings.mlr.press/v70/yang17b/yang17b.pdf)
+
+* **Open Intent Discovery Json format**
+
+Due to the large number of charts, We choose "Recommended Labels" in the model analysis module as an example. If you want to learn more,See chart format for more details from “frontend/static/jsons”.
+
+![image](https://user-images.githubusercontent.com/37832030/112453578-cf719080-8d92-11eb-9145-c435e74ae1c2.png)
+
+```
+"discovery_pie":  [
+            {"value": 40, "name": "Intent#1",
+            "KeyWord1":"Play Movie","KeyWord2":"Movie","KeyWord3":"Movie Star",
+            "value1":"70%","value2":"21%","value3":"9%"},
+            {"value": 38, "name": "Intent#2",
+            "KeyWord1":"Book Ticket","KeyWord2":"Book","KeyWord3":"Ticket",
+            "value1":"50%","value2":"31%","value3":"19%"},
+            {"value": 32, "name": "Intent#3",
+            "KeyWord1":"Weather","KeyWord2":"Cold","KeyWord3":"Wind",
+            "value1":"65%","value2":"20%","value3":"15%"},
+            {"value": 30, "name": "Intent#4",
+            "KeyWord1":"PlayList","KeyWord2":"Add","KeyWord3":"Music",
+            "value1":"73%","value2":"20%","value3":"7%"},
+            {"value": 28, "name": "Intent#5",
+            "KeyWord1":"Movie","KeyWord2":"Play","KeyWord3":"Movie Star",
+            "value1":"80%","value2":"10%","value3":"10%"},
+            {"value": 26, "name": "Intent#6",
+            "KeyWord1":"Resturant","KeyWord2":"Book Resturant","KeyWord3":"Food",
+            "value1":"83%","value2":"10%","value3":"7%"},
+            {"value": 22, "name": "Intent#7",
+            "KeyWord1":"Book","KeyWord2":"Want","KeyWord3":"How much",
+            "value1":"71%","value2":"21%","value3":"8%"}
+        ]
+```
+
+* **Open Intent Recognition**
+
+Model Management：This module collects the classic baseline and the current SOTA model of the Open Intent Detection. And the user can view information about the model.
+
+## 
+
 
 
 
