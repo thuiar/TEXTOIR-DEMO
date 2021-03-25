@@ -11,7 +11,7 @@ TEXTOIR Toolkit consists of four parts, which are Dialogue Texts,Open Intent Det
 
 ## :tram: Working Directory
 
-```
+  ```
                         .
                         ├── data  
                         │   ├── banking
@@ -106,8 +106,7 @@ Due to the large number of charts, we take the ADB method for model analysis mod
                         [6.148946, 6.345138],
                         [5.629062, 6.535831]
                     ]              
-                }
-```
+                }```
 
 * **Open Intent Discovery**
 
