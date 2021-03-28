@@ -64,50 +64,6 @@ Open Intent Detection module integrates the current mainstream 5 baselines. By d
 
 [Towards open set deep networks](https://www.cv-foundation.org/openaccess/content_cvpr_2016/html/Bendale_Towards_Open_Set_CVPR_2016_paper.html)
 
-* **Open Intent Detection Json format**
-
-Due to the large number of charts, we take the ADB method for model analysis module diagram as an example. If you want to learn more,See chart format for more details from “frontend/static/jsons”.
-
-    ```
-                "circle":
-                {
-                    "Boundary#1": [[1.5,5.7,30]],
-                    "Boundary#2": [[2.5,1.5,40]],
-                    "Boundary#3": [[4.1,4.1,50]],
-                    "Boundary#4": [[6,6.5,60]]
-                    },
-                    "cluster":{
-                    "Cluster#1" : [
-                        [1.275154, 5.957587],
-                        [1.441611, 5.444826],
-                        [1.17768, 5.387793],
-                        [1.855808, 5.483301],
-                        [1.650821, 5.407572],  
-                        [1.513623, 5.841029]
-                    ],
-                    "Cluster#2":[
-                        [2.606999, 1.510312],
-                        [2.121904, 1.173988],
-                        [2.376754, 1.863579],
-                        [2.797787, 1.518662],
-                        [2.327224, 1.358778]
-                    ],
-                    "Cluster#3":[
-                        [3.919901, 4.439368],
-                        [3.598143, 5.07597],
-                        [3.914654, 4.559303],
-                        [4.148946, 3.345138],
-                        [4.629062, 3.535831]
-                    ],
-                    "Cluster#4":[
-                        [5.919901, 6.439368],
-                        [5.598143, 6.97597],
-                        [5.914654, 6.559303],
-                        [6.148946, 6.345138],
-                        [5.629062, 6.535831]
-                    ]              
-                }```
-
 * **Open Intent Discovery**
 
 Open Intent Discovery module integrates the current mainstream 10 baselines.Among them, there were 5 semi-supervised methods and 5 unsupervised methods. By defining the interface, a good code format is formed. If you want to add baseline, you can add your own baseline refer to our code format. On the other hand, in order to provide data support to the visual platform, the 10 baselines need to save the intermediate results of the model running. The following is the introduction of baseline and json format.
@@ -136,9 +92,21 @@ Open Intent Discovery module integrates the current mainstream 10 baselines.Amon
 
 [Towards k-means-friendly spaces: Simultaneous deep learning and clustering](http://proceedings.mlr.press/v70/yang17b/yang17b.pdf)
 
-* **Open Intent Discovery Json format**
+## :hammer_and_wrench: Install
+```
+PyTorch                    
+pytorch_pretrained_bert
+matplotlib
+sklearn
+nltk
+gensim
+seaborn
+tensorflow-gpu
+keras
+wordcloud
+keybert
+```
 
-Due to the large number of charts, We choose "Recommended Labels" in the model analysis module as an example. If you want to learn more,See chart format for more details from “frontend/static/jsons”.
 
 
 
