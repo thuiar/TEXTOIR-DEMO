@@ -54,7 +54,7 @@ Our system consists of two parts, which are ***Visualization Platform*** and ***
 * **Open Intent Discovery:** Open Intent Detection module provides four basic functions, including Model Management, Model Training, Model Testing, and Model Analysis.
 
 * **Open Intent Recognition:**  Open Intent Recognition module provides data label recommendation function. This module integrates new intent detection and new intent discovery to recommend tags for unlabeled data.
-## :toolbox: Visualization Platform
+## :toolbox: TEXTOIR Toolkit
 ## :file_folder: Our works 
 :page_facing_up:[Discovering New Intents with Deep Aligned Clustering (Accepted by AAAI2021)](https://github.com/thuiar/DeepAligned-Clustering)
 
