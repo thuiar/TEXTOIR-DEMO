@@ -48,12 +48,17 @@ Our system consists of two parts, which are ***Visualization Platform*** and ***
 ```
 ### :loudspeaker: How to use
 * **Dataset Management:** The data management module stores the popular open intent identification public datasets. Similarly, to serve the data annotation function, users can upload the dataset that needs to be annotated in this module.
+![image](https://user-images.githubusercontent.com/37832030/114355420-096bd080-9ba2-11eb-9119-1f8ea90a608c.png)
 
 * **Open Intent Detection:** Open Intent Detection module provides four basic functions, including Model Management, Model Training, Model Testing, and Model Analysis.
+![image](https://user-images.githubusercontent.com/37832030/114355474-1983b000-9ba2-11eb-8f30-527dce36a426.png)
 
 * **Open Intent Discovery:** Open Intent Detection module provides four basic functions, including Model Management, Model Training, Model Testing, and Model Analysis.
+![image](https://user-images.githubusercontent.com/37832030/114355539-2accbc80-9ba2-11eb-8fc6-e293be402818.png)
 
 * **Open Intent Recognition:**  Open Intent Recognition module provides data label recommendation function. This module integrates new intent detection and new intent discovery to recommend tags for unlabeled data.
+![image](https://user-images.githubusercontent.com/37832030/114355591-3c15c900-9ba2-11eb-8ffc-4257fc70fd98.png)
+
 ## :toolbox: TEXTOIR Toolkit
 ## :file_folder: Our works 
 :page_facing_up:[Discovering New Intents with Deep Aligned Clustering (Accepted by AAAI2021)](https://github.com/thuiar/DeepAligned-Clustering)
