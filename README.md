@@ -60,6 +60,50 @@ Our system consists of two parts, which are ***Visualization Platform*** and ***
 ![image](https://user-images.githubusercontent.com/37832030/114355591-3c15c900-9ba2-11eb-8ffc-4257fc70fd98.png)
 
 ## :toolbox: TEXTOIR Toolkit
+TEXTOIR Toolkit consists of four parts, which are Dialogue Texts,Open Intent Detection, Open Intent Discovery and Open Intent Recognition respectively.There are two main modules, open intent detection and open intent discovery, which integrates most of the state-of-the-art algorithms respectively.Moreover, we propose a unified open intent recognition (OIR) framework,which connects the two modules in a pipeline scheme and achieves multiple model combination.
+![image](https://user-images.githubusercontent.com/37832030/114355848-88610900-9ba2-11eb-9586-c9931eabe64b.png)
+
+### 	:world_map: Working Directory
+```
+.
+├── data  
+│   ├── banking
+│   ├── snips
+│   ├── atis
+│   ├── dbpedia
+│   ├── clinc
+│   └── stackoverflow
+├── open_intent_detection  
+│   ├── Backbone.py
+│   ├── dataloader.py
+│   ├── init_parameters.py
+│   ├── utils.py
+│   ├── pretrain.py
+│   ├── methods
+│   └── README.md
+├── open_intent_discovery  
+│   ├── Backbone.py
+│   ├── dataloader.py
+│   ├── init_parameters.py
+│   ├── utils.py
+│   ├── methods
+│   └── README.md
+├── pipeline
+│   ├── dataloader.py
+│   ├── init_parameters.py
+│   ├── manager.py
+│   ├── utils.py
+│   ├── pipe_results
+│   └── README.md
+├── pipe.py
+├── run_detect.py 
+├── run_discover.py 
+└── Tutorial.md
+```
+### :loudspeaker: How to use
+* **Open Intent Detection module** integrates the current mainstream 5 baselines. By defining the interface, a good code format is formed. If you want to add baseline, you can add your own baseline refer to our code format. On the other hand, in order to provide data support to the visual platform, the 5 baselines need to save the intermediate results of the model running. 
+* **Open Intent Discovery module** integrates the current mainstream 10 baselines.Among them, there were 5 semi-supervised methods and 5 unsupervised methods. By defining the interface, a good code format is formed. If you want to add baseline, you can add your own baseline refer to our code format. On the other hand, in order to provide data support to the visual platform, the 10 baselines need to save the intermediate results of the model running. 
+
 ## :file_folder: Our works 
 :page_facing_up:[Discovering New Intents with Deep Aligned Clustering (Accepted by AAAI2021)](https://github.com/thuiar/DeepAligned-Clustering)
 
