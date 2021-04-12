@@ -17,13 +17,13 @@ Our system consists of four parts, which are *Dataset Management*,*Open Intent D
 * We connect the open intent detection and intent discovery modules in a pipeline scheme and achieves multiple model combination. Based on the pipeline scheme, the application of *Data Annotation* is realized.
 
 ## :file_folder: Our works 
-:page_facing_up:[Discovering New Intents with Deep Aligned Clustering (Accepted by AAAI2021)](https://github.com/thuiar/DeepAligned-Clustering)
+  :page_facing_up:[Discovering New Intents with Deep Aligned Clustering (Accepted by AAAI2021)](https://github.com/thuiar/DeepAligned-Clustering)
 
-:page_facing_up:[Deep Open Intent Classification with Adaptive Decision Boundary (Accepted by AAAI2021)](https://github.com/thuiar/Adaptive-Decision-Boundary)
+  :page_facing_up:[Deep Open Intent Classification with Adaptive Decision Boundary (Accepted by AAAI2021)](https://github.com/thuiar/Adaptive-Decision-Boundary)
 
-:page_facing_up:[Discovering New Intents via Constrained Deep Adaptive Clustering with Cluster Refinement (Accepted by AAAI2020)](https://github.com/thuiar/CDAC-plus)
+  :page_facing_up:[Discovering New Intents via Constrained Deep Adaptive Clustering with Cluster Refinement (Accepted by AAAI2020)](https://github.com/thuiar/CDAC-plus)
 
-:page_facing_up:[Deep Unknown Intent Detection with Margin Loss (Accepted by ACL2019)](https://github.com/thuiar/DeepUnkID)
+  :page_facing_up:[Deep Unknown Intent Detection with Margin Loss (Accepted by ACL2019)](https://github.com/thuiar/DeepUnkID)
 
 
   
