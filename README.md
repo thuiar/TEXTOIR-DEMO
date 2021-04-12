@@ -11,9 +11,9 @@ We divide OIR into two categories, open intent detection and open intent discove
 * **New to Open Intent Recognition:** With the help of **TEXTOIR**, you can fully understand the progress in the field of open intent, and process visualization also helps you understand the model in depth.
 
 ## :house:  Overview
-Our system consists of two parts, which are *Visualization Platform*and *TEXTOIR Toolkit* respectively. 
+Our system consists of two parts, which are ***Visualization Platform*** and ***TEXTOIR Toolkit*** respectively. 
 * TEXTOIR provides a series of convenient visualized tools for data and model management, training and evaluation, These functions are integrated as Visualization platform. Visualization Platform consists of four parts, which are Dataset Management,Open Intent Detection, Open Intent Discovery and Open Intent Recognition respectively.
-* With *Open Intent Detection* and *Open Intent Discovery* you can not only manage the new intent detection models but also to train , test models. At the same time, you can 
+* TEXTOIR integrates five state-of-the-art models for open intent detection, and ten competitive models for open intent discovery respectively. Moreover, we propose a unified open intent recognition (OIR) framework, which connects the two modules in a pipeline scheme and achieves multiple model combination. These functions are called TEXTOIR Toolkit .
 
 ## :file_folder: Our works 
 :page_facing_up:[Discovering New Intents with Deep Aligned Clustering (Accepted by AAAI2021)](https://github.com/thuiar/DeepAligned-Clustering)
