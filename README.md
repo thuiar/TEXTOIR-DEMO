@@ -104,6 +104,7 @@ TEXTOIR Toolkit consists of four parts, which are Dialogue Texts,Open Intent Det
 ### :loudspeaker: How to use
 * **Open Intent Detection module** integrates the current mainstream 5 baselines. By defining the interface, a good code format is formed. If you want to add baseline, you can add your own baseline refer to our code format. On the other hand, in order to provide data support to the visual platform, the 5 baselines need to save the intermediate results of the model running. 
 * **Open Intent Discovery module** integrates the current mainstream 10 baselines.Among them, there were 5 semi-supervised methods and 5 unsupervised methods. By defining the interface, a good code format is formed. If you want to add baseline, you can add your own baseline refer to our code format. On the other hand, in order to provide data support to the visual platform, the 10 baselines need to save the intermediate results of the model running. 
+* **Open Intent Recognition**The two modules of open intent detection and dis-covery are closely related. However, there lackan overall framework to successively invoke the two modules for both identifying known intentsand discovering open intents. TEXTOIR addressesthis issue with the proposed overall framework.
 
 ## :file_folder: Our works 
 :page_facing_up:[Discovering New Intents with Deep Aligned Clustering (Accepted by AAAI2021)](https://github.com/thuiar/DeepAligned-Clustering)
