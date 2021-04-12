@@ -16,7 +16,8 @@ Our system consists of two parts, which are ***Visualization Platform*** and ***
 * **TEXTOIR** integrates five state-of-the-art models for open intent detection, and ten competitive models for open intent discovery respectively. Moreover, we propose a unified open intent recognition (OIR) framework, which connects the two modules in a pipeline scheme and achieves multiple model combination. These functions are called TEXTOIR Toolkit .
 
 ## :chart_with_upwards_trend: Visualization Platform
-![image](https://user-images.githubusercontent.com/37832030/114353992-3cad6000-9ba0-11eb-9ca9-559ea63b5888.png)
+![image](https://user-images.githubusercontent.com/37832030/114356425-294fc400-9ba3-11eb-8f6f-16e60ca7f9c8.png)
+
 * As you can see, Dataset Management manages your dataset and you can do some basic operations, such as adding, deleting, modifying and searching.
 * With Open Intent Detection and Open Intent Discovery you can not only manage the new intent detection models but also to train , test models. At the same time, you can analyze the models' effect.
 * We connect the open intent detection and intent discovery modules in a pipeline scheme and achieves multiple model combination. Based on the pipeline scheme, the application of Open Intent Recognition is realized.
