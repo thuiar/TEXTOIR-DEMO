@@ -115,5 +115,23 @@ TEXTOIR Toolkit consists of four parts, which are Dialogue Texts,Open Intent Det
 
 :page_facing_up:[Deep Unknown Intent Detection with Margin Loss (Accepted by ACL2019)](https://github.com/thuiar/DeepUnkID)
 
+## :hammer_and_wrench:  Install
+```
+Django
+PyMySQL
+pandas
+PyTorch                    
+pytorch_pretrained_bert
+matplotlib
+sklearn
+nltk
+gensim
+seaborn
+tensorflow-gpu
+keras
+wordcloud
+keybert
+```
+
 
   
