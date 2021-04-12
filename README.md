@@ -1,4 +1,4 @@
-# TEXTOIR HandBook
+# TEXTOIR: An Integrated and Visualized Platform for Text Open Intent Recognition
 
 ## :pushpin: What is TEXTOIR
 **TEXOIR** is the first integrated and visualized platform for text Open Intent Recognition (OIR). 
