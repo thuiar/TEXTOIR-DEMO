@@ -1,6 +1,0 @@
-RateBook
-SearchCreativeWork
-AddToPlaylist
-GetWeather
-BookRestaurant
-<UNK>
