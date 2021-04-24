@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>New Intent Discovery System</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <meta name="description" content="" />
+        <meta name="keywords" content="" />
+        <link rel="stylesheet" href="/static/lib/xadmin/css/font.css">
+        <link rel="stylesheet" href="/static/lib/xadmin/css/main.css" />
+        <link rel="stylesheet" href="/static/lib/layui/css/layui.css" media="all">
+        <script type="text/javascript" src="/static/lib/layui/layui.js" charset="utf-8"></script>
+        <script type="text/javascript" src="/static/lib/xadmin/js/xadmin.js"></script>
+        
+        
+    </head>
+    <body >
+    <div class="layui-col-md12">
+      <div class="layui-card">
+            <div class="layui-card-header"></div>
+            <div class="layui-card-header" style ="align:'center'">
+                <div style="font-weight:700; font-size:26px;color:#555555;text-align:center" >TEXTOIR: An Integrated and Visualized Platform for Text Open Intent Recognition</div>
+            </div><br><br>
+            <div class="layui-card-body">
+                <p style="font-weight:700; font-size:20px;color:#555555;padding-left:20px">
+                <img src="/static/img/handbook/pin.png" width="30px"; height="30px;" style="vertical-align:middle"/>
+                What is TEXTOIR?</p><br>
+                <p style="font-weight:540; font-size:15px;color:#555555;padding-left:30px"><b style="color:#555555;">TEXOIR</b> is the first integrated and visualized platform for text Open Intent Recognition(OIR).</p>
+                <p style="font-weight:540; font-size:15px;color:#555555;padding-left:30px">We divide OIR into two categories, open intent detection and open intent discovery. 
+                Though both of them are both essential modules for OIR, they have different characteristics and implementation methods. 
+                However, there is little related work for integrating these two modules. 
+                Although some toolkits are developed for Named Entity Recognition, Sentiment Analysis, 
+                there is little related work for intent recognition, not even in open-world settings. 
+                Therefore, we build a text open intent recognition platform to fill the blank.
+                </p><br>
+
+                <p style="font-weight:700; font-size:20px;color:#555555;padding-left:20px">
+                <img src="/static/img/handbook/Family.png" width="30px"; height="30px;" style="vertical-align:middle"/>
+                Audiences</p><br>
+                <p style="font-weight:540; font-size:15px;color:#555555;padding-left:30px"><span class="layui-badge-dot layui-bg-cyan"></span><b style="color:#555555;padding-left:10px">Researchers:</b> With the help of TEXTOIR, you can quickly reproduce the open intention recognition models and analyze the effect of the comparison models.</p>
+                <p style="font-weight:540; font-size:15px;color:#555555;padding-left:30px"><span class="layui-badge-dot layui-bg-cyan"></span><b style="color:#555555;padding-left:10px">New to Open Intent Recognition:</b> With the help of TEXTOIR, you can fully understand the progress in the field of open intent, and process visualization also helps you understand the model in depth.
+                </p>
+                <br>
+                
+                <p style="font-weight:700; font-size:20px;color:#555555;padding-left:20px">
+                <img src="/static/img/introduction/video.png" width="30px"; height="30px;" style="vertical-align:middle"/>
+                Video</p><br>
+                <video src="/static/video/demo_videoV1.mp4" width="860px"; height="560px;" controls="controls" style = "padding:60px">
+
+                </video>
+
+                <p style="font-weight:700; font-size:20px;color:#555555;padding-left:20px">
+                <img src="/static/img/introduction/paper.png" width="30px"; height="25px;" style="vertical-align:middle"/>
+                Our Works</p><br>
+                <p style="font-weight:540; font-size:15px;color:#555555;padding-left:30px"><img src="/static/img/introduction/paper_1.png" width="20px"; height="20px;" style="vertical-align:middle"/><a href="https://github.com/thuiar/DeepAligned-Clustering" style = "color:blue; font-weight:700; font-size:15px;padding-left:10px">Discovering New Intents with Deep Aligned Clustering (Accepted by AAAI2021)</a></p><br>
+                <p style="font-weight:540; font-size:15px;color:#555555;padding-left:30px"><img src="/static/img/introduction/paper_1.png" width="20px"; height="20px;" style="vertical-align:middle"/><a href="https://github.com/thuiar/Adaptive-Decision-Boundary" style = "color:blue; font-weight:700; font-size:15px;padding-left:10px">Deep Open Intent Classification with Adaptive Decision Boundary (Accepted by AAAI2021)</a></p><br>
+                <p style="font-weight:540; font-size:15px;color:#555555;padding-left:30px"><img src="/static/img/introduction/paper_1.png" width="20px"; height="20px;" style="vertical-align:middle"/><a href="https://github.com/thuiar/CDAC-plus" style = "color:blue; font-weight:700; font-size:15px;padding-left:10px">Discovering New Intents via Constrained Deep Adaptive Clustering with Cluster Refinement (Accepted by AAAI2020)</a></p><br>
+                <p style="font-weight:540; font-size:15px;color:#555555;padding-left:30px"><img src="/static/img/introduction/paper_1.png" width="20px"; height="20px;" style="vertical-align:middle"/><a href="https://github.com/thuiar/DeepUnkID" style = "color:blue; font-weight:700; font-size:15px;padding-left:10px">Deep Unknown Intent Detection with Margin Loss (Accepted by ACL2019)</a></p><br>
+                
+                <br>
+                
+                
+            </div>
+            <div class="copyright" style="margin-bottom:40px;text-align:center;">&copy; THUIAR 2021</div>
+      </div>
+
+        
+        
+        
+        
+        <script>layui.use(['carousel'],
+            function() {
+                var carousel = layui.carousel;
+                //图片轮播
+                carousel.render({
+                    elem: '#carousel01'
+                    ,width: '100%'
+                    ,interval: 3000
+                }); 
+
+            });
+        </script>
+    </body>
+</html>

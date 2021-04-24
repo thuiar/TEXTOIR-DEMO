@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>New Intent Discovery System</title>
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+        <link rel="stylesheet" href="/static/lib/xadmin/css/font.css">
+        <link rel="stylesheet" href="/static/lib/xadmin/css/xadmin.css">
+        <script type="text/javascript" src="/static/lib/jquery-3.2.1.js" charset="utf-8"></script>
+        <script type="text/javascript" src="/static/lib/layui/layui.js" charset="utf-8"></script>
+        <script type="text/javascript" src="/static/lib/xadmin/js/xadmin.js"></script>
+        <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+        <!--[if lt IE 9]>
+            <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+            <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+        <div class="layui-fluid">
+            <div class="layui-row">
+                <div class="layui-card">
+
+                    <div class="layui-card-body ">
+                        <table class="layui-table layui-form" id="datasetTable" lay-filter="demoEvent" ></table>
+                    </div>
+                    <script type="text/html" id="barDemo">
+                        <a title="Run Detection and Discovery" lay-event="run_pipeline" href="javascript:;">
+                            <i class="iconfont left-nav-li ">&#xe719;</i>
+                        </a>
+                    </script>
+                </div>
+            </div>
+        </div>
+        <script>layui.use(['form', 'layer','jquery','table'],
+            function() {
+                $ = layui.jquery;
+                var form = layui.form,
+                layer = layui.layer;
+                table = layui.table;
+
+                var datasetTableIns = table.render({
+                    elem: '#datasetTable'
+                    ,id: 'datasetTable'
+                    ,url: '/annotation/getDatasetList' //设置异步接口
+                    ,page: false
+                    // ,cols: [[ //表头
+                    //         {field: 'dataset_name', title: 'Datasets' , align: 'center', rowspan:"2"}
+                    //         ,{field: 'detection_known', title: 'Known Intents' , event: 'known', align: 'center', templet: function(d) {
+                    //             return '<div style="position: relative;\n' + '    padding: 0 10px 0 20px;">' + d.detection_known + '<i style="left: 0px;" lay-tips="Show Details" class="layui-icon layui-colla-icon layui-icon-right"></i></div>'
+                    //         }}
+                    //         ,{field: 'discovery_class_num', title: 'Discovered Intents' , event: 'open', align: 'center', templet: function(d) {
+                    //             return '<div style="position: relative;\n' + '    padding: 0 10px 0 20px;">' + d.discovery_class_num + '<i style="left: 0px;" lay-tips="Show Details" class="layui-icon layui-colla-icon layui-icon-right"></i></div>'
+                    //         }}
+                    //     ]] //设置表头 
+                    ,cols: [[ //表头
+                            {field: 'dataset_name', title: 'Datasets' , align: 'center', rowspan:"2"}
+                            ,{title: 'Detection' , align: 'center', colspan:"2"}
+                            ,{title: 'Discovery' , align: 'center',  colspan:"2"}
+                        ],
+                        [ //表头
+                            {field: 'detection_known', title: 'Known Intents' , event: 'known', align: 'center', templet: function(d) {
+                                return '<div style="position: relative;\n' + '    padding: 0 10px 0 20px;">' + d.detection_known + '<i style="left: 0px;" lay-tips="Show Details" class="layui-icon layui-colla-icon layui-icon-right"></i></div>'
+                            }}
+                            ,{field: 'detection_open', title: 'Open Intent', event: 'unknown', align: 'center', templet: function(d) {
+                                return '<div style="position: relative;\n' + '    padding: 0 10px 0 20px;">' + d.detection_open + '<i style="left: 0px;" lay-tips="Show Details" class="layui-icon layui-colla-icon layui-icon-right"></i></div>'
+                            }}
+                            ,{field: 'discovery_class_num', title: 'Discovered Intents' , event: 'open', align: 'center', templet: function(d) {
+                                return '<div style="position: relative;\n' + '    padding: 0 10px 0 20px;">' + d.discovery_class_num + '<i style="left: 0px;" lay-tips="Show Details" class="layui-icon layui-colla-icon layui-icon-right"></i></div>'
+                            }}
+                    ]] //设置表头 
+                    ,done:function (res, curr, count) {
+                        $('thead > tr > th[data-key="1-0-0"] > div').click(function(){
+                            // Datasets
+                            top.addTabNew('Dataset Management','thedataset/toDatasetList');
+                        })
+                        $('thead > tr > th[data-key="1-0-1"] > div').click(function(){
+                            // Detection
+                            top.addTabNew('Detection Model Analysis','detection/model_analysis');
+                        })
+                        $('thead > tr > th[data-key="1-0-2"] > div').click(function(){
+                            // Discovery
+                            top.addTabNew('Discovery Model Analysis','discovery/model_analysis');
+                        })
+
+                        $('thead > tr > th[data-key="1-0-0"] > div ,thead > tr > th[data-key="1-0-1"] > div ,thead > tr > th[data-key="1-0-2"] > div ').mouseenter(function(){
+                            // Datasets
+                            layer.msg('Click Here to See More')
+                            //top.addTabNew('Dataset Management','thedataset/toDatasetList');
+                        })
+                        $('thead > tr > th[data-key="1-0-0"] > div > span ,thead > tr > th[data-key="1-0-1"] > div > span ,thead > tr > th[data-key="1-0-2"] > div > span').addClass('layui-btn-lg layui-btn-radius layui-btn-normal')
+                        $('thead > tr > th[data-key="1-0-0"] > div > span ,thead > tr > th[data-key="1-0-1"] > div > span ,thead > tr > th[data-key="1-0-2"] > div > span').css('color', '#F0F0F0')
+                    }
+                });
+
+
+
+                //监听单元格事件
+                table.on('tool(demoEvent)', function(obj){
+                    var data = obj.data;
+                    // console.log('tool(demoEvent):\t'+obj.event)
+                    // console.log('80:tool(demoEvent)')
+                    if((obj.event === 'known' || obj.event === 'open') && data.dataset_name != undefined){
+                        // 打开折叠面板，显示对应信息
+                        var trObj = layui.$(this).parent('tr'); //当前行
+                        var accordion = true //开启手风琴，那么在进行折叠操作时，始终只会展现当前展开的表格。
+                        var content = '<table lay-filter="subTableDemoEvent" ></table>' //内容
+                        var optionForClass = getOptionsForClassTable(trObj, accordion, content, obj.event, data.dataset_name, obj.event)
+                        collapseTable(optionForClass)
+                    }else if (obj.event === 'unknown' && data.dataset_name != undefined){
+                        
+                        var trObj = layui.$(this).parent('tr'); //当前行
+                        var accordion = true //开启手风琴，那么在进行折叠操作时，始终只会展现当前展开的表格。
+                        var content = '<table></table>' //内容
+                        var optionForClass = getOptionsForTextTableOfUnknown(trObj, accordion, content, obj.event, data.dataset_name, obj.event)
+                        collapseTable(optionForClass)
+                    }else if (obj.event === 'run_pipeline'){
+                        console.log('run_pipeline')
+                    }
+                });
+
+                table.on('tool(subTableDemoEvent)', function(obj){
+                    var data = obj.data;
+                    console.log('tool(subTableDemoEvent):\t'+obj.event)
+                    if(obj.event === 'sub_known' && data.label_name != undefined){
+                        // console.log('94:tool(subTableDemoEvent)')
+                        // 打开折叠面板，显示对应信息
+                        var trObj = layui.$(this).parent('tr'); //当前行
+                        var accordion = true //开启手风琴，那么在进行折叠操作时，始终只会展现当前展开的表格。
+                        var content = '<table ></table>' //内容
+                        var optionForText = getOptionsForTextTableOfKnown(trObj, accordion, content, obj.event, data.dataset_name, data.class_type, data.label_name)
+                        collapseTable(optionForText)
+                    }else if(obj.event === 'sub_open' && data.label_name != undefined){
+                        // console.log(data.label_name)
+                        // 打开折叠面板，显示对应信息
+                        var trObj = layui.$(this).parent('tr'); //当前行
+                        var accordion = true //开启手风琴，那么在进行折叠操作时，始终只会展现当前展开的表格。
+                        var content = '<table ></table>' //内容
+                        var optionForText = getOptionsForTextTableOfOpen(trObj, accordion, content, obj.event, data.dataset_name, data.class_type, data.label_name)
+                        collapseTable(optionForText)
+                    }
+                });
+
+            });
+
+            
+            function collapseTable(options) {
+                anotherEvent = {"known":"open","open":"known"}
+                all_event = ['known', 'unknown', 'open']
+                var trObj = options.elem;
+                if (!trObj) return;
+                var accordion = options.accordion,
+                success = options.success,
+                content = options.content || '';
+                event = options.event;
+                var tableView = trObj.parents('.layui-table-view'); //当前表格视图
+                var id = tableView.attr('lay-id'); //当前表格标识
+                var index = trObj.data('index'); //当前行索引
+                var leftTr = tableView.find('.layui-table-fixed.layui-table-fixed-l tr[data-index="' + index + '"]'); //左侧当前固定行
+                var rightTr = tableView.find('.layui-table-fixed.layui-table-fixed-r tr[data-index="' + index + '"]'); //右侧当前固定行
+                var colspan = trObj.find('td').length; //获取合并长度
+                var trObjChildren = trObj.next(); //展开行Dom
+                var indexChildren = id + '-' + index + '-children'+'-'+event; //展开行索引
+                var leftTrChildren = tableView.find('.layui-table-fixed.layui-table-fixed-l tr[data-index="' + indexChildren + '"]'); //左侧展开固定行
+                var rightTrChildren = tableView.find('.layui-table-fixed.layui-table-fixed-r tr[data-index="' + indexChildren + '"]'); //右侧展开固定行
+                var lw = leftTr.width() + 15; //左宽
+                var rw = rightTr.width() + 15; //右宽
+
+                //不存在就创建展开行
+                if (trObjChildren.data('index') != indexChildren ) {
+                    //装载HTML元素
+                    for(i = 0;i<all_event.length;i++){
+                        anotherIndexChildren = id + '-' + index + '-children'+'-'+all_event[i]; //展开行索引
+                        if(trObjChildren.data('index') == anotherIndexChildren){
+                            trObjChildren.remove()
+                            //trObjChildren = trObj.after(tr).next().hide(); //隐藏展开行
+                            console.log(trObj)
+                            // trObj.parents().parents().find('td[lay-event="'+event+'"] i.layui-colla-icon').toggleClass("layui-icon-right layui-icon-down");
+                            trObj.parents().parents().find('td[lay-event="'+all_event[i]+'"] i.layui-colla-icon').toggleClass("layui-icon-right layui-icon-down");
+                            trObj.parents().parents().find('td[lay-event="'+all_event[i]+'"] i.layui-colla-icon').removeClass("layui-icon-down").addClass("layui-icon-right");
+                            // trObj.parents().parents().find('td[lay-event="'+anotherEvent[event]+'"] i.layui-colla-icon').removeClass("layui-icon-down").addClass("layui-icon-right");
+                            //trObj.siblings().find('td[lay-event="'+anotherEvent[event]+'"] i.layui-colla-icon').toggleClass("layui-icon-right layui-icon-down");
+                        }
+                    }
+                    
+                    var tr = '<tr data-index="' + indexChildren + '"><td colspan="' + colspan + '"><div style="height: auto;padding-left:' + lw + 'px;padding-right:' + rw + 'px" class="layui-table-cell">' + content + '</div></td></tr>';
+                    trObjChildren = trObj.after(tr).next().hide(); //隐藏展开行
+                    var fixTr = '<tr data-index="' + indexChildren + '"></tr>';//固定行
+                    leftTrChildren = leftTr.after(fixTr).next().hide(); //左固定
+                    rightTrChildren = rightTr.after(fixTr).next().hide(); //右固定
+                }
+                
+                
+                //展开|折叠箭头图标
+                trObj.find('td[lay-event="'+event+'"] i.layui-colla-icon').toggleClass("layui-icon-right layui-icon-down");
+                                
+                //显示|隐藏展开行
+                trObjChildren.toggle();
+                //开启手风琴折叠和折叠箭头
+                if (accordion) {
+                    // trObj.find('td[lay-event="'+event+'"] i.layui-colla-icon').toggleClass("layui-icon-down layui-icon-right");
+                    trObj.siblings().find('td[lay-event="'+event+'"] i.layui-colla-icon').removeClass("layui-icon-down").addClass("layui-icon-right");
+                    trObjChildren.siblings('[data-index$="-children"]').hide(); //展开
+                    rightTrChildren.siblings('[data-index$="-children"]').hide(); //左固定
+                    leftTrChildren.siblings('[data-index$="-children"]').hide(); //右固定
+                }
+                success(trObjChildren, indexChildren); //回调函数
+                heightChildren = trObjChildren.height(); //展开高度固定
+                rightTrChildren.height(heightChildren + 115).toggle(); //左固定
+                leftTrChildren.height(heightChildren + 115).toggle(); //右固定
+            }
+
+            function getOptionsForClassTable(trObj, accordion, content, event, dataset_name, class_type){
+                class_type_2_color = {"known":'#01AAED',"open":'#FF5722'}
+                class_type_2_title = {"known":'Known Intents',"open":'Discovered Intents'}
+                sub_event = 'sub_'+event
+                var optionForClassTable = {
+                    elem: trObj,
+                    accordion: accordion,
+                    content: content,
+                    event: event,
+                    success: function(trObjChildren, index) { //成功回调函数
+                        //trObjChildren 展开tr层DOM
+                        //index 当前层索引
+                        trObjChildren.find('table').attr("id", index);
+                        table.render({
+                            elem: "#" + index,
+                            url: '/annotation/getClassListByDatasetNameAndClassType',
+                            cellMinWidth: 80,
+                            page: false,
+                            cols: [[
+                                {field: 'label_name', title: class_type_2_title[class_type] ,event: sub_event, align: 'center', templet: function(d) {
+                                    return '<div style="position: relative;\n' + '    padding: 0 10px 0 20px;color:'+class_type_2_color[class_type]+';">' + d.label_name + '<i style="left: 0px;" lay-tips="Show Details" class="layui-icon layui-colla-icon layui-icon-right"></i></div>'
+                                }}
+                                ,{field: 'label_text_num', title: 'Numbers', width:'20%' , align: 'center'}
+                            ]]
+                            ,where:{
+                                "dataset_name": dataset_name,
+                                "class_type": class_type
+                            }
+                        });
+
+                        table.on
+                        
+
+                    }
+                }
+                return optionForClassTable;
+            }
+
+
+            
+            function getOptionsForTextTableOfKnown(trObj, accordion, content, event, dataset_name, class_type, label_name){
+                // console.log('dataset_name:\t'+dataset_name+'\nclass_type:\t'+class_type+'\nlabel_name:\t'+label_name)
+                var optionForClassTable = {
+                    elem: trObj,
+                    accordion: accordion,
+                    content: content,
+                    event: event,
+                    success: function(trObjChildren, index) { //成功回调函数
+                        //trObjChildren 展开tr层DOM
+                        //index 当前层索引
+                        trObjChildren.find('table').attr("id", index);
+                        table.render({
+                            elem: "#" + index,
+                            url: '/annotation/getTextListByDatasetClassTypeLabelName',
+                            cellMinWidth: 80,
+                            page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+                                layout: ['prev', 'page', 'next' , 'count' ] //自定义分页布局
+                                //,curr: 5 //设定初始在第 5 页
+                                ,first: 'first'
+                                ,last: 'last'
+                                
+                            },
+                            cols: [[ //表头
+                                    {field: 'text', title: 'Text' , align: 'center'}
+                                    ,{field: 'label_name', title: 'Detection Label' , align: 'center'}
+                                ]]
+                            ,where:{
+                                "dataset_name": dataset_name,
+                                "class_type": class_type,
+                                "label_name": label_name
+                            }
+                        });
+
+                    }
+                }
+                return optionForClassTable;
+            }
+
+            function getOptionsForTextTableOfOpen(trObj, accordion, content, event, dataset_name, class_type, label_name){
+                var optionForClassTable = {
+                    elem: trObj,
+                    accordion: accordion,
+                    content: content,
+                    event: event,
+                    success: function(trObjChildren, index) { //成功回调函数
+                        //trObjChildren 展开tr层DOM
+                        //index 当前层索引
+                        trObjChildren.find('table').attr("id", index);
+                        table.render({
+                            elem: "#" + index,
+                            url: '/annotation/getTextListByDatasetClassTypeLabelName',
+                            cellMinWidth: 80,
+                            page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+                                layout: ['prev', 'page', 'next' , 'count' ] //自定义分页布局
+                                //,curr: 5 //设定初始在第 5 页
+                                ,first: 'first'
+                                ,last: 'last'
+                                
+                            },
+                            // cols: [[ //表头
+                            //         {field: 'text', title: 'Text' , align: 'center',  rowspan:"2"}
+                            //         ,{field: 'can_1', title: 'Key word' , align: 'center'}
+                            //         ,{field: 'conf_1', title: 'Confidence' , align: 'center'}
+                            //     ]]
+                            cols: [[ //表头
+                                    {field: 'text', title: 'Text' , align: 'center',  rowspan:"2"}
+                                    ,{title: 'Discovery' , align: 'center',  colspan:"2"}
+                                ],
+                                [ //表头
+                                    {field: 'can_1', title: 'Key word' , align: 'center'}
+                                    ,{field: 'conf_1', title: 'Confidence' , align: 'center'}
+                            ]]
+                            ,where:{
+                                "dataset_name": dataset_name,
+                                "class_type": class_type,
+                                "label_name": label_name
+                            }
+                        });
+
+                    }
+                }
+                return optionForClassTable;
+            }
+
+
+            function getOptionsForTextTableOfUnknown(trObj, accordion, content, event, dataset_name, class_type, label_name){
+                var optionForClassTable = {
+                    elem: trObj,
+                    accordion: accordion,
+                    content: content,
+                    event: event,
+                    success: function(trObjChildren, index) { //成功回调函数
+                        //trObjChildren 展开tr层DOM
+                        //index 当前层索引
+                        trObjChildren.find('table').attr("id", index);
+                        table.render({
+                            elem: "#" + index,
+                            url: '/annotation/getTextListByDatasetForUnknown',
+                            cellMinWidth: 80,
+                            page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+                                layout: ['prev', 'page', 'next' , 'count' ] //自定义分页布局
+                                //,curr: 5 //设定初始在第 5 页
+                                ,first: 'first'
+                                ,last: 'last'
+                                
+                            },
+                            cols: [[ //表头
+                                    {field: 'text', title: 'Text' , align: 'center'}
+                                ]]
+                            ,where:{
+                                "dataset_name": dataset_name
+                            }
+                        });
+
+                    }
+                }
+                return optionForClassTable;
+            }
+
+
+            function toRunDataAnnotation(){
+                var index = layer.load(2, {time: 10*1000});
+            }
+
+            function errorConfirm(errorMsg){
+                layer.confirm(
+                    errorMsg,
+                    { icon:6, btn:['Confirm'], title:'Attention Please' }
+                )
+            }
+            </script>
+        <script>
+        </script>
+    </body>
+
+</html>
