@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+    <head>
+        <meta charset="UTF-8">
+        <META HTTP-EQUIV="pragma" CONTENT="no-cache"> 
+        <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate"> 
+        <META HTTP-EQUIV="expires" CONTENT="0">
+        <title>Open Intent Discovery System</title>
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+        <link rel="stylesheet" href="/static/lib/xadmin/css/font.css">
+        <link rel="stylesheet" href="/static/lib/xadmin/css/xadmin.css">
+        <script type="text/javascript" src="/static/lib/jquery-3.2.1.js" charset="utf-8"></script>
+        <script type="text/javascript" src="/static/lib/layui/layui.js" charset="utf-8"></script>
+        <script type="text/javascript" src="/static/lib/xadmin/js/xadmin.js"></script>
+        <script src="/static/lib/xadmin/js/echarts.min.js"></script>
+        <script src="/static/lib/xadmin/js/ecStat.js"></script>
+    </head>
+    <body>
+    
+        <div class="layui-fluid">
+            <div class="layui-row">
+                <div class="layui-card">
+                    <div class="layui-card-body ">
+
+                        <div style="font-weight:700; font-size:20px;color:#555555">Open Intent Detection</div>
+                        <div style="color:#6F6F6F">--Here,You can detection new intents</div>
+
+                        <form class="layui-form" enctype="multipart/form-data">
+                            
+                            
+                                <div class="layui-input-inline">
+                                    
+                                    <div class="layui-input-inline ">
+                                        <div class="layui-form-item" style="position: relative;left: 57%">
+                                            <select id = 'dataset_select_detection' name="dataset_select_detection" lay-filter="dataset_select_detection" onclick="switchBySelect()"> 
+                                                <option value="" disabled>Dataset</option>
+                                                {% for lines in dataset_list %}
+                                                    <option  value="{{lines.dataset_id}}" >{{lines.dataset_name}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-input-inline" >
+                                        <div class="layui-form-item" style="position: relative;left: 77%">
+                                            <select id="model_detection" name="model_detection" >
+                                                <option  selected >Open Intent Detection</option>
+                                                    {% for lines in modelList_detection %}
+                                                        {% if lines.model_name == 'MSP' %}
+                                                        <option selected  value="{{lines.model_name}}" >{{lines.model_name}}</option>
+                                                        {% else % }
+                                                        <option  value="{{lines.model_name}}" >{{lines.model_name}}</option>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                   
+                                    <div class="layui-input-inline">
+
+                                        <div class="layui-input-inline">
+                                            <div class="layui-form-item" style="position:relative">
+                                                <button class="layui-btn" lay-filter="detection_test" lay-submit="" style=" position: relative;left: 400%">Test</button>
+                                            </div>
+                                        </div>
+                                        <div class="layui-input-inline">
+                                            <div class="layui-form-item" style="position:relative">
+                                                <button class="layui-btn layui-btn-danger"   style="position: relative;left: 600%" type ='reset'>Clear</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            <!-- <div class="layui-card-body ">
+                                <div class="layui-input-inline">
+                                    <div class="layui-input-inline">
+                                        <div class="layui-form-item" style="position:relative">
+                                            <button class="layui-btn" lay-filter="detection_test" lay-submit="" style="position: relative;left: 400%">Test</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-input-inline">
+                                        <div class="layui-form-item" style="position:relative">
+                                            <button class="layui-btn layui-btn-danger"   style="position: relative;left: 600%" type ='reset'>Clear</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>  -->
+                           
+                        </form> 
+
+                        <div style="font-weight:700; font-size:20px;color:#555555">Model Results Analysis</div>
+                        <div style="color:#6F6F6F">--Show the model results</div>
+                        <div class="layui-card-body ">
+                            <table class="layui-table layui-form" id="classTable" lay-filter="demoEvent" >
+                            </table>
+                        </div>
+                        <div style="font-weight:700; font-size:20px;color:#555555">Model Detail Analysis</div>
+                        <div style="color:#6F6F6F">--Show the reasons for the model results</div>
+                        
+                        <!-- <a id="download" href="">Download</a> -->
+                            <div class="layui-form-item">
+                                <div id="doc" style="display:none;position:absolute;right: 0px;z-index:999">
+                                    <div class="layui-input-inline">
+                                            <div class="layui-input-inline">
+                                                <div style="font-weight:600; font-size:18px;color:#555555">Select Intent Class: </div>
+                                            </div>
+                                            <div class="layui-input-inline">
+                                                <select id="select_data" style="display:none" lay-filter='select_data'>
+                                                
+                                                </select>
+                                            </div>
+                                    </div>    
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item">
+                                <div id="image1" style="width:800px; height:450px; left:0; right:0; margin:auto;" ></div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+
+        <script>layui.use(['form', 'layer','jquery', 'table'],
+            function() {
+                $ = layui.jquery;
+                var form = layui.form,
+                layer = layui.layer;
+                table = layer.table;
+                var DOC_intent_class = '';
+
+                var classTable = table.render({
+                    elem: '#classTable',
+                    url: '/annotation/getClassListByDatasetNameAndClassType',
+                    cols: [[
+                        {field: 'label_name', title: 'Known Intens' , align: 'center'},
+                        {field: 'label_text_num', title: 'Numbers' , align: 'center'}
+                    ]],
+                    where: {
+                        "dataset_name": "banking",
+                        "class_type": "known"
+                    }
+                });
+
+                // var classTable = table.render({
+                //     elem: '#classTable',
+                //     url: '/annotation/getClassListByDatasetNameAndClassType',
+                //     page: false,
+                //     cols: [[
+                //         {field: 'label_name', title: 'Known Intens' , align: 'center'},
+                //         {field: 'label_text_num', title: 'Numbers' , align: 'center'}
+                //     ]],
+                //     where:{
+                //         "dataset_name": 'banking',
+                //         "class_type": 'known'
+                //     }
+                // });
+
+                
+                    
+                form.on('submit(detection_test)',
+                function(data) {
+                    console.log('data===='+data);                   
+                    var form_data = new FormData();
+                    form_data.append('model_detection', $('#model_detection').val());
+                    form_data.append('dataset_select_detection', $('#dataset_select_detection').val());
+                    console.log(form_data);
+                    //image_show
+                    model_detection = $('#model_detection').val()
+                    dataset_select_detection = $('#dataset_select_detection').val()
+                    if(model_detection == 'New Intent Detection'){
+                        layer.msg('Please select Model');
+                    } else if( dataset_select_detection == 0){
+                        layer.msg('Please select Dataset');
+                    }else if(model_detection == 'MSP'){// 渲染图表
+                        $('#doc').hide();
+                        var myChart2 = echarts.init(document.getElementById('image1'), null, {renderer: 'svg'});
+                            myChart2.hideLoading();
+                            var series = [];
+                            var legend = [];
+                            var i = 0 ;
+                            var intent_data =[];                          
+                            var my_color = ['rgba(255, 102, 102,0.8)','rgba(102, 204, 204,0.8)'];
+                            console.log(my_color[0])
+                            
+                             $.get('/static/json/my_json.json', function (data) {
+                                data_chart_2 = data["MSP_oos"];
+                                msp_data_chart_x = data["MSP_oos_x"]["xaxis"];
+                                data_length = data_chart_2.Known_Intent.length-1;
+                                console.log(data_length);
+                                myChart2.hideLoading();  // 
+                                myChart2.clear();//清除缓存
+                                //get /static/json/bar_test.json
+                                for(var key in data_chart_2){
+                                    legend.push(key); 
+                                    intent_data.push(data_chart_2[key]);
+                                    series.push({
+                                                name: key,
+                                                type: 'bar',
+                                                color:my_color[i],
+                                                barGap: '-100%',//添加此配置项即为重叠效果  被重叠
+                                                barCategoryGap: "0%",
+                                                data: data_chart_2[key],
+                                                markLine : {
+                                                        symbol:"none",               
+                                                        label:{
+                                                            position:"end",
+                                                            color:'blue',
+                                                            fontWeight: 'bolder',
+                                                            formatter: function (params) {
+                                                            str = "Default Threshold: " + '0.5'                                            
+                                                            return str
+                                                            },          
+                                                        },
+                                                        data : [{
+                                                            silent:false,  
+                                                            lineStyle:{               
+                                                                type:"solid",
+                                                                color:"blue",
+                                                            },
+                                                            xAxis:'0.5',
+                                                        }]
+                                                    }
+                                            });
+                                        i = i+1;                                       
+                                    };                                   
+                                myChart2.setOption({                                   
+                                    tooltip : {
+                                    trigger: 'axis',
+                                    axisPointer:{
+                                        lineStyle:{
+                                            color:"blue",
+                                            type:'line',
+                                        }
+                                    },
+                                    formatter:function(params){                                        
+                                        var sumNum_k = 0;
+                                        var sumNum_n = 0;
+                                        var sumAll = 0;
+                                        for(i=0;i<=data_length;i++){ 
+                                            sumAll = sumAll + intent_data[1][i]+ intent_data[0][i];
+                                        };
+                                        console.log(data_length);
+                                        console.log(sumAll);
+                                        for(i=data_length;i>params[0].dataIndex;i--){ 
+                                            sumNum_k = sumNum_k + intent_data[0][i];
+                                        };
+                                        for(i=0;i<params[0].dataIndex;i++){ 
+                                            sumNum_n = sumNum_n + intent_data[1][i];
+                                        };
+                                        score = ((sumNum_k+sumNum_n)/sumAll).toFixed(2);
+                                        if(params[0] == undefined & params[1] == undefined){
+                                            return false
+                                        }else if(params[0] == undefined){
+                                            mystr = params[1].seriesName+": "+'<span style="font-weight:800;font-size:13px;">'+params[1].value+"<br>"+'</span>';
+                                            return mystr
+                                        }else if(params[1] == undefined){
+                                            mystr = params[0].seriesName+": "+'<span style="font-weight:800;font-size:13px;">'+params[0].value+"<br>"+'</span>';
+                                            return mystr
+                                        }else{
+                                            console.log("This isnt null")
+                                            mystr = 'Threshold: '+'<span style="font-weight:800;font-size:13px;">'+params[0].name+"<br>"+'</span>'
+                                            +params[0].seriesName+": "+'<span style="font-weight:800;font-size:13px;">'+sumNum_k+"<br>"+'</span>'
+                                            +params[1].seriesName+": "+'<span style="font-weight:800;font-size:13px;">'+sumNum_n+"<br>"+'</span>'
+                                            +'Score: '+'<span style="font-weight:800;font-size:13px;">'+score+"<br>"+'</span>';
+                                            return mystr
+                                        }
+                                        
+                                        
+                                    },
+                                    textStyle:{
+                                　　align:'left'
+                                　　　},
+                                    }, 
+                                    legend: {
+                                        data: legend,
+                                    },
+
+                                    grid: {
+                                        left: '3%',
+                                        right: '4%',
+                                        bottom: '3%',
+                                        top:'20%',
+                                        containLabel: true
+                                    },
+                                    xAxis: {
+                                        //name:'Samples',
+                                        type: 'category',
+                                        data:  msp_data_chart_x,
+                                    },
+                                    yAxis: { 
+                                        //name:'Probability',
+                                        type: 'value',
+                                        boundaryGap: [0, 0.01],
+                                    },
+                                    
+                                    series: series,
+                            })
+                            }, 'json');
+
+                    }
+                    else if(model_detection == 'ADB'){// 渲染图表
+                        $('#doc').hide();
+                            var myChart4 = echarts.init(document.getElementById('image1'), null, {renderer: 'svg'});
+                            myChart4.hideLoading();
+                            var series = [];//保存散点
+                            var mylegend = [];//legend部分使用
+                            var graphic = [];//保存圆                          
+                            //get cluster.json
+                            $.get('/static/json/my_json.json', function (data) {
+                                 data_chart_4 = data["circle"];
+                                 console.log(data_chart_4)
+                                    for (var key in data_chart_4){ 
+                                    mylegend.push(key);
+                                    console.log("the key: "+data_chart_4[key][0][2])
+                                    console.log("the data class: "+typeof(data_chart_4[key]))
+                                    series.push({
+                                        name:key,
+                                        type:'scatter',
+                                        data:data_chart_4[key],
+                                        symbolSize: data_chart_4[key][0][2],
+                                        itemStyle: {
+                                                borderColor: '#555'
+                                            },
+                                        tooltip: {
+                                                trigger:'item',
+                                                formatter:function(params){
+                                                 console.log(params);
+                                                    var dotHtml1 = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#666666"></span>'
+                                                    mystr ='<span style="font-size:10px;">'+params.seriesName+"</br>"
+                                                    +dotHtml1+"Radius:"+'</span>'+ '<span style="font-weight:800;font-size:14px;">'+"  " +params.data[2]+'</span>'+"</br>"
+                                                    +dotHtml1+"Center:"+'</span>' + '<span style="font-weight:800;font-size:14px;">'+"  " +'('+params.data[0]+','+params.data[1]+')'+'</span>';
+                                                    return mystr;
+                                                // console.log(mystr);                                              
+                                                }                                               
+                                        },
+                                        
+                                    });
+                                };
+                                //get cluster
+                                data_chart_5 = data["cluster"];
+                                myChart4.clear();//清除缓存
+                                //循环显示散点
+                                //换行显示legend
+                                mylegend.push('');
+                                for (var key in data_chart_5){
+                                    mylegend.push(key);
+                                    series.push({
+                                        name:key,
+                                        type:'scatter',
+                                        data:data_chart_5[key],
+                                        itemStyle: {
+                                                borderColor: '#555'
+                                            },
+                                            tooltip: {
+                                                trigger:'item',
+                                                formatter:function(params){
+                                                    //console.log(params);                                                             
+                                                    var dotHtml2 = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#666666"></span>'
+                                                    mystr ='<span style="font-size:10px;">'+params.seriesName+"</br>"+dotHtml2+"Center:"+'</span>' + '<span style="font-weight:800;font-size:14px;">'+"  " +'('+params.data[0]+','+params.data[1]+')'+'</span>';
+                                                    return mystr;
+                                                    //console.log(params);
+                                                }                                               
+                                        }
+                                    });
+                                };
+                                myChart4.setOption({
+                                        xAxis: {},
+                                        yAxis: {},
+                                        legend: {
+                                            data:mylegend
+                                            //data:["cluster1","cluster2","cluster3","cluster4"]
+                                            },
+                                        tooltip: {
+                                        },
+                                         dataZoom: [
+                                        {
+                                            type: "slider",
+                                            realtime: true, //拖动滚动条时是否动态的更新图表数据
+                                            height: 15, //滚动条高度
+                                            left:"10%",
+                                            right:"5%",
+                                            start: 0, //滚动条开始位置（共100等份）
+                                            end: 100, //结束位置（共100等份）
+                                        },
+                                        {
+                                                type: 'slider',
+                                                show: true,
+                                                yAxisIndex: [0],
+                                                left: '93%',
+                                                right:"5%",
+                                                start: 0, //数据窗口范围的起始百分比
+                                                end: 1000
+                                            }
+                                        ],
+                                        series: series,
+                                    //画圆
+                                        graphic:graphic,
+                                    })
+                            }, 'json');
+                        }else if(model_detection == 'DeepUnk'){
+                            $('#doc').hide();
+                            var myChart4 = echarts.init(document.getElementById('image1'));                                       
+                            myChart4.hideLoading();
+                            var series = [];//保存散点
+                            var mylegend = [];//legend部分使用
+                            $.get('/static/json/my_json.json', function (data) {
+                                data_chart_5 = data["density"];
+                                myChart4.clear();//清除缓存
+                                mylegend.push('');
+                                for (var key in data_chart_5){
+                                    mylegend.push(key);
+                                    series.push({
+                                        name:key,
+                                        type:'scatter',
+                                        data:data_chart_5[key],                                       
+                                        itemStyle: {
+                                                normal: {
+                                                    borderColor: '#555',
+                                                    label: {
+                                                        show: true,
+                                                        color: '#6F6F6F',
+                                                        position: 'right',
+                                                        fontWeight: 'bolder',
+                                                        formatter: function (params, ticket, callback) {
+                                                            var s = "Density: \""+params.value[2]+"\""; 
+                                                            return s
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                            tooltip: {
+                                                trigger:'item',
+                                                formatter:function(params){
+                                                    //console.log(params);                                                             
+                                                    var dotHtml2 = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#666666"></span>'
+                                                    mystr ='<span style="font-size:10px;">'+params.seriesName+"</br>"+dotHtml2+"Density:"+'</span>' + '<span style="font-weight:800;font-size:14px;">'+"  " +params.data[2]+'</span>'+"</br>"+dotHtml2+"Center:"+'</span>' + '<span style="font-weight:800;font-size:14px;">'+"  " +'('+params.data[0]+','+params.data[1]+')'+'</span>';
+                                                    return mystr;
+                                                    //console.log(params);
+                                                }                                                
+                                        }
+                                    });
+                                };
+                                myChart4.setOption({
+                                    //X,Y轴还必须要有
+                                        xAxis: {},
+                                        yAxis: {},
+                                        legend: {
+                                            data:mylegend
+                                            },
+                                        tooltip: {
+                                        },
+                                        // x轴拖动
+                                        dataZoom: [
+                                        {
+                                            type: "slider",
+                                            realtime: true, //拖动滚动条时是否动态的更新图表数据
+                                            height: 15, //滚动条高度
+                                            left:"10%",
+                                            right:"5%",
+                                            start: 0, //滚动条开始位置（共100等份）
+                                            end: 100, //结束位置（共100等份）
+                                        },
+                                        {
+                                                type: 'slider',
+                                                show: true,
+                                                yAxisIndex: [0],
+                                                left: '93%',
+                                                right:"5%",
+                                                start: 0, //数据窗口范围的起始百分比
+                                                end: 1000
+                                            }
+                                        ],
+                                        series: series,
+                                    })
+                            }, 'json');  
+                    }else if(model_detection == 'DOC'){
+                        $('#doc').show();
+                        $("#select_data").empty();
+                        form.render('select');
+                        doc_data_str = "DOC_"+dataset_select_detection+"_Index";
+                        console.log(doc_data_str);
+
+                        var myChart1 = echarts.init(document.getElementById('image1'));
+                                myChart1.hideLoading();
+                                var series = [];
+                                var legend = [];
+                                var j = 0 ;
+                                var intent_data =[];                          
+                                var my_color = ['rgba(255, 102, 102,0.8)','rgba(102, 204, 204,0.8)'];
+                                console.log(my_color[0]);
+                                $.get('/static/json/my_json.json', function (data) {
+
+                                data_chart_0 = data[doc_data_str];
+                                //get x axis
+                                doc_x_str = "DOC_"+dataset_select_detection+"_Xaxis";
+                                doc_x_key =  data_chart_0["Intent_Class"][0]+"_xaxis";
+                                console.log("first_key: "+doc_x_key);
+                                doc_data_chart_x = data[doc_x_str][doc_x_key];
+                                console.log("first_key: "+ doc_data_chart_x);
+
+                                length = data_chart_0.Intent_Class.length;
+                                console.log("this is length:"+length);
+                                for(i=0;i<length;i++){
+                                    opention_str = data_chart_0.Intent_Class[i];
+                                    console.log(opention_str);
+                                    $("#select_data").append("<option value="+opention_str+">"+opention_str+"</option>");
+                                    form.render('select');
+                                }
+                                doc_threshold = data_chart_0.Intent_Threshold 
+
+                                doc_content_str = "DOC_"+dataset_select_detection+"_Content";
+                                data_chart_1 = data[doc_content_str][data_chart_0.Intent_Class[0]];
+                                data_length = data_chart_1.Known_Intent.length-1;
+                                console.log(data_length);
+                                myChart1.hideLoading();  // 
+                                myChart1.clear();//清除缓存
+                                //get /static/json/bar_test.json
+                                for(var key in data_chart_1){
+                                    legend.push(key); 
+                                    intent_data.push(data_chart_1[key]);
+                                    console.log("threshold_test: "+doc_threshold[0])
+                                    series.push({
+                                            name: key,
+                                            type: 'bar',
+                                            color:my_color[j],
+                                            barGap: '-100%',//添加此配置项即为重叠效果  被重叠
+                                            barCategoryGap: "0%",
+                                            data: data_chart_1[key],
+                                            markLine : {
+                                                    symbol:"none",               
+                                                    label:{
+                                                        position:"end",
+                                                        color:'blue',
+                                                        fontWeight: 'bolder',
+                                                        formatter: function (params) {
+                                                        str = "Default Threshold: " + doc_threshold[0];                                            
+                                                        return str
+                                                        },          
+                                                    },
+                                                    data : [{
+                                                        silent:false,  
+                                                        lineStyle:{               
+                                                            type:"solid",
+                                                            color:"blue",
+                                                        },
+                                                        xAxis: doc_threshold[0],
+                                                    }]
+                                                }
+                                        });
+                                        j = j+1;
+                                        console.log(j);                                       
+                                    };
+                                
+                                myChart1.setOption({                                   
+                                    tooltip : {
+                                    trigger: 'axis',
+                                    axisPointer:{
+                                        lineStyle:{
+                                            color:"blue",
+                                            type:'line',
+                                        }
+                                    },
+                                    formatter:function(params){                                        
+                                        var sumNum_k = 0;
+                                        var sumNum_n = 0;
+                                        var sumAll = 0;
+                                        for(i=0;i<=data_length;i++){ 
+                                            sumAll = sumAll + intent_data[1][i]+ intent_data[0][i];
+                                        };
+                                        console.log(data_length);
+                                        console.log(sumAll);
+                                        for(i=data_length;i>params[0].dataIndex;i--){ 
+                                            sumNum_k = sumNum_k + intent_data[0][i];
+                                        };
+                                        for(i=0;i<params[0].dataIndex;i++){ 
+                                            sumNum_n = sumNum_n + intent_data[1][i];
+                                        };
+                                        score = ((sumNum_k+sumNum_n)/sumAll).toFixed(2);
+                                        if(params[0] == undefined & params[1] == undefined){
+                                            return false
+                                        }else if(params[0] == undefined){
+                                            mystr = params[1].seriesName+": "+'<span style="font-weight:800;font-size:13px;">'+params[1].value+"<br>"+'</span>';
+                                            return mystr
+                                        }else if(params[1] == undefined){
+                                            mystr = params[0].seriesName+": "+'<span style="font-weight:800;font-size:13px;">'+params[0].value+"<br>"+'</span>';
+                                            return mystr
+                                        }else{
+                                            console.log("This isnt null")
+                                            mystr = 'Threshold: '+'<span style="font-weight:800;font-size:13px;">'+params[0].name+"<br>"+'</span>'
+                                            +params[0].seriesName+": "+'<span style="font-weight:800;font-size:13px;">'+sumNum_k+"<br>"+'</span>'
+                                            +params[1].seriesName+": "+'<span style="font-weight:800;font-size:13px;">'+sumNum_n+"<br>"+'</span>'
+                                            +'Score: '+'<span style="font-weight:800;font-size:13px;">'+score+"<br>"+'</span>';
+                                            return mystr
+                                        }
+                                    },
+                                    textStyle:{
+                                　　align:'left'
+                                　　　},
+                                    }, 
+                                    legend: {
+                                        data: legend,
+                                    },
+                                    grid: {
+                                        left: '3%',
+                                        right: '4%',
+                                        bottom: '3%',
+                                        top:'20%',
+                                        containLabel: true
+                                    },
+                                    xAxis: {
+                                        //name:'Samples',
+                                        type: 'category',
+                                        data:  doc_data_chart_x,
+                                    },
+                                    yAxis: { 
+                                        //name:'Probability',
+                                        type: 'value',
+                                        boundaryGap: [0, 0.01],
+                                    },
+                                    series: series,
+                            })
+                            }, 'json');
+                    }else if(model_detection == 'OpenMax'){
+                         $('#doc').hide();
+                        var myChart2 = echarts.init(document.getElementById('image1'));
+                            myChart2.hideLoading();
+                            var series = [];
+                            var legend = [];
+                            var i = 0 ;
+                            var intent_data =[];                          
+                            var my_color = ['rgba(255, 102, 102,0.8)','rgba(102, 204, 204,0.8)','rgba(102,204,102,0.8)'];
+                            console.log(my_color[2])
+                             $.get('/static/json/my_json.json', function (data) {
+                                data_chart_s = data["OpneMax_Index"]["Score"];
+                                data_chart_x = data["OpneMax_Index"]["xaxis"];
+                                data_chart_2 = data["OpneMax_Threshold"];
+                                data_length = data_chart_2.Known_Intent.length-1;
+                                console.log(data_length);
+                                myChart2.hideLoading();  // 
+                                myChart2.clear();//清除缓存
+                                //get /static/json/bar_test.json
+                                for(var key in data_chart_2){
+                                    legend.push(key); 
+                                    intent_data.push(data_chart_2[key]);
+                                    series.push({
+                                            name: key,
+                                            type: 'bar',
+                                            color:my_color[i],
+                                            barGap: '-100%',//添加此配置项即为重叠效果  被重叠
+                                            barCategoryGap: "0%",
+                                            data: data_chart_2[key],
+                                            markLine : {
+                                                    symbol:"none",               
+                                                    label:{
+                                                        position:"end",
+                                                        color:'blue',
+                                                        fontWeight: 'bolder',
+                                                        formatter: function (params) {
+                                                        str = "Default Threshold: " + '0.5'                                            
+                                                        return str
+                                                        },          
+                                                    },
+                                                    data : [{
+                                                        silent:false,  
+                                                        lineStyle:{               
+                                                            type:"solid",
+                                                            color:"blue",
+                                                        },
+                                                        xAxis:'0.5',
+                                                    }]
+                                                }
+                                        });
+                                        i = i+1;  
+                                        console.log(i)                                     
+                                    };
+                                myChart2.setOption({                                   
+                                    tooltip : {
+                                    trigger: 'axis',
+                                    axisPointer:{
+                                        lineStyle:{
+                                            color:"blue",
+                                            type:'line',
+                                        }
+                                    },
+                                    formatter:function(params){  
+                                        if(params[0] == undefined & params[1] == undefined & params[2] == undefined ){
+                                            return false
+                                        }else if(params[0] == undefined & params[1] == undefined){
+                                            mystr = params[2].seriesName+": "+'<span style="font-weight:800;font-size:13px;">'+params[2].value+"<br>"+'</span>';
+                                            return mystr
+                                        }else if(params[0] == undefined & params[2] == undefined){
+                                            mystr = params[1].seriesName+": "+'<span style="font-weight:800;font-size:13px;">'+params[1].value+"<br>"+'</span>';
+                                            return mystr
+                                        }else if(params[1] == undefined & params[2] == undefined){
+                                            mystr = params[0].seriesName+": "+'<span style="font-weight:800;font-size:13px;">'+params[0].value+"<br>"+'</span>';
+                                            return mystr
+                                        }else if(params[0] == undefined){
+                                            mystr = params[1].seriesName+": "+'<span style="font-weight:800;font-size:13px;">'+params[1].value+"<br>"+'</span>'
+                                            +params[2].seriesName+": "+'<span style="font-weight:800;font-size:13px;">'+params[2].value+"<br>"+'</span>';
+                                            return mystr
+                                        }else if(params[1] == undefined){
+                                            mystr = params[0].seriesName+": "+'<span style="font-weight:800;font-size:13px;">'+params[0].value+"<br>"+'</span>'
+                                            +params[2].seriesName+": "+'<span style="font-weight:800;font-size:13px;">'+params[2].value+"<br>"+'</span>';
+                                            return mystr
+                                        }else if(params[2] == undefined){
+                                            mystr = params[0].seriesName+": "+'<span style="font-weight:800;font-size:13px;">'+params[0].value+"<br>"+'</span>'
+                                            +params[1].seriesName+": "+'<span style="font-weight:800;font-size:13px;">'+params[1].value+"<br>"+'</span>';
+                                            return mystr
+                                        }
+                                        else {
+                                            mystr = 'Threshold: '+'<span style="font-weight:800;font-size:13px;">'+params[0].name+"<br>"+'</span>'
+                                            +params[0].seriesName+": "+'<span style="font-weight:800;font-size:13px;">'+params[0].value+"<br>"+'</span>'
+                                            +params[1].seriesName+": "+'<span style="font-weight:800;font-size:13px;">'+params[1].value+"<br>"+'</span>'
+                                            +params[2].seriesName+": "+'<span style="font-weight:800;font-size:13px;">'+params[2].value+"<br>"+'</span>'
+                                            +'Score: '+'<span style="font-weight:800;font-size:13px;">'+data_chart_s[params[0].dataIndex]+"<br>"+'</span>';
+                                        return mystr
+                                        }
+                                        
+                                    },
+                                    textStyle:{
+                                　　align:'left'
+                                　　　},
+                                    }, 
+                                    legend: {
+                                        data: legend,
+                                    },
+
+                                    grid: {
+                                        left: '3%',
+                                        right: '4%',
+                                        bottom: '3%',
+                                        top:'20%',
+                                        containLabel: true
+                                    },
+                                    xAxis: {
+                                        //name:'Samples',
+                                        type: 'category',
+                                        data:  data_chart_x,
+                                    },
+                                    yAxis: { 
+                                        //name:'Probability',
+                                        type: 'value',
+                                        boundaryGap: [0, 0.01],
+                                    },
+                                    series: series,
+                            })
+                            }, 'json');
+
+
+                    }
+                    return false;
+                });
+
+
+                //样例选择监听
+                 form.on('select(dataset_select_detection)', function(data) {
+                    switchBySelect();
+                });
+                form.on('select(example_select_discovery)', function(data) {
+                    discovery_switchBySelect();
+                }); 
+                form.on('select(select_data)', function(data) {
+                    console.log('my_test: '+data.value);
+                    var doc_intent = data.value;
+                    var t  = data_chart_0.Intent_Class.indexOf(doc_intent);
+                    var myChart1 = echarts.init(document.getElementById('image1'));
+                            myChart1.hideLoading();
+                            var series = [];
+                            var legend = [];
+                            var i = 0 ;
+                            var intent_data =[];                          
+                            var my_color = ['rgba(255, 102, 102,0.8)','rgba(102, 204, 204,0.8)'];
+                            data_str = "DOC_"+dataset_select_detection+"_Content"
+                            x_str = "DOC_"+dataset_select_detection+"_Xaxis"
+                            x_key = doc_intent+"_xaxis"
+                            th_str = "DOC_"+dataset_select_detection+"_Index"
+                             $.get('/static/json/my_json.json', function (data) {
+                                data_chart_1 = data[data_str][doc_intent];
+                                data_length = data_chart_1.Known_Intent.length-1;
+                                doc_threshold = data[th_str]["Intent_Threshold"]
+                                console.log("low_threshold: "+doc_threshold)
+                                myChart1.hideLoading();  // 
+                                myChart1.clear();//清除缓存
+                                //get /static/json/bar_test.json
+                                doc_data_chart_x = data[x_str][x_key];
+                                for(var key in data_chart_1){
+                                    legend.push(key); 
+                                    intent_data.push(data_chart_1[key]);
+                                    console.log("my_:++++++ "+doc_threshold[t])    
+                                    series.push({
+                                            name: key,
+                                            type: 'bar',
+                                            color:my_color[i],
+                                            barGap: '-100%',//添加此配置项即为重叠效果  被重叠
+                                            barCategoryGap: "0%",
+                                            data: data_chart_1[key],
+                                            markLine : {
+                                                    symbol:"none",               
+                                                    label:{
+                                                        position:"end",
+                                                        color:'blue',
+                                                        fontWeight: 'bolder',
+                                                        formatter: function (params) {
+                                                        str = "Default Threshold: " + doc_threshold[t]                                            
+                                                        return str
+                                                        },          
+                                                    },
+                                                    data : [{
+                                                        silent:false,  
+                                                        lineStyle:{               
+                                                            type:"solid",
+                                                            color:"blue",
+                                                        },
+                                                        xAxis: doc_threshold[t],
+                                                      
+                                                    }]
+                                                }
+                                        });
+                                        i = i+1;
+                                       
+                                    };
+                                
+                                myChart1.setOption({                                   
+                                    tooltip : {
+                                    trigger: 'axis',
+                                    axisPointer:{
+                                        lineStyle:{
+                                            color:"blue",
+                                            type:'line',
+                                        }
+                                    },
+                                    formatter:function(params){                                        
+                                        var sumNum_k = 0;
+                                        var sumNum_n = 0;
+                                        var sumAll = 0;
+                                        for(i=0;i<=data_length;i++){ 
+                                            sumAll = sumAll + intent_data[1][i]+ intent_data[0][i];
+                                        };
+                                        console.log(data_length);
+                                        console.log(sumAll);
+                                        for(i=data_length;i>params[0].dataIndex;i--){ 
+                                            sumNum_k = sumNum_k + intent_data[0][i];
+                                        };
+                                        for(i=0;i<params[0].dataIndex;i++){ 
+                                            sumNum_n = sumNum_n + intent_data[1][i];
+                                        };
+                                        score = ((sumNum_k+sumNum_n)/sumAll).toFixed(2);
+                                        if(params[0] == undefined & params[1] == undefined){
+                                            return false
+                                        }else if(params[0] == undefined){
+                                            mystr = params[1].seriesName+": "+'<span style="font-weight:800;font-size:13px;">'+params[1].value+"<br>"+'</span>';
+                                            return mystr
+                                        }else if(params[1] == undefined){
+                                            mystr = params[0].seriesName+": "+'<span style="font-weight:800;font-size:13px;">'+params[0].value+"<br>"+'</span>';
+                                            return mystr
+                                        }else{
+                                            console.log("This isnt null")
+                                            mystr = 'Threshold: '+'<span style="font-weight:800;font-size:13px;">'+params[0].name+"<br>"+'</span>'
+                                            +params[0].seriesName+": "+'<span style="font-weight:800;font-size:13px;">'+sumNum_k+"<br>"+'</span>'
+                                            +params[1].seriesName+": "+'<span style="font-weight:800;font-size:13px;">'+sumNum_n+"<br>"+'</span>'
+                                            +'Score: '+'<span style="font-weight:800;font-size:13px;">'+score+"<br>"+'</span>';
+                                            return mystr
+                                        }
+                                    },
+                                    textStyle:{
+                                　　align:'left'
+                                　　　},
+                                    }, 
+                                    legend: {
+                                        data: legend,
+                                    },
+                                    grid: {
+                                        left: '3%',
+                                        right: '4%',
+                                        bottom: '3%',
+                                        top:'20%',
+                                        containLabel: true
+                                    },
+                                    xAxis: {
+                                        //name:'Samples',
+                                        type: 'category',
+                                        data:  doc_data_chart_x,
+                                    },
+                                    yAxis: { 
+                                        //name:'Probability',
+                                        type: 'value',
+                                        boundaryGap: [0, 0.01],
+                                    },
+                                    series: series,
+                            })
+                            }, 'json');
+
+
+                });
+            });    
+        </script>
+
+        <script type="text/javascript">
+
+            function switchBySelect() {
+                // alert('点击select框了')
+                var v = $("#dataset_select_detection").find("option:selected").text();//得到下拉框的value值
+                // alert(v)
+                // console.log(v);
+                var form_data = new FormData();
+                form_data.append('example_num', v);
+                $.ajax({
+                        url: "/detection/model_analysis/getModelAnalysisExampleData",
+                        type: 'POST',
+                        data: form_data,
+                        dataType: "json",
+                        contentType: false,
+                        processData: false,// 获取POST所需的csrftoken
+                        success: function (data) {
+                            if (data.code == 200){
+                                document.getElementById("text_example").value = data.text
+                            }else{
+                                alert('Chose Error !')
+                            }
+
+                        }
+
+                });
+
+            }
+
+
+             function discovery_switchBySelect() {
+                // alert('点击select框了')
+                var v = $("#example_select_discovery").find("option:selected").text();//得到下拉框的value值
+                // alert(v)
+                // console.log(v);
+                var form_data = new FormData();
+                form_data.append('example_num', v);
+                $.ajax({
+                        url: "/log_management/discovery_getExampleData/",
+                        type: 'POST',
+                        data: form_data,
+                        dataType: "json",
+                        contentType: false,
+                        processData: false,// 获取POST所需的csrftoken
+                        success: function (data) {
+                            if (data.code == 200){
+                                document.getElementById("discovery_text_example").value = data.text
+                            }else{
+                                alert('Chose Error !')
+                            }
+                        }
+                });
+            }
+
+            
+            function errorConfirm(errorMsg){
+                var baseErr = ': There is no data for this combination ！！！'
+                layer.confirm(
+                    errorMsg + baseErr,
+                    { icon:6, btn:['Confirm'], title:'Attention Please' }
+                )
+            }
+
+
+            function initDefalutEcharts(){
+                model_detection = layui.jquery('#model_detection').val()
+                dataset_select_detection = layui.jquery('#dataset_select_detection').val()
+                //image1    Model Detail Analysis
+                var myChart2 = echarts.init(document.getElementById('image1'), null, {renderer: 'svg'});
+                myChart2.hideLoading();
+                var series = [];
+                var legend = [];
+                var i = 0 ;
+                var intent_data =[];                          
+                var my_color = ['rgba(255, 102, 102,0.8)','rgba(102, 204, 204,0.8)'];
+                layui.jquery.get('/static/json/my_json.json', function (data) {
+                    var errorMsg = 'Model Detail Analysis'
+                    data_chart_2 = data["MSP_oos"];
+                    if (data_chart_2 == undefined){ errorConfirm(errorMsg); return false; }
+                    msp_data_chart_x = data["MSP_oos_x"]["xaxis"];
+                    data_length = data_chart_2.Known_Intent.length-1;
+                    console.log(data_length);
+                    myChart2.hideLoading();  // 
+                    myChart2.clear();//清除缓存
+                    //get /static/json/bar_test.json
+                    for(var key in data_chart_2){
+                        legend.push(key); 
+                        intent_data.push(data_chart_2[key]);
+                        series.push({
+                                    name: key,
+                                    type: 'bar',
+                                    color:my_color[i],
+                                    barGap: '-100%',//添加此配置项即为重叠效果  被重叠
+                                    barCategoryGap: "0%",
+                                    data: data_chart_2[key],
+                                    markLine : {
+                                            symbol:"none",               
+                                            label:{
+                                                position:"end",
+                                                color:'blue',
+                                                fontWeight: 'bolder',
+                                                formatter: function (params) {
+                                                str = "Default Threshold: " + '0.5'                                            
+                                                return str
+                                                },          
+                                            },
+                                            data : [{
+                                                silent:false,  
+                                                lineStyle:{               
+                                                    type:"solid",
+                                                    color:"blue",
+                                                },
+                                                xAxis:'0.5',
+                                            }]
+                                        }
+                                });
+                            i = i+1;                                       
+                        };                                   
+                    myChart2.setOption({                                   
+                        tooltip : {
+                        trigger: 'axis',
+                        axisPointer:{
+                            lineStyle:{
+                                color:"blue",
+                                type:'line',
+                            }
+                        },
+                        formatter:function(params){                                        
+                            var sumNum_k = 0;
+                            var sumNum_n = 0;
+                            var sumAll = 0;
+                            for(i=0;i<=data_length;i++){ 
+                                sumAll = sumAll + intent_data[1][i]+ intent_data[0][i];
+                            };
+                            console.log(data_length);
+                            console.log(sumAll);
+                            for(i=data_length;i>params[0].dataIndex;i--){ 
+                                sumNum_k = sumNum_k + intent_data[0][i];
+                            };
+                            for(i=0;i<params[0].dataIndex;i++){ 
+                                sumNum_n = sumNum_n + intent_data[1][i];
+                            };
+                            score = ((sumNum_k+sumNum_n)/sumAll).toFixed(2);
+                            if(params[0] == undefined & params[1] == undefined){
+                                return false
+                            }else if(params[0] == undefined){
+                                mystr = params[1].seriesName+": "+'<span style="font-weight:800;font-size:13px;">'+params[1].value+"<br>"+'</span>';
+                                return mystr
+                            }else if(params[1] == undefined){
+                                mystr = params[0].seriesName+": "+'<span style="font-weight:800;font-size:13px;">'+params[0].value+"<br>"+'</span>';
+                                return mystr
+                            }else{
+                                console.log("This isnt null")
+                                mystr = 'Threshold: '+'<span style="font-weight:800;font-size:13px;">'+params[0].name+"<br>"+'</span>'
+                                +params[0].seriesName+": "+'<span style="font-weight:800;font-size:13px;">'+sumNum_k+"<br>"+'</span>'
+                                +params[1].seriesName+": "+'<span style="font-weight:800;font-size:13px;">'+sumNum_n+"<br>"+'</span>'
+                                +'Score: '+'<span style="font-weight:800;font-size:13px;">'+score+"<br>"+'</span>';
+                                return mystr
+                            }
+                            
+                            
+                        },
+                        textStyle:{
+                    　　align:'left'
+                    　　　},
+                        }, 
+                        legend: {
+                            data: legend,
+                        },
+
+                        grid: {
+                            left: '3%',
+                            right: '4%',
+                            bottom: '3%',
+                            top:'20%',
+                            containLabel: true
+                        },
+                        xAxis: {
+                            //name:'Samples',
+                            type: 'category',
+                            data:  msp_data_chart_x,
+                        },
+                        yAxis: { 
+                            //name:'Probability',
+                            type: 'value',
+                            boundaryGap: [0, 0.01],
+                        },
+                        
+                        series: series,
+                })
+                }, 'json');
+
+
+            }
+
+
+
+
+
+        </script>
+
+
+        <script>
+            initDefalutEcharts();
+        </script>
+    </body>
+
+</html>

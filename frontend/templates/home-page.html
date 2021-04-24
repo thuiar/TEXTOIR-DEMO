@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>New Intent Discovery System</title>
+        <meta charset="utf-8" />
+        <meta name="description" content="" />
+        <meta name="keywords" content="" />
+        <link rel="stylesheet" href="/static/lib/xadmin/css/font.css">
+        <link rel="stylesheet" href="/static/lib/xadmin/css/main.css" />
+        <link rel="stylesheet" href="/static/lib/layui/css/layui.css" media="all">
+        <script type="text/javascript" src="/static/lib/layui/layui.js" charset="utf-8"></script>
+        <script type="text/javascript" src="/static/lib/xadmin/js/xadmin.js"></script>
+    </head>
+    <body >
+        <div id="container" style="align:center;">
+            
+
+            <div id="header" style="background-color:#009688;text-align:center;height:340px;width:100%;margin: auto;">
+                <h1 style="padding-top:60px;">TEXTOIR</h1>
+                <p style="padding-top:20px;margin-left:30px;margin-right:30px;font-size:25px;color:#FFFFFF;">An Integrated and Visualized Platform for Text Open Intent Recognition</p>
+                
+                <a href="https://github.com/thuiar/DeepAligned-Clustering" target="_blank" style="margin:20px;margin-top:26px;" class="layui-btn layui-btn-radius layui-btn-normal">Get Started</a>
+                
+                <a href="https://github.com/thuiar/DeepAligned-Clustering/archive/main.zip" target="_blank" style="margin:20px;margin-top:26px;" class="layui-btn layui-btn-radius layui-btn-primary">Download</a>
+            </div>
+            
+            <!-- 初始样式 -->
+            <div class="layui-carousel" style="height: auto; width: 80%; margin: auto;margin-top:30px;padding:30px;">
+              <div class="layui-carousel" id="carousel01" style="height: 100%; width: 100%; margin: auto;">
+				<div carousel-item="" style="height:100%;width:100%;margin: auto;">
+					<div style="height:100%;width:100%;margin: auto;"><img style="align:middle;height:100%;width:100%; image-rendering:-moz-crisp-edges;image-rendering:-o-crisp-edges;image-rendering:-webkit-optimize-contrast;image-rendering: crisp-edges;-ms-interpolation-mode:nearest-neighbor;"  src="/static/img/homepage/homepage-01.png"></div>
+					<div style="height:100%;width:100%;margin: auto;"><img style="align:middle;height:100%;width:100%; image-rendering:-moz-crisp-edges;image-rendering:-o-crisp-edges;image-rendering:-webkit-optimize-contrast;image-rendering: crisp-edges;-ms-interpolation-mode:nearest-neighbor;"  src="/static/img/homepage/homepage-02.png"></div>
+					<div style="height:100%;width:100%;margin: auto;"><img style="align:middle;height:100%;width:100%; image-rendering:-moz-crisp-edges;image-rendering:-o-crisp-edges;image-rendering:-webkit-optimize-contrast;image-rendering: crisp-edges;-ms-interpolation-mode:nearest-neighbor;"  src="/static/img/homepage/homepage-03.png"></div>
+					<div style="height:100%;width:100%;margin: auto;"><img style="align:middle;height:100%;width:100%; image-rendering:-moz-crisp-edges;image-rendering:-o-crisp-edges;image-rendering:-webkit-optimize-contrast;image-rendering: crisp-edges;-ms-interpolation-mode:nearest-neighbor;"  src="/static/img/homepage/homepage-04.png"></div>
+				</div>
+				</div>
+            </div>
+   
+            
+            <div id="wrapper" style="text-align:left;height:200px;width:100%;margin: auto;margin-top:10px;padding:60px;background-color: rgb(255, 255, 255);">
+                <ul class="feature-icons">
+                    <li class="icon solid fa-cog"><p style="font-size:25px;cursor:pointer;" onclick="change('Dataset Management','thedataset/toDatasetList')">Dataset Management</p></li>
+                    <li class="icon solid fa-laptop"><p style="font-size:25px;cursor:pointer;"onclick="change('Detection Model Management','detection/model_management')">Open Intent Detection</p></li>
+                    <li class="icon solid fa-bolt"><p style="font-size:25px;cursor:pointer;"onclick="change('Discovery Model Management','discovery/model_management')">Open Intent Discovery</p></li>
+                    <li class="icon solid fa-signal"><p style="font-size:25px;cursor:pointer;"onclick="change('Open Intent Recognition','annotation/data_annotation')">Open Intent Recognition</p></li>
+                </ul>
+            </div>
+   
+            <div class="copyright" style="margin:40px;text-align:center;">&copy;  THUIAR 2021</div>
+
+        </div>
+        
+        <script>layui.use(['carousel'],
+            function() {
+                var carousel = layui.carousel;
+                //图片轮播
+                carousel.render({
+                    elem: '#carousel01'
+                    ,width: '95%'
+                    ,hight: "100%"
+                    ,interval: 3000
+                }); 
+            });
+        </script>
+        <script>
+            function change(data1,data2){
+                top.addTabNew(data1,data2);
+                    return false;
+            }
+            // top.addTabNew('Detection Model Analysis','/detection/model_analysis');
+            //         return false;
+
+        </script>
+    </body>
+</html>

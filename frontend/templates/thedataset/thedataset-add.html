@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>New Intent Discovery System</title>
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+        <link rel="stylesheet" href="/static/lib/xadmin/css/font.css">
+        <link rel="stylesheet" href="/static/lib/xadmin/css/xadmin.css">
+        <script type="text/javascript" src="/static/lib/layui/layui.js" charset="utf-8"></script>
+        <script type="text/javascript" src="/static/lib/xadmin/js/xadmin.js"></script>
+        <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+        <!--[if lt IE 9]>
+            <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+            <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+        <div class="layui-fluid">
+            <div class="layui-row">
+                <div class="layui-card">
+                    <div class="layui-card-body ">
+
+                        <form class="layui-form" enctype="multipart/form-data">
+                            <div class="layui-form-item">
+                                <label for="domain" class="layui-form-label" style="margin-right: 5px">
+                                    <span class="x-red">*</span>Name</label>
+                                <div class="layui-input-inline">
+                                    <input style= "border-radius: 5px" type="text" id="dataset_name" name="dataset_name" lay-verify="passlength" placeholder="dataset name" style="width: 80%" autocomplete="off" class="layui-input">
+                                </div>
+                                <label for="domain" class="layui-form-label" style="margin-right: 5px">
+                                    <span class="x-red">*</span>Domain</label>
+                                <div class="layui-input-inline">
+                                    <input style= "border-radius: 5px" type="text" id="domain" name="domain" lay-verify="passlength" placeholder="dataset domain" style="width: 80%" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label for="class_num" class="layui-form-label" style="margin-right: 5px">
+                                    <span class="x-red">*</span>Classes</label>
+                                <div class="layui-input-inline">
+                                    <input style= "border-radius: 5px" type="text" id="class_num" name="class_num" lay-verify="isnum" placeholder="classes number" style="width: 80%" autocomplete="off" class="layui-input">
+                                </div>
+                                <label for="source" class="layui-form-label" style="margin-right: 5px">
+                                    <span class="x-red">*</span>Source</label>
+                                <div class="layui-input-inline">
+                                    <input style= "border-radius: 5px" type="text" id="source" name="source" lay-verify="passlength" placeholder="dataset source" style="width: 80%" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label for="sample_total_num" class="layui-form-label" style="margin-right: 5px" >
+                                    sample_total_num</label>
+                                <div class="layui-input-inline">
+                                    <input style= "border-radius: 5px" type="text" id="sample_total_num" name="sample_total_num" lay-verify="isnum" placeholder="sample total num" style="width: 80%" autocomplete="off" class="layui-input">
+                                </div>
+                                <label for="sample_training_num" class="layui-form-label" style="margin-right: 5px">
+                                    sample_train_num</label>
+                                <div class="layui-input-inline">
+                                    <input style= "border-radius: 5px" type="text" id="sample_train_num" name="sample_train_num" lay-verify="isnum" placeholder="sample train num" style="width: 80%" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label for="sample_vali_num" class="layui-form-label" style="margin-right: 5px">
+                                    sample_vali_num</label>
+                                <div class="layui-input-inline">
+                                    <input style= "border-radius: 5px" type="text" id="sample_vali_num" name="sample_vali_num" lay-verify="isnum" placeholder="sample vali num" style="width: 80%" autocomplete="off" class="layui-input">
+                                </div>
+                                <label for="sample_test_num" class="layui-form-label" style="margin-right: 5px">
+                                    sample_test_num</label>
+                                <div class="layui-input-inline">
+                                    <input style= "border-radius: 5px" type="text" id="sample_test_num" name="sample_test_num" lay-verify="isnum" placeholder="sample test num" style="width: 80%" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label for="sentence_max_length" class="layui-form-label" style="margin-right: 5px">
+                                    max_length</label>
+                                <div class="layui-input-inline">
+                                    <input style= "border-radius: 5px" type="text" id="sentence_max_length" name="sentence_max_length" lay-verify="isnum" placeholder="sentence max length" style="width: 80%"  autocomplete="off" class="layui-input">
+                                </div>
+                                <label for="sentence_max_length" class="layui-form-label" style="margin-right: 5px">
+                                    avg_length</label>
+                                <div class="layui-input-inline">
+                                    <input style= "border-radius: 5px" type="text" id="sentence_avg_length" name="sentence_avg_length" lay-verify="isnum" placeholder="sentence avg length" style="width: 80%" autocomplete="off" class="layui-input"></div>
+                            </div>
+                            <!-- {% comment %} upload file  {% endcomment %} -->
+                            <div class="layui-form-item">
+                                {% comment %} <label for="files" class="layui-form-label" style="margin-right: 5px">
+                                    all.tsv</label>
+                                <div class="layui-input-inline">
+                                    <!-- <input  type="file" id="file_all" name="file_all" > -->
+                                    <input type="button" value="Please check here to select file" onclick="javascript:$('input[name=\'file_all\']').click();" class="layui-btn layui-btn-normal"  />
+                                    <input type="file" id="file_all" name="file_all"  style="display: none;"/>
+                                </div> {% endcomment %}
+                                <label for="files" class="layui-form-label" style="margin-right: 5px">
+                                    train.tsv</label>
+                                <div class="layui-input-inline">
+                                    <input type="button" value="Please check here to select file" onclick="javascript:$('input[name=\'file_train\']').click();" class="layui-btn layui-btn-primary"  />
+                                    <input type="file" id="file_train" name="file_train"  style="display: none;">
+                                </div>
+                                <label for="files" class="layui-form-label" style="margin-right: 5px">
+                                    dev.tsv</label>
+                                <div class="layui-input-inline">
+                                    <input type="button" value="Please check here to select file" onclick="javascript:$('input[name=\'file_dev\']').click();" class="layui-btn layui-btn-primary"  />
+                                    <input type="file" id="file_dev" name="file_dev" style="display: none;">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label for="files" class="layui-form-label" style="margin-right: 5px">
+                                    test.tsv</label>
+                                <div class="layui-input-inline">
+                                    <input type="button" value="Please check here to select file" onclick="javascript:$('input[name=\'file_test\']').click();" class="layui-btn layui-btn-primary"  />
+                                    <input type="file" id="file_test" name="file_test" style="display: none;">
+                                </div>
+                            </div>
+
+                            <div class="layui-card-body ">
+                                <div class="layui-input-inline">
+                                    <div class="layui-input-inline">
+                                        <div class="layui-form-item" style="position:relative">
+                                            <button class="layui-btn" lay-filter="add" lay-submit="" style="position: relative;left: 400%">Add</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-input-inline">
+                                        <div class="layui-form-item" style="position:relative">
+                                            <button class="layui-btn layui-btn-danger"   style="position: relative;left: 600%" type ='reset'>Clear</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>layui.use(['form', 'layer','jquery'],
+            function() {
+                $ = layui.jquery;
+                var form = layui.form,
+                layer = layui.layer;
+
+                //自定义验证规则
+                form.verify({
+                    isnum: function(value) {
+                        if (value.length < 1) {
+                            return 'Please Input Attribute ！！！';
+                        }
+                        if (isNaN(value)){
+                            return 'Only Input Number ！！！';
+                        }
+                    },
+                    pass: [/(.+){6,12}$/, '密码必须6到12位'],
+                    passlength: function(value) {
+                        if (value.length < 1) {
+                            return 'Please Input Attribute ！！！';
+                        }
+                    }
+                });
+
+                //监听提交
+                form.on('submit(add)',
+                function(data) {
+                    console.log(data);
+                    var form_data = new FormData();
+                    form_data.append('dataset_name', $('#dataset_name').val());
+                    form_data.append('domain', $('#domain').val());
+                    form_data.append('class_num', $('#class_num').val());
+                    form_data.append('source', $('#source').val());
+                    form_data.append('sample_total_num', $('#sample_total_num').val());
+                    form_data.append('sample_training_num', $('#sample_train_num').val());
+                    form_data.append('sample_validation_num', $('#sample_vali_num').val());
+                    form_data.append('sample_test_num', $('#sample_test_num').val());
+                    form_data.append('sentence_max_length', $('#sentence_max_length').val());
+                    form_data.append('sentence_avg_length', $('#sentence_avg_length').val());
+                    // form_data.append('file_all', $('#file_all')[0].files[0])
+                    form_data.append('file_train', $('#file_train')[0].files[0])
+                    form_data.append('file_dev', $('#file_dev')[0].files[0])
+                    form_data.append('file_test', $('#file_test')[0].files[0])
+                    
+                    {% comment %} fileList = $('#files')[0].files;
+                    for(var i =0 ; i < fileList.length; i++){
+                        file = fileList[i];
+                        form_data.append('files',file)
+                    } {% endcomment %}
+                    
+                    console.log(form_data);
+                    $.ajax({
+                        url: "/thedataset/addDataset/",
+                        type: 'POST',
+                        data: form_data,
+                        dataType: "json",
+                        contentType: false,
+                        processData: false,// 获取POST所需的csrftoken
+                        success: function (data) {
+                            // alert(data.msg);
+                            layer.msg(data.msg)
+                            if (data.code == 200){
+                                //关闭当前frame
+                                xadmin.close();
+                                // 可以对父窗口进行刷新
+                                xadmin.father_reload();
+                            }
+
+                        }
+
+                    });
+                    return false;
+                });
+
+            });</script>
+            {% comment %} upoload test 
+            <script>
+            layui.use('upload', function(data){
+                var upload = layui.upload;
+                
+                //执行实例
+                var uploadInst = upload.render({
+                    elem: '#test1', //绑定元素
+                    url: '/dataset_management/addFile/', 
+                    accept:"file",
+                    field:"files",
+                    //上传前的回调
+                    before: function (obj) {
+                        this.data = {
+                            dataset_name: $('#dataset_name').val(),
+                            csrfmiddlewaretoken: '{{ csrf_token  }}'
+                        }
+                    },
+                    done: function(res){
+                    layer.msg('Successfully Upload');
+                    console.log(res);
+                    }
+
+                });
+                });
+            </script>{% endcomment %}
+
+
+        <script>var _hmt = _hmt || []; (function() {
+                var hm = document.createElement("script");
+                hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+                var s = document.getElementsByTagName("script")[0];
+                s.parentNode.insertBefore(hm, s);
+            })();</script>
+    </body>
+
+</html>
