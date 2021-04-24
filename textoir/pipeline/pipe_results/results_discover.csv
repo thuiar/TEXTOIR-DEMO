@@ -1,8 +1,0 @@
-ACC,ARI,NMI,dataset,mode,discover_method,known_cls_ratio,labeled_ratio,seed
-32.44,17.92,51.84,banking,pipeline,DeepAligned,0.75,1.0,0
-47.44,29.41,65.55,banking,pipeline,DeepAligned,0.75,1.0,0
-67.73,50.28,76.77,banking,pipeline,DeepAligned,0.75,1.0,0
-19.55,9.04,39.56,banking,pipeline,DeepAligned,0.75,1.0,0
-46.75,29.91,65.51,banking,pipeline,DeepAligned,0.75,1.0,0
-19.29,9.02,39.29,banking,pipeline,DeepAligned,0.75,1.0,0
-43.67,27.07,62.98,banking,pipeline,DeepAligned,0.75,1.0,0
