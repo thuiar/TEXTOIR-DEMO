@@ -1,0 +1,145 @@
+2021-03-26 19:14:49.685373: I tensorflow/stream_executor/platform/default/dso_loader.cc:49] Successfully opened dynamic library libcudart.so.11.0
+03/26/2021 19:14:52 - INFO - pytorch_pretrained_bert.tokenization -   loading vocabulary file /home/sharing/disk2/zhl_backup/pretrained_models/uncased_L-12_H-768_A-12/vocab.txt
+03/26/2021 19:14:53 - INFO - pytorch_pretrained_bert.tokenization -   loading vocabulary file /home/sharing/disk2/zhl_backup/pretrained_models/uncased_L-12_H-768_A-12/vocab.txt
+03/26/2021 19:14:54 - INFO - pytorch_pretrained_bert.tokenization -   loading vocabulary file /home/sharing/disk2/zhl_backup/pretrained_models/uncased_L-12_H-768_A-12/vocab.txt
+03/26/2021 19:14:55 - INFO - pytorch_pretrained_bert.tokenization -   loading vocabulary file /home/sharing/disk2/zhl_backup/pretrained_models/uncased_L-12_H-768_A-12/vocab.txt
+03/26/2021 19:14:55 - INFO - pytorch_pretrained_bert.tokenization -   loading vocabulary file /home/sharing/disk2/zhl_backup/pretrained_models/uncased_L-12_H-768_A-12/vocab.txt
+03/26/2021 19:14:56 - INFO - pytorch_pretrained_bert.modeling -   loading archive file /home/sharing/disk2/zhl_backup/pretrained_models/uncased_L-12_H-768_A-12
+03/26/2021 19:14:56 - INFO - pytorch_pretrained_bert.modeling -   Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 12,
+  "type_vocab_size": 2,
+  "vocab_size": 30522
+}
+
+03/26/2021 19:14:59 - INFO - pytorch_pretrained_bert.modeling -   Weights of bert not initialized from pretrained model: ['dense.weight', 'dense.bias', 'classifier.weight', 'classifier.bias']
+03/26/2021 19:14:59 - INFO - pytorch_pretrained_bert.modeling -   Weights from pretrained model not used in bert: ['cls.predictions.bias', 'cls.predictions.transform.dense.weight', 'cls.predictions.transform.dense.bias', 'cls.predictions.decoder.weight', 'cls.seq_relationship.weight', 'cls.seq_relationship.bias', 'cls.predictions.transform.LayerNorm.weight', 'cls.predictions.transform.LayerNorm.bias']
+03/26/2021 19:15:02 - INFO - pytorch_pretrained_bert.modeling -   loading archive file /home/sharing/disk2/zhl_backup/pretrained_models/uncased_L-12_H-768_A-12
+03/26/2021 19:15:02 - INFO - pytorch_pretrained_bert.modeling -   Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 12,
+  "type_vocab_size": 2,
+  "vocab_size": 30522
+}
+
+03/26/2021 19:15:04 - INFO - pytorch_pretrained_bert.modeling -   Weights of bert not initialized from pretrained model: ['dense.weight', 'dense.bias', 'classifier.weight', 'classifier.bias']
+03/26/2021 19:15:04 - INFO - pytorch_pretrained_bert.modeling -   Weights from pretrained model not used in bert: ['cls.predictions.bias', 'cls.predictions.transform.dense.weight', 'cls.predictions.transform.dense.bias', 'cls.predictions.decoder.weight', 'cls.seq_relationship.weight', 'cls.seq_relationship.bias', 'cls.predictions.transform.LayerNorm.weight', 'cls.predictions.transform.LayerNorm.bias']
+Extracting representation:   0%|          | 0/49 [00:00<?, ?it/s]Extracting representation:   2%|▏         | 1/49 [00:00<00:33,  1.45it/s]Extracting representation:   6%|▌         | 3/49 [00:00<00:10,  4.46it/s]Extracting representation:  10%|█         | 5/49 [00:00<00:06,  7.14it/s]Extracting representation:  14%|█▍        | 7/49 [00:01<00:04,  9.71it/s]Extracting representation:  18%|█▊        | 9/49 [00:01<00:03, 11.93it/s]Extracting representation:  22%|██▏       | 11/49 [00:01<00:02, 13.50it/s]Extracting representation:  27%|██▋       | 13/49 [00:01<00:02, 13.40it/s]Extracting representation:  31%|███       | 15/49 [00:01<00:02, 12.50it/s]Extracting representation:  35%|███▍      | 17/49 [00:01<00:02, 12.98it/s]Extracting representation:  39%|███▉      | 19/49 [00:01<00:02, 13.71it/s]Extracting representation:  43%|████▎     | 21/49 [00:01<00:01, 15.09it/s]Extracting representation:  47%|████▋     | 23/49 [00:02<00:01, 15.97it/s]Extracting representation:  51%|█████     | 25/49 [00:02<00:01, 16.70it/s]Extracting representation:  55%|█████▌    | 27/49 [00:02<00:01, 15.61it/s]Extracting representation:  59%|█████▉    | 29/49 [00:02<00:01, 13.64it/s]Extracting representation:  63%|██████▎   | 31/49 [00:02<00:01, 13.74it/s]Extracting representation:  67%|██████▋   | 33/49 [00:02<00:01, 14.02it/s]Extracting representation:  71%|███████▏  | 35/49 [00:02<00:00, 15.02it/s]Extracting representation:  76%|███████▌  | 37/49 [00:03<00:00, 15.97it/s]Extracting representation:  80%|███████▉  | 39/49 [00:03<00:00, 16.82it/s]Extracting representation:  84%|████████▎ | 41/49 [00:03<00:00, 16.33it/s]Extracting representation:  88%|████████▊ | 43/49 [00:03<00:00, 14.12it/s]Extracting representation:  92%|█████████▏| 45/49 [00:03<00:00, 13.79it/s]Extracting representation:  96%|█████████▌| 47/49 [00:03<00:00, 14.06it/s]Extracting representation: 100%|██████████| 49/49 [00:03<00:00, 15.14it/s]Extracting representation: 100%|██████████| 49/49 [00:03<00:00, 12.80it/s]
+Open Intent Discovery Begin...
+Parameters Initialization...
+Notice: ****This is test mode****
+The assigned labeled ratio is unavailable!
+Data Preparation...
+num_labeled_samples 2062
+num_unlabeled_samples 6941
+Evaluation begin...
+Evaluation finished...
+run_discover.py: 44:  {'ACC': 58.14, 'ARI': 47.54, 'NMI': 74.58}
+test_results        ACC    ARI    NMI  ... labeled_ratio cluster_num_factor  seed
+0    56.51  44.70  76.55  ...           0.1                  1     0
+1    53.83  40.97  72.25  ...           0.1                  1     0
+2    60.15  46.72  72.21  ...           0.1                  1     0
+3    61.14  47.43  75.68  ...           0.1                  1     0
+4    38.92  22.85  63.79  ...           0.1                  1     0
+..     ...    ...    ...  ...           ...                ...   ...
+287  69.94  59.43  82.24  ...           0.5                  1     0
+288  69.94  59.43  82.24  ...           0.5                  1     0
+289  60.39  49.05  77.31  ...           0.1                  1     0
+290  69.94  59.43  82.24  ...           0.5                  1     0
+291  64.32  51.30  77.97  ...           0.5                  1     0
+
+[292 rows x 9 columns]
+-----------------Data--------------------
+data_dir : /home/zhanghanlei/TEXTOIR/textoir/data/banking
+n_known_cls : 38
+num_labels : 77
+all_label_list : ['Refund_not_showing_up' 'activate_my_card' 'age_limit'
+ 'apple_pay_or_google_pay' 'atm_support' 'automatic_top_up'
+ 'balance_not_updated_after_bank_transfer'
+ 'balance_not_updated_after_cheque_or_cash_deposit'
+ 'beneficiary_not_allowed' 'cancel_transfer' 'card_about_to_expire'
+ 'card_acceptance' 'card_arrival' 'card_delivery_estimate' 'card_linking'
+ 'card_not_working' 'card_payment_fee_charged'
+ 'card_payment_not_recognised' 'card_payment_wrong_exchange_rate'
+ 'card_swallowed' 'cash_withdrawal_charge'
+ 'cash_withdrawal_not_recognised' 'change_pin' 'compromised_card'
+ 'contactless_not_working' 'country_support' 'declined_card_payment'
+ 'declined_cash_withdrawal' 'declined_transfer'
+ 'direct_debit_payment_not_recognised' 'disposable_card_limits'
+ 'edit_personal_details' 'exchange_charge' 'exchange_rate'
+ 'exchange_via_app' 'extra_charge_on_statement' 'failed_transfer'
+ 'fiat_currency_support' 'get_disposable_virtual_card' 'get_physical_card'
+ 'getting_spare_card' 'getting_virtual_card' 'lost_or_stolen_card'
+ 'lost_or_stolen_phone' 'order_physical_card' 'passcode_forgotten'
+ 'pending_card_payment' 'pending_cash_withdrawal' 'pending_top_up'
+ 'pending_transfer' 'pin_blocked' 'receiving_money' 'request_refund'
+ 'reverted_card_payment?' 'supported_cards_and_currencies'
+ 'terminate_account' 'top_up_by_bank_transfer_charge'
+ 'top_up_by_card_charge' 'top_up_by_cash_or_cheque' 'top_up_failed'
+ 'top_up_limits' 'top_up_reverted' 'topping_up_by_card'
+ 'transaction_charged_twice' 'transfer_fee_charged'
+ 'transfer_into_account' 'transfer_not_received_by_recipient'
+ 'transfer_timing' 'unable_to_verify_identity' 'verify_my_identity'
+ 'verify_source_of_funds' 'verify_top_up' 'virtual_card_not_working'
+ 'visa_or_mastercard' 'why_verify_identity'
+ 'wrong_amount_of_cash_received' 'wrong_exchange_rate_for_cash_withdrawal']
+known_label_list : ['pending_top_up', 'why_verify_identity', 'top_up_failed', 'supported_cards_and_currencies', 'exchange_via_app', 'declined_card_payment', 'unable_to_verify_identity', 'exchange_rate', 'passcode_forgotten', 'verify_my_identity', 'declined_cash_withdrawal', 'top_up_limits', 'apple_pay_or_google_pay', 'lost_or_stolen_card', 'lost_or_stolen_phone', 'balance_not_updated_after_cheque_or_cash_deposit', 'change_pin', 'getting_virtual_card', 'pin_blocked', 'get_disposable_virtual_card', 'top_up_reverted', 'reverted_card_payment?', 'topping_up_by_card', 'top_up_by_bank_transfer_charge', 'virtual_card_not_working', 'balance_not_updated_after_bank_transfer', 'request_refund', 'verify_source_of_funds', 'atm_support', 'disposable_card_limits', 'pending_transfer', 'age_limit', 'declined_transfer', 'card_acceptance', 'compromised_card', 'card_about_to_expire', 'edit_personal_details', 'getting_spare_card']
+-----------------Args--------------------
+dataset : banking
+known_cls_ratio : 0.5
+labeled_ratio : 0.5
+method : DeepAligned
+backbone : bert
+cluster_num_factor : 1
+feat_dim : 768
+seed : 0
+type : open_intent_discovery
+pipe_results_path : pipe_results
+setting : semi_supervised
+save_results_path : outputs
+data_dir : /home/zhanghanlei/TEXTOIR/textoir/data
+gpu_id : 1
+frontend_dir : /home/zhanghanlei/TEXTOIR/textoir/../frontend/static/jsons
+train_discover : False
+max_num_words : 10000
+glove_model : /home/sharing/pretrained_embedding/glove
+maxiter : 12000
+update_interval : 100
+batch_size : 256
+tol : 0.001
+rampup_coefficient : 10.0
+rampup_length : 5
+num_warmup_train_epochs : 1
+alpha : 0.6
+train_data_dir : /home/zhanghanlei/TEXTOIR/textoir/../train
+bert_model : /home/sharing/disk2/zhl_backup/pretrained_models/uncased_L-12_H-768_A-12
+pretrain : pretrain
+model_dir : models
+max_seq_length : 55
+warmup_proportion : 0.1
+freeze_bert_parameters : freeze
+save_discover : False
+lr : 5e-05
+lr_pre : 5e-05
+num_train_epochs : 100
+train_batch_size : 128
+eval_batch_size : 64
+wait_patient : 20
+-----------------Manager--------------------
+device : cuda
+test_results : {'ACC': 64.32, 'ARI': 51.3, 'NMI': 77.97}
+Open Intent Discovery Finished...

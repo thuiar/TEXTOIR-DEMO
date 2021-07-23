@@ -1,0 +1,2 @@
+F1-known,F1-open,F1,Acc,dataset,method,known_cls_ratio,labeled_ratio,seed
+23.1527,68.6117,45.8822,55.43,snips,OpenMax,0.1,0.2,0

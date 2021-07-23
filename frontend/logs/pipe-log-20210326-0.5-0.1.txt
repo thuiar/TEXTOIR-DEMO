@@ -1,0 +1,111 @@
+2021-03-26 19:51:34.532746: I tensorflow/stream_executor/platform/default/dso_loader.cc:49] Successfully opened dynamic library libcudart.so.11.0
+03/26/2021 19:51:48 - INFO - pytorch_pretrained_bert.tokenization -   loading vocabulary file /home/sharing/disk2/zhl_backup/pretrained_models/uncased_L-12_H-768_A-12/vocab.txt
+03/26/2021 19:51:48 - INFO - pytorch_pretrained_bert.tokenization -   loading vocabulary file /home/sharing/disk2/zhl_backup/pretrained_models/uncased_L-12_H-768_A-12/vocab.txt
+03/26/2021 19:51:48 - INFO - pytorch_pretrained_bert.tokenization -   loading vocabulary file /home/sharing/disk2/zhl_backup/pretrained_models/uncased_L-12_H-768_A-12/vocab.txt
+03/26/2021 19:51:49 - INFO - pytorch_pretrained_bert.tokenization -   loading vocabulary file /home/sharing/disk2/zhl_backup/pretrained_models/uncased_L-12_H-768_A-12/vocab.txt
+03/26/2021 19:51:51 - INFO - pytorch_pretrained_bert.tokenization -   loading vocabulary file /home/sharing/disk2/zhl_backup/pretrained_models/uncased_L-12_H-768_A-12/vocab.txt
+03/26/2021 19:51:52 - INFO - pytorch_pretrained_bert.modeling -   loading archive file /home/sharing/disk2/zhl_backup/pretrained_models/uncased_L-12_H-768_A-12
+03/26/2021 19:51:52 - INFO - pytorch_pretrained_bert.modeling -   Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 12,
+  "type_vocab_size": 2,
+  "vocab_size": 30522
+}
+
+03/26/2021 19:51:56 - INFO - pytorch_pretrained_bert.modeling -   Weights of bert not initialized from pretrained model: ['dense.weight', 'dense.bias', 'classifier.weight', 'classifier.bias']
+03/26/2021 19:51:56 - INFO - pytorch_pretrained_bert.modeling -   Weights from pretrained model not used in bert: ['cls.predictions.bias', 'cls.predictions.transform.dense.weight', 'cls.predictions.transform.dense.bias', 'cls.predictions.decoder.weight', 'cls.seq_relationship.weight', 'cls.seq_relationship.bias', 'cls.predictions.transform.LayerNorm.weight', 'cls.predictions.transform.LayerNorm.bias']
+Iteration:   0%|          | 0/135 [00:00<?, ?it/s]Iteration:   1%|          | 1/135 [00:00<02:13,  1.00it/s]Iteration:   2%|▏         | 3/135 [00:01<00:40,  3.23it/s]Iteration:   3%|▎         | 4/135 [00:01<00:31,  4.21it/s]Iteration:   4%|▍         | 6/135 [00:01<00:18,  6.86it/s]Iteration:   6%|▌         | 8/135 [00:01<00:13,  9.43it/s]Iteration:   8%|▊         | 11/135 [00:01<00:09, 12.59it/s]Iteration:  10%|▉         | 13/135 [00:01<00:10, 11.83it/s]Iteration:  11%|█         | 15/135 [00:01<00:10, 11.27it/s]Iteration:  13%|█▎        | 17/135 [00:02<00:09, 11.84it/s]Iteration:  14%|█▍        | 19/135 [00:02<00:08, 13.35it/s]Iteration:  16%|█▋        | 22/135 [00:02<00:07, 15.39it/s]Iteration:  18%|█▊        | 24/135 [00:02<00:06, 16.40it/s]Iteration:  19%|█▉        | 26/135 [00:02<00:07, 14.20it/s]Iteration:  21%|██        | 28/135 [00:02<00:08, 12.71it/s]Iteration:  22%|██▏       | 30/135 [00:03<00:08, 12.97it/s]Iteration:  24%|██▎       | 32/135 [00:03<00:07, 14.21it/s]Iteration:  25%|██▌       | 34/135 [00:03<00:06, 15.52it/s]Iteration:  27%|██▋       | 37/135 [00:03<00:05, 17.05it/s]Iteration:  29%|██▉       | 39/135 [00:03<00:06, 14.69it/s]Iteration:  30%|███       | 41/135 [00:03<00:07, 12.99it/s]Iteration:  32%|███▏      | 43/135 [00:03<00:06, 13.17it/s]Iteration:  33%|███▎      | 45/135 [00:04<00:06, 14.37it/s]Iteration:  36%|███▌      | 48/135 [00:04<00:05, 16.12it/s]Iteration:  38%|███▊      | 51/135 [00:04<00:05, 16.23it/s]Iteration:  39%|███▉      | 53/135 [00:04<00:05, 14.00it/s]Iteration:  41%|████      | 55/135 [00:04<00:05, 13.95it/s]Iteration:  42%|████▏     | 57/135 [00:04<00:05, 13.49it/s]Iteration:  44%|████▎     | 59/135 [00:04<00:05, 14.84it/s]Iteration:  46%|████▌     | 62/135 [00:05<00:04, 16.47it/s]Iteration:  47%|████▋     | 64/135 [00:05<00:04, 15.72it/s]Iteration:  49%|████▉     | 66/135 [00:05<00:05, 13.49it/s]Iteration:  50%|█████     | 68/135 [00:05<00:04, 13.88it/s]Iteration:  52%|█████▏    | 70/135 [00:05<00:04, 13.43it/s]Iteration:  53%|█████▎    | 72/135 [00:05<00:04, 14.82it/s]Iteration:  56%|█████▌    | 75/135 [00:05<00:03, 16.51it/s]Iteration:  58%|█████▊    | 78/135 [00:06<00:03, 16.23it/s]Iteration:  59%|█████▉    | 80/135 [00:06<00:03, 13.92it/s]Iteration:  61%|██████    | 82/135 [00:06<00:03, 14.09it/s]Iteration:  62%|██████▏   | 84/135 [00:06<00:03, 13.64it/s]Iteration:  64%|██████▎   | 86/135 [00:06<00:03, 14.96it/s]Iteration:  66%|██████▌   | 89/135 [00:06<00:02, 16.60it/s]Iteration:  67%|██████▋   | 91/135 [00:07<00:02, 16.05it/s]Iteration:  69%|██████▉   | 93/135 [00:07<00:03, 13.73it/s]Iteration:  70%|███████   | 95/135 [00:07<00:02, 13.75it/s]Iteration:  72%|███████▏  | 97/135 [00:07<00:02, 13.36it/s]Iteration:  73%|███████▎  | 99/135 [00:07<00:02, 14.75it/s]Iteration:  75%|███████▍  | 101/135 [00:07<00:02, 15.98it/s]Iteration:  77%|███████▋  | 104/135 [00:07<00:01, 16.41it/s]Iteration:  79%|███████▊  | 106/135 [00:08<00:02, 13.97it/s]Iteration:  80%|████████  | 108/135 [00:08<00:01, 13.68it/s]Iteration:  81%|████████▏ | 110/135 [00:08<00:01, 13.33it/s]Iteration:  83%|████████▎ | 112/135 [00:08<00:01, 14.73it/s]Iteration:  85%|████████▌ | 115/135 [00:08<00:01, 16.43it/s]Iteration:  87%|████████▋ | 117/135 [00:08<00:01, 16.13it/s]Iteration:  88%|████████▊ | 119/135 [00:09<00:01, 13.69it/s]Iteration:  90%|████████▉ | 121/135 [00:09<00:01, 13.64it/s]Iteration:  91%|█████████ | 123/135 [00:09<00:00, 13.27it/s]Iteration:  93%|█████████▎| 125/135 [00:09<00:00, 14.67it/s]Iteration:  94%|█████████▍| 127/135 [00:09<00:00, 15.91it/s]Iteration:  96%|█████████▋| 130/135 [00:09<00:00, 17.30it/s]Iteration:  98%|█████████▊| 132/135 [00:09<00:00, 14.74it/s]Iteration:  99%|█████████▉| 134/135 [00:10<00:00, 13.10it/s]Iteration: 100%|██████████| 135/135 [00:10<00:00, 13.33it/s]
+Iteration:   0%|          | 0/49 [00:00<?, ?it/s]Iteration:   4%|▍         | 2/49 [00:00<00:03, 14.87it/s]Iteration:   8%|▊         | 4/49 [00:00<00:02, 17.48it/s]Iteration:  14%|█▍        | 7/49 [00:00<00:02, 18.84it/s]Iteration:  18%|█▊        | 9/49 [00:00<00:02, 14.68it/s]Iteration:  22%|██▏       | 11/49 [00:00<00:02, 12.81it/s]Iteration:  27%|██▋       | 13/49 [00:00<00:02, 12.99it/s]Iteration:  31%|███       | 15/49 [00:01<00:02, 14.39it/s]Iteration:  35%|███▍      | 17/49 [00:01<00:02, 15.76it/s]Iteration:  39%|███▉      | 19/49 [00:01<00:01, 16.84it/s]Iteration:  43%|████▎     | 21/49 [00:01<00:01, 15.97it/s]Iteration:  47%|████▋     | 23/49 [00:01<00:01, 13.29it/s]Iteration:  51%|█████     | 25/49 [00:01<00:01, 13.23it/s]Iteration:  55%|█████▌    | 27/49 [00:01<00:01, 13.14it/s]Iteration:  59%|█████▉    | 29/49 [00:01<00:01, 14.51it/s]Iteration:  63%|██████▎   | 31/49 [00:02<00:01, 15.73it/s]Iteration:  67%|██████▋   | 33/49 [00:02<00:00, 16.65it/s]Iteration:  71%|███████▏  | 35/49 [00:02<00:00, 14.39it/s]Iteration:  76%|███████▌  | 37/49 [00:02<00:00, 12.49it/s]Iteration:  80%|███████▉  | 39/49 [00:02<00:00, 13.40it/s]Iteration:  84%|████████▎ | 41/49 [00:02<00:00, 13.56it/s]Iteration:  88%|████████▊ | 43/49 [00:02<00:00, 14.87it/s]Iteration:  92%|█████████▏| 45/49 [00:03<00:00, 16.04it/s]Iteration:  96%|█████████▌| 47/49 [00:03<00:00, 16.92it/s]Iteration: 100%|██████████| 49/49 [00:03<00:00, 17.19it/s]Iteration: 100%|██████████| 49/49 [00:03<00:00, 14.95it/s]
+03/26/2021 19:52:17 - INFO - pytorch_pretrained_bert.tokenization -   loading vocabulary file /home/sharing/disk2/zhl_backup/pretrained_models/uncased_L-12_H-768_A-12/vocab.txt
+03/26/2021 19:52:17 - INFO - pytorch_pretrained_bert.tokenization -   loading vocabulary file /home/sharing/disk2/zhl_backup/pretrained_models/uncased_L-12_H-768_A-12/vocab.txt
+03/26/2021 19:52:18 - INFO - pytorch_pretrained_bert.tokenization -   loading vocabulary file /home/sharing/disk2/zhl_backup/pretrained_models/uncased_L-12_H-768_A-12/vocab.txt
+03/26/2021 19:52:20 - INFO - pytorch_pretrained_bert.tokenization -   loading vocabulary file /home/sharing/disk2/zhl_backup/pretrained_models/uncased_L-12_H-768_A-12/vocab.txt
+03/26/2021 19:52:20 - INFO - pytorch_pretrained_bert.tokenization -   loading vocabulary file /home/sharing/disk2/zhl_backup/pretrained_models/uncased_L-12_H-768_A-12/vocab.txt
+03/26/2021 19:52:21 - INFO - pytorch_pretrained_bert.tokenization -   loading vocabulary file /home/sharing/disk2/zhl_backup/pretrained_models/uncased_L-12_H-768_A-12/vocab.txt
+03/26/2021 19:52:21 - INFO - pytorch_pretrained_bert.tokenization -   loading vocabulary file /home/sharing/disk2/zhl_backup/pretrained_models/uncased_L-12_H-768_A-12/vocab.txt
+03/26/2021 19:52:22 - INFO - pytorch_pretrained_bert.tokenization -   loading vocabulary file /home/sharing/disk2/zhl_backup/pretrained_models/uncased_L-12_H-768_A-12/vocab.txt
+03/26/2021 19:52:23 - INFO - pytorch_pretrained_bert.tokenization -   loading vocabulary file /home/sharing/disk2/zhl_backup/pretrained_models/uncased_L-12_H-768_A-12/vocab.txt
+03/26/2021 19:52:24 - INFO - pytorch_pretrained_bert.tokenization -   loading vocabulary file /home/sharing/disk2/zhl_backup/pretrained_models/uncased_L-12_H-768_A-12/vocab.txt
+03/26/2021 19:52:24 - INFO - pytorch_pretrained_bert.modeling -   loading archive file /home/sharing/disk2/zhl_backup/pretrained_models/uncased_L-12_H-768_A-12
+03/26/2021 19:52:24 - INFO - pytorch_pretrained_bert.modeling -   Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 12,
+  "type_vocab_size": 2,
+  "vocab_size": 30522
+}
+
+03/26/2021 19:52:27 - INFO - pytorch_pretrained_bert.modeling -   Weights of bert not initialized from pretrained model: ['dense.weight', 'dense.bias', 'classifier.weight', 'classifier.bias']
+03/26/2021 19:52:27 - INFO - pytorch_pretrained_bert.modeling -   Weights from pretrained model not used in bert: ['cls.predictions.bias', 'cls.predictions.transform.dense.weight', 'cls.predictions.transform.dense.bias', 'cls.predictions.decoder.weight', 'cls.seq_relationship.weight', 'cls.seq_relationship.bias', 'cls.predictions.transform.LayerNorm.weight', 'cls.predictions.transform.LayerNorm.bias']
+03/26/2021 19:52:27 - INFO - pytorch_pretrained_bert.modeling -   loading archive file /home/sharing/disk2/zhl_backup/pretrained_models/uncased_L-12_H-768_A-12
+03/26/2021 19:52:27 - INFO - pytorch_pretrained_bert.modeling -   Model config {
+  "attention_probs_dropout_prob": 0.1,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "max_position_embeddings": 512,
+  "num_attention_heads": 12,
+  "num_hidden_layers": 12,
+  "type_vocab_size": 2,
+  "vocab_size": 30522
+}
+
+03/26/2021 19:52:30 - INFO - pytorch_pretrained_bert.modeling -   Weights of bert not initialized from pretrained model: ['dense.weight', 'dense.bias', 'classifier.weight', 'classifier.bias']
+03/26/2021 19:52:30 - INFO - pytorch_pretrained_bert.modeling -   Weights from pretrained model not used in bert: ['cls.predictions.bias', 'cls.predictions.transform.dense.weight', 'cls.predictions.transform.dense.bias', 'cls.predictions.decoder.weight', 'cls.seq_relationship.weight', 'cls.seq_relationship.bias', 'cls.predictions.transform.LayerNorm.weight', 'cls.predictions.transform.LayerNorm.bias']
+Extracting representation:   0%|          | 0/49 [00:00<?, ?it/s]Extracting representation:   6%|▌         | 3/49 [00:00<00:02, 17.58it/s]Extracting representation:  12%|█▏        | 6/49 [00:00<00:02, 19.11it/s]Extracting representation:  18%|█▊        | 9/49 [00:00<00:02, 19.71it/s]Extracting representation:  24%|██▍       | 12/49 [00:00<00:01, 20.11it/s]Extracting representation:  31%|███       | 15/49 [00:00<00:02, 15.69it/s]Extracting representation:  35%|███▍      | 17/49 [00:01<00:02, 14.53it/s]Extracting representation:  39%|███▉      | 19/49 [00:01<00:02, 13.97it/s]Extracting representation:  43%|████▎     | 21/49 [00:01<00:01, 15.12it/s]Extracting representation:  49%|████▉     | 24/49 [00:01<00:01, 16.76it/s]Extracting representation:  55%|█████▌    | 27/49 [00:01<00:01, 18.01it/s]Extracting representation:  59%|█████▉    | 29/49 [00:01<00:01, 18.20it/s]Extracting representation:  63%|██████▎   | 31/49 [00:01<00:01, 15.15it/s]Extracting representation:  67%|██████▋   | 33/49 [00:02<00:01, 13.79it/s]Extracting representation:  71%|███████▏  | 35/49 [00:02<00:01, 13.48it/s]Extracting representation:  78%|███████▊  | 38/49 [00:02<00:00, 15.40it/s]Extracting representation:  84%|████████▎ | 41/49 [00:02<00:00, 16.86it/s]Extracting representation:  90%|████████▉ | 44/49 [00:02<00:00, 17.82it/s]Extracting representation:  94%|█████████▍| 46/49 [00:02<00:00, 17.02it/s]Extracting representation:  98%|█████████▊| 48/49 [00:03<00:00, 14.56it/s]Extracting representation: 100%|██████████| 49/49 [00:03<00:00, 15.77it/s]
+Notice: ****This is test mode for pipeline****
+Open Intent Detection: Data and Parameters Preparation...
+dataloader:	109:	 {'pending_top_up': 0, 'why_verify_identity': 1, 'top_up_failed': 2, 'supported_cards_and_currencies': 3, 'exchange_via_app': 4, 'declined_card_payment': 5, 'unable_to_verify_identity': 6, 'exchange_rate': 7, 'passcode_forgotten': 8, 'verify_my_identity': 9, 'declined_cash_withdrawal': 10, 'top_up_limits': 11, 'apple_pay_or_google_pay': 12, 'lost_or_stolen_card': 13, 'lost_or_stolen_phone': 14, 'balance_not_updated_after_cheque_or_cash_deposit': 15, 'change_pin': 16, 'getting_virtual_card': 17, 'pin_blocked': 18, 'get_disposable_virtual_card': 19, 'top_up_reverted': 20, 'reverted_card_payment?': 21, 'topping_up_by_card': 22, 'top_up_by_bank_transfer_charge': 23, 'virtual_card_not_working': 24, 'balance_not_updated_after_bank_transfer': 25, 'request_refund': 26, 'verify_source_of_funds': 27, 'atm_support': 28, 'disposable_card_limits': 29, 'pending_transfer': 30, 'age_limit': 31, 'declined_transfer': 32, 'card_acceptance': 33, 'compromised_card': 34, 'card_about_to_expire': 35, 'edit_personal_details': 36, 'getting_spare_card': 37, '<UNK>': 38}
+dataloader:	109:	 {'pending_top_up': 0, 'why_verify_identity': 1, 'top_up_failed': 2, 'supported_cards_and_currencies': 3, 'exchange_via_app': 4, 'declined_card_payment': 5, 'unable_to_verify_identity': 6, 'exchange_rate': 7, 'passcode_forgotten': 8, 'verify_my_identity': 9, 'declined_cash_withdrawal': 10, 'top_up_limits': 11, 'apple_pay_or_google_pay': 12, 'lost_or_stolen_card': 13, 'lost_or_stolen_phone': 14, 'balance_not_updated_after_cheque_or_cash_deposit': 15, 'change_pin': 16, 'getting_virtual_card': 17, 'pin_blocked': 18, 'get_disposable_virtual_card': 19, 'top_up_reverted': 20, 'reverted_card_payment?': 21, 'topping_up_by_card': 22, 'top_up_by_bank_transfer_charge': 23, 'virtual_card_not_working': 24, 'balance_not_updated_after_bank_transfer': 25, 'request_refund': 26, 'verify_source_of_funds': 27, 'atm_support': 28, 'disposable_card_limits': 29, 'pending_transfer': 30, 'age_limit': 31, 'declined_transfer': 32, 'card_acceptance': 33, 'compromised_card': 34, 'card_about_to_expire': 35, 'edit_personal_details': 36, 'getting_spare_card': 37, '<UNK>': 38}
+dataloader:	109:	 {'pending_top_up': 0, 'why_verify_identity': 1, 'top_up_failed': 2, 'supported_cards_and_currencies': 3, 'exchange_via_app': 4, 'declined_card_payment': 5, 'unable_to_verify_identity': 6, 'exchange_rate': 7, 'passcode_forgotten': 8, 'verify_my_identity': 9, 'declined_cash_withdrawal': 10, 'top_up_limits': 11, 'apple_pay_or_google_pay': 12, 'lost_or_stolen_card': 13, 'lost_or_stolen_phone': 14, 'balance_not_updated_after_cheque_or_cash_deposit': 15, 'change_pin': 16, 'getting_virtual_card': 17, 'pin_blocked': 18, 'get_disposable_virtual_card': 19, 'top_up_reverted': 20, 'reverted_card_payment?': 21, 'topping_up_by_card': 22, 'top_up_by_bank_transfer_charge': 23, 'virtual_card_not_working': 24, 'balance_not_updated_after_bank_transfer': 25, 'request_refund': 26, 'verify_source_of_funds': 27, 'atm_support': 28, 'disposable_card_limits': 29, 'pending_transfer': 30, 'age_limit': 31, 'declined_transfer': 32, 'card_acceptance': 33, 'compromised_card': 34, 'card_about_to_expire': 35, 'edit_personal_details': 36, 'getting_spare_card': 37, '<UNK>': 38}
+dataloader:	109:	 {'pending_top_up': 0, 'why_verify_identity': 1, 'top_up_failed': 2, 'supported_cards_and_currencies': 3, 'exchange_via_app': 4, 'declined_card_payment': 5, 'unable_to_verify_identity': 6, 'exchange_rate': 7, 'passcode_forgotten': 8, 'verify_my_identity': 9, 'declined_cash_withdrawal': 10, 'top_up_limits': 11, 'apple_pay_or_google_pay': 12, 'lost_or_stolen_card': 13, 'lost_or_stolen_phone': 14, 'balance_not_updated_after_cheque_or_cash_deposit': 15, 'change_pin': 16, 'getting_virtual_card': 17, 'pin_blocked': 18, 'get_disposable_virtual_card': 19, 'top_up_reverted': 20, 'reverted_card_payment?': 21, 'topping_up_by_card': 22, 'top_up_by_bank_transfer_charge': 23, 'virtual_card_not_working': 24, 'balance_not_updated_after_bank_transfer': 25, 'request_refund': 26, 'verify_source_of_funds': 27, 'atm_support': 28, 'disposable_card_limits': 29, 'pending_transfer': 30, 'age_limit': 31, 'declined_transfer': 32, 'card_acceptance': 33, 'compromised_card': 34, 'card_about_to_expire': 35, 'edit_personal_details': 36, 'getting_spare_card': 37, '<UNK>': 38}
+dataloader:	109:	 {'pending_top_up': 0, 'why_verify_identity': 1, 'top_up_failed': 2, 'supported_cards_and_currencies': 3, 'exchange_via_app': 4, 'declined_card_payment': 5, 'unable_to_verify_identity': 6, 'exchange_rate': 7, 'passcode_forgotten': 8, 'verify_my_identity': 9, 'declined_cash_withdrawal': 10, 'top_up_limits': 11, 'apple_pay_or_google_pay': 12, 'lost_or_stolen_card': 13, 'lost_or_stolen_phone': 14, 'balance_not_updated_after_cheque_or_cash_deposit': 15, 'change_pin': 16, 'getting_virtual_card': 17, 'pin_blocked': 18, 'get_disposable_virtual_card': 19, 'top_up_reverted': 20, 'reverted_card_payment?': 21, 'topping_up_by_card': 22, 'top_up_by_bank_transfer_charge': 23, 'virtual_card_not_working': 24, 'balance_not_updated_after_bank_transfer': 25, 'request_refund': 26, 'verify_source_of_funds': 27, 'atm_support': 28, 'disposable_card_limits': 29, 'pending_transfer': 30, 'age_limit': 31, 'declined_transfer': 32, 'card_acceptance': 33, 'compromised_card': 34, 'card_about_to_expire': 35, 'edit_personal_details': 36, 'getting_spare_card': 37, 'Refund_not_showing_up': 38, 'activate_my_card': 39, 'automatic_top_up': 40, 'beneficiary_not_allowed': 41, 'cancel_transfer': 42, 'card_arrival': 43, 'card_delivery_estimate': 44, 'card_linking': 45, 'card_not_working': 46, 'card_payment_fee_charged': 47, 'card_payment_not_recognised': 48, 'card_payment_wrong_exchange_rate': 49, 'card_swallowed': 50, 'cash_withdrawal_charge': 51, 'cash_withdrawal_not_recognised': 52, 'contactless_not_working': 53, 'country_support': 54, 'direct_debit_payment_not_recognised': 55, 'exchange_charge': 56, 'extra_charge_on_statement': 57, 'failed_transfer': 58, 'fiat_currency_support': 59, 'get_physical_card': 60, 'order_physical_card': 61, 'pending_card_payment': 62, 'pending_cash_withdrawal': 63, 'receiving_money': 64, 'terminate_account': 65, 'top_up_by_card_charge': 66, 'top_up_by_cash_or_cheque': 67, 'transaction_charged_twice': 68, 'transfer_fee_charged': 69, 'transfer_into_account': 70, 'transfer_not_received_by_recipient': 71, 'transfer_timing': 72, 'verify_top_up': 73, 'visa_or_mastercard': 74, 'wrong_amount_of_cash_received': 75, 'wrong_exchange_rate_for_cash_withdrawal': 76}
+Open Intent Detection: Prediction begin...
+num_labeled_samples 413
+num_unlabeled_samples 8590
+cm [[ 0  0  0 ...  0  0  0]
+ [ 0  0  0 ...  0  0  0]
+ [ 0  0 23 ...  0  0  0]
+ ...
+ [ 0  0  0 ...  0  0  0]
+ [ 0  0  0 ...  0  0  0]
+ [ 0  0  0 ...  0  0  0]]
+results {'F1-known': 8.2715, 'F1-open': 0, 'F1': 8.164, 'Acc': 10.29}
+test_results      F1-known  F1-open       F1  ...  known_cls_ratio labeled_ratio seed
+0     15.4413  71.9871  18.2686  ...             0.25           1.0    0
+1     15.4413  71.9871  18.2686  ...             0.25           1.0    0
+2     70.8276  84.4672  71.5095  ...             0.25           1.0    0
+3     15.4413  71.9871  18.2686  ...             0.25           1.0    0
+4     15.4413  71.9871  18.2686  ...             0.25           1.0    0
+..        ...      ...      ...  ...              ...           ...  ...
+288   17.1080   0.0000  16.8858  ...             0.25           0.5    0
+289   64.4897   0.0000  63.6522  ...             0.75           0.5    0
+290   38.9821   0.0000  38.4758  ...             0.50           0.5    0
+291   64.4897   0.0000  63.6522  ...             0.75           0.5    0
+292    8.2715   0.0000   8.1640  ...             0.50           0.1    0
+
+[293 rows x 9 columns]
+Open Intent Detection: Prediction finished...
+Open Intent Discovery: Data and Parameters Preparation...
+num_labeled_samples 413
+num_unlabeled_samples 8590
+labeled_examples 2227
+unlabeled_examples 6776
+all results {'ACC': 19.97, 'ARI': 8.3, 'NMI': 37.69}
+known acc 0.18552631578947368
+open_results {'ACC': 18.65, 'ARI': 7.28, 'NMI': 35.63}

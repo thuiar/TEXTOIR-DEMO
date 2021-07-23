@@ -4,6 +4,7 @@
 from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path
+
 from . import views
 urlpatterns = [
     path('toDatasetList/',views.toDatasetList),
@@ -15,4 +16,5 @@ urlpatterns = [
     url(r'^toEdit/$', views.toEdit),
     url(r'^editData/$', views.editData),
     url(r'^delData/$', views.delData),
+    
 ]

@@ -1,0 +1,6 @@
+F1-known,F1-open,F1,Acc,dataset,method,known_cls_ratio,labeled_ratio,seed
+0.0,94.5205,10.5023,89.61,banking,ADB,0.1,0.2,0
+0.0,94.5205,10.5023,89.61,banking,OpenMax,0.1,0.2,0
+23.1527,68.6117,45.8822,55.43,snips,OpenMax,0.1,0.2,0
+0.0,94.7368,31.5789,90.0,stackoverflow,OpenMax,0.1,0.2,0
+0.0,94.5205,10.5023,89.61,banking,ADB,0.1,0.2,0

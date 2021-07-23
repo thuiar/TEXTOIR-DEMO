@@ -25,6 +25,10 @@ urlpatterns = [
     path('model_test/model_evaluation_getDataOfTFFineByKey',views.model_evaluation_getDataOfTFFineByKey),
     path('model_test/model_evaluation_getDataOfIOKIRByKey',views.model_evaluation_getDataOfIOKIRByKey),
     path('model_test/model_evaluation_getDataOfIONOCByKey',views.model_evaluation_getDataOfIONOCByKey),
+    path('model_test/model_evaluation_getDataOfIOKIRByKey_new',views.model_evaluation_getDataOfIOKIRByKey_new),
+    path('model_test/model_evaluation_getDataOfIOLRByKey_new',views.model_evaluation_getDataOfIOLRByKey_new),
+    path('model_test/model_evaluation_getDataOfTFOverallByKey_new',views.model_evaluation_getDataOfTFOverallByKey_new),
+    path('model_test/model_evaluation_getDataOfTFFineByKey_new',views.model_evaluation_getDataOfTFFineByKey_new),
     
     path('model_analysis/',views.model_analysis),
     path('model_analysis/getModelAnalysisExampleData',views.getModelAnalysisExampleData),

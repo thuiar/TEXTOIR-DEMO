@@ -1,0 +1,6 @@
+{"F1-known": "F1-known", "F1-open": "F1-open", "F1": "F1", "Acc": "Acc", "dataset": "dataset", "method": "method", "known_cls_ratio": "known_cls_ratio", "labeled_ratio": "labeled_ratio", "seed": "seed"}
+{"F1-known": "0.0", "F1-open": "94.5205", "F1": "10.5023", "Acc": "89.61", "dataset": "banking", "method": "ADB", "known_cls_ratio": "0.1", "labeled_ratio": "0.2", "seed": "0"}
+{"F1-known": "0.0", "F1-open": "94.5205", "F1": "10.5023", "Acc": "89.61", "dataset": "banking", "method": "OpenMax", "known_cls_ratio": "0.1", "labeled_ratio": "0.2", "seed": "0"}
+{"F1-known": "23.1527", "F1-open": "68.6117", "F1": "45.8822", "Acc": "55.43", "dataset": "snips", "method": "OpenMax", "known_cls_ratio": "0.1", "labeled_ratio": "0.2", "seed": "0"}
+{"F1-known": "0.0", "F1-open": "94.7368", "F1": "31.5789", "Acc": "90.0", "dataset": "stackoverflow", "method": "OpenMax", "known_cls_ratio": "0.1", "labeled_ratio": "0.2", "seed": "0"}
+{"F1-known": "0.0", "F1-open": "94.5205", "F1": "10.5023", "Acc": "89.61", "dataset": "banking", "method": "ADB", "known_cls_ratio": "0.1", "labeled_ratio": "0.2", "seed": "0"}

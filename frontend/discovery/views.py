@@ -119,7 +119,8 @@ def getModelLogList(request):
 def toLogParameter(request):
     log_id = request.GET.get('log_id')
     paramList = models.run_log_hyper_parameters.objects.filter(log_id=log_id)
-    return render(request,'discovery/model-training-log-parameter.html',{'model_id': log_id,'paramList':paramList})
+    ex_data = models.Run_Log.objects.values().filter(log_id=log_id)
+    return render(request,'discovery/model-training-log-parameter.html',{'model_id': log_id,'paramList':paramList,'ex_data':ex_data})
 
 @xframe_options_exempt
 def toRunModel(request):
@@ -260,22 +261,143 @@ def add_model_training_log(request):
 
 @xframe_options_exempt
 def model_test(request):
+    print("----------------------------***-------------------------------")
     datasetList = models.DataSet.objects.values()
-    modelList_discovery = models.Model_Tdes.objects.values().filter(type = 2)
+    modelList_detection = models.Model_Tdes.objects.values().filter(type = 2)
+
+ 
+
+    if request.GET.get('log_id'):     #如果是跳转，带着log_id_jump
+        log_id = request.GET.get('log_id')
+        create_time_new = models.Run_Log.objects.values().filter(log_id = log_id,model_id__type=2).first()#.filter(type = 2)     #默认显示最新的一条
+    else:
+        create_time_new = models.Run_Log.objects.values().filter(model_id__type=2).order_by('-log_id').first()     #默认显示最新的一条
+        log_id = create_time_new['log_id']
+    
+    
+     
+    dataset_new = create_time_new['dataset_name']
+    model_new = create_time_new['model_name']
+    create_time = models.Run_Log.objects.values().filter(dataset_name = dataset_new,model_name=model_new,model_id__type=2) #成功完成的记录 *******待改***********
+
+    parameters = models.run_log_hyper_parameters.objects.values().filter(log_id=log_id)
+  
+
+
+    
+   
+    print("-------------------------------***----------------------------")
     result = {}
     result['datasetList'] = datasetList
-    result['modelList_discovery'] = modelList_discovery
+    result['modelList_detection'] = modelList_detection
+    result['create_time'] = create_time
+    result['create_time_new'] = create_time_new
+    result['parameters'] = parameters
+    
     return render(request,'discovery/model-test.html' , result)
+#--------------------------------------------------------------------------------------------------
 
+@csrf_exempt
+def model_evaluation_getDataOfIOKIRByKey_new(request):
+    key = request.GET.get('key')
+    json_path = os.path.join(sys.path[0], 'static/jsons/open_intent_discovery/', 'json_discvoery_loss.json')
+    print("*******************************************")
+    print(key)
+    print(json_path)
+    #/home/wx/workplace_1/TEXTOIR/frontend/static/jsons/open_intent_detection/json_detection_IOKIR.json
+    print("*******************************************")
+    data_iokir = {}
+    with open(json_path, 'r') as load_f:
+        load_dict = json.load(load_f)
+    if not load_dict.__contains__(key):
+        return JsonResponse({ "code":201, "msg": "There is no data" })
+    data_iokir = load_dict[key]
+    
+    results = {}
+    results['code'] = 201
+    results['msg'] = ''
+    results['data'] = data_iokir
+    return JsonResponse(results)
+@csrf_exempt
+def model_evaluation_getDataOfTFOverallByKey_new(request):
+    key = request.GET.get('key')
+    json_path = os.path.join(sys.path[0], 'static/jsons/open_intent_discovery/', 'true_false_overall_new.json')
+    data_iokir = {}
+    with open(json_path, 'r') as load_f:
+        load_dict = json.load(load_f)
+    if not load_dict.__contains__(key):
+        return JsonResponse({ "code":201, "msg": "There is no data" })
+    data_iokir = load_dict[key]
+    
+    results = {}
+    results['code'] = 200
+    results['msg'] = ''
+    results['data'] = data_iokir
+    return JsonResponse(results)
+@csrf_exempt
+def model_evaluation_getDataOfTFFineByKey_new(request):
+    key = request.GET.get('key')
+    json_path = os.path.join(sys.path[0], 'static/jsons/open_intent_discovery/', 'true_false_fine_new.json')
+    data_iokir = {}
+    with open(json_path, 'r') as load_f:
+        load_dict = json.load(load_f)
+    if not load_dict.__contains__(key):
+        return JsonResponse({ "code":201, "msg": "There is no data" })
+    data_iokir = load_dict[key]
+    
+    results = {}
+    results['code'] = 200
+    results['msg'] = ''
+    results['data'] = data_iokir
+    return JsonResponse(results)
+
+
+@csrf_exempt
+def model_evaluation_getDataOfIOLRByKey_new(request):
+    key = request.GET.get('key')
+    json_path = os.path.join(sys.path[0], 'static/jsons/open_intent_discovery/', 'json_discvoery_metric.json')
+    data_iokir = {}
+    with open(json_path, 'r') as load_f:
+        load_dict = json.load(load_f)
+    if not load_dict.__contains__(key):
+        return JsonResponse({ "code":201, "msg": "There is no data" })
+    data_iokir = load_dict[key]
+    
+    results = {}
+    results['code'] = 200
+    results['msg'] = ''
+    results['data'] = data_iokir
+    return JsonResponse(results)
+#--------------------------------------------------------------------------------------------------
 @xframe_options_exempt
 def model_analysis(request):
     dataset_list = models.DataSet.objects.values()
     modelList_discovery = models.Model_Tdes.objects.values().filter(type = 2)
+    example_list = models.Model_Test_Example.objects.values()
     # print(dataset_list)
+
+
+    if request.GET.get('log_id'):     #如果是跳转，带着log_id_jump
+        log_id = request.GET.get('log_id')
+        create_time_new = models.Run_Log.objects.values().filter(log_id = log_id,model_id__type=2).first()#.filter(type = 2)     #默认显示最新的一条
+    else:
+        create_time_new = models.Run_Log.objects.values().filter(model_id__type=2).order_by('-log_id').first()#.filter(type = 2)     #默认显示最新的一条
+        log_id = create_time_new['log_id']
+
+    dataset_new = create_time_new['dataset_name']
+    model_new = create_time_new['model_name']
+    create_time = models.Run_Log.objects.values().filter(dataset_name = dataset_new,model_name=model_new,model_id__type=2) #type=2#成功完成的记录 *******待改***********
+
+
     
     result = {}
     result['dataset_list'] = dataset_list
     result['modelList_discovery'] = modelList_discovery
+
+    result['exampleList'] = example_list
+    result['create_time'] = create_time
+    result['create_time_new'] = create_time_new
+
     return render(request,'discovery/model-analysis.html' , result)
 
 @csrf_exempt
@@ -393,22 +515,30 @@ def model_evaluation_getDataOfIONOCByKey(request):
     results['data'] = data_iokir
     return JsonResponse(results)
 
+
+
+
+# old
 @csrf_exempt
 def model_analysis_getClassListByDatasetNameAndMethod(request):
     print('model_analysis_getTableResultsByDatasetNameAndMethod')
     dataset_name = request.GET.get('dataset_name')
     method = request.GET.get('method')
+    log_id = str(request.GET.get('log_id'))
+    print(dataset_name)
+    print(method)
     class_type = 'open'
     page = request.GET.get('page')
     limit = request.GET.get("limit")
-    json_path = os.path.join(sys.path[0], 'static/jsons/open_intent_discovery/', 'analysis_table_info.json')
+    json_path = os.path.join(sys.path[0], 'static/jsons/open_intent_discovery/', 'analysis_table_info_new.json')
     return_list = []
     with open(json_path, 'r') as load_f:
         load_dict = json.load(load_f)
-    if load_dict.__contains__("class_list_"+ dataset_name +'_'+ method +"_"+ class_type) == False:
+    print("class_list_"+ dataset_name +'_'+ method +"_"+ log_id +"_" + class_type)
+    if load_dict.__contains__("class_list_"+ dataset_name +'_'+ method +"_"+ log_id +"_" + class_type) == False:
         return JsonResponse({'code':200, 'msg':'There is no data', 'count':0, 'data':list([]) })
     
-    return_list = load_dict["class_list_"+ dataset_name +'_'+ method +"_"+ class_type]
+    return_list = load_dict["class_list_"+ dataset_name +'_'+ method +"_"+ log_id +"_"+ class_type]
     
     count = len(return_list)
     paginator = Paginator(return_list, limit)
@@ -425,22 +555,29 @@ def model_analysis_getClassListByDatasetNameAndMethod(request):
 def model_analysis_getTextListByDatasetNameAndMethodAndLabel(request):
     print('model_analysis_getTableResultsByDatasetNameAndMethod')
     dataset_name = request.GET.get('dataset_name')
+    log_id = str(request.GET.get('log_id'))
     method = request.GET.get('method')
     label = request.GET.get('label_name')
     class_type = 'open'
     page = request.GET.get('page')
     limit = request.GET.get("limit")
-    json_path = os.path.join(sys.path[0], 'static/jsons/open_intent_discovery/', 'analysis_table_info.json')
+    json_path = os.path.join(sys.path[0], 'static/jsons/open_intent_discovery/', 'analysis_table_info_new.json')
     return_list = []
     with open(json_path, 'r') as load_f:
         load_dict = json.load(load_f)
-    key = "text_list_"+ str(dataset_name) +'_'+ str(method) +"_"+ str(class_type)+"_"+str(label)
+    key = "text_list_"+ str(dataset_name) +'_'+ str(method) +"_"+log_id+"_"+ str(class_type)+"_"+str(label)
+    print('key: ',key)
     print("*"*40,"\n\n\n\n",key,"\n\n\n","*"*40)
     if load_dict.__contains__(key) == False:
         return JsonResponse({'code':200, 'msg':'There is no data', 'count':0, 'data':list([]) })
     
     # return_list = load_dict["class_list_"+ dataset_name +'_'+ method +"_"+ class_type+"_"+label]
     return_list = load_dict[key]
+    
+
+
+
+
     
     count = len(return_list)
     paginator = Paginator(return_list, limit)
@@ -457,7 +594,9 @@ def model_analysis_getTextListByDatasetNameAndMethodAndLabel(request):
 @csrf_exempt
 def model_analysis_getDataOfDINByKey(request):
     key = request.GET.get('key')
-    json_path = os.path.join(sys.path[0], 'static/jsons/open_intent_discovery/', 'DeepAligned_analysis.json')
+    # key='banking_DeepAligned_389'
+    json_path = os.path.join(sys.path[0], 'static/jsons/open_intent_discovery/', 'Discovery_analysis_new.json')
+
     data_iokir = {}
     with open(json_path, 'r') as load_f:
         load_dict = json.load(load_f)
