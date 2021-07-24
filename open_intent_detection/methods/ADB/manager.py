@@ -86,7 +86,7 @@ class ADBManager:
             
             loss = tr_loss / nb_tr_steps
             
-            y_true, y_pred = self.get_outputs(args, data, self.eval_dataloader, pre_train=True)
+            y_true, y_pred, _ = self.get_outputs(args, data, self.eval_dataloader, pre_train=True)
             eval_score = accuracy_score(y_true, y_pred)
 
             eval_results = {
@@ -149,10 +149,6 @@ class ADBManager:
                     optimizer.step()
                     optimizer.zero_grad()
                     
-                    # train_preds = self.open_classify(data, features)
-                    # train_labels = label_ids
-
-                    # tr_score = f1_score(train_labels.cpu().numpy(), train_preds.cpu().numpy(), average='macro')
                     tr_loss += loss.item()
                     
                     nb_tr_examples += input_ids.size(0)
@@ -162,7 +158,7 @@ class ADBManager:
 
             tr_loss = tr_loss / nb_tr_steps
             
-            y_true, y_pred = self.get_outputs(args, data, self.eval_dataloader)
+            y_true, y_pred, _ = self.get_outputs(args, data, self.eval_dataloader)
             eval_score = f1_score(y_true, y_pred, average='macro')
 
             eval_results = {
@@ -237,8 +233,9 @@ class ADBManager:
 
             y_pred = total_preds.cpu().numpy()
             y_true = total_labels.cpu().numpy()
+            feats = total_features.cpu().numpy()
 
-            return y_true, y_pred
+            return y_true, y_pred, feats
 
 
     def open_classify(self, data, features):
@@ -252,7 +249,7 @@ class ADBManager:
     
     def test(self, args, data, show=True):
         
-        y_true, y_pred = self.get_outputs(args, data, self.test_dataloader)
+        y_true, y_pred, feats = self.get_outputs(args, data, self.test_dataloader)
         
         cm = confusion_matrix(y_true, y_pred)
         test_results = F_measure(cm)
@@ -271,6 +268,7 @@ class ADBManager:
 
         test_results['y_true'] = y_true
         test_results['y_pred'] = y_pred
+        test_results['y_feat'] = feats
 
         return test_results
 

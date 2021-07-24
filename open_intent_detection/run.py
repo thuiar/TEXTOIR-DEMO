@@ -3,6 +3,8 @@ from dataloaders.base import DataManager
 from backbones.base import ModelManager
 from methods import method_map
 from utils.functions import save_results
+from utils.frontend_evalulation import save_train_results, save_evaluation_results
+from utils.frontend_analysis import save_analysis_table_results, save_point_results
 import logging
 import argparse
 import sys
@@ -116,8 +118,18 @@ def run(args, data, model, logger):
         save_results(args, outputs)
     
     if args.save_frontend_results:
-        from utils.frontend_evalulation import save_train_results
-        save_train_results(method.train_results, args)
+
+        save_train_results(args, method.train_results)
+        save_evaluation_results(args, data, outputs)
+        save_analysis_table_results(args, data, outputs)
+
+        map_save_analysis_figs = {
+            'ADB': save_point_results, 
+            'DeepUnk': save_point_results,
+            
+        }
+
+        map_save_analysis_figs[args.method](args, data, outputs)
 
 if __name__ == '__main__':
     
@@ -136,14 +148,16 @@ if __name__ == '__main__':
         logger.debug(f"{k}:\t{args[k]}")
     logger.debug("="*30+" End Params "+"="*30)
 
-    # test = True
-    # if test:
-    #     args.dataset = 'banking'
-    #     args.num_train_epochs = 20
-    #     args.known_cls_ratio = 0.25
-    #     args.labeled_ratio = 0.2
-    #     args.train = True
-    #     args.save_frontend_results = True
+    test = True
+    if test:
+        args.dataset = 'banking'
+        args.num_train_epochs = 2
+        args.known_cls_ratio = 0.25
+        args.labeled_ratio = 0.2
+        args.train = True
+        args.save_frontend_results = True
+        args.log_id = '3'
+        args.save_model = True
         
 
     logger.info('Data and Model Preparation...')

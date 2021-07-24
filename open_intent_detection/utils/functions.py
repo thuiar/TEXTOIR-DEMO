@@ -37,6 +37,7 @@ def save_results(args, test_results):
 
     del test_results['y_pred']
     del test_results['y_true']
+    del test_results['feats']
 
     if not os.path.exists(args.result_dir):
         os.makedirs(args.result_dir)
