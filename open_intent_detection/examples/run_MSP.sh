@@ -1,6 +1,4 @@
 #!/usr/bin bash
-# method='MSP'
-# results_file_name="$method-"`date "+%Y-%m-%d-%H-%M-%S".csv`
 
 for dataset in 'banking' 'oos' 'stackoverflow'
 do
@@ -16,10 +14,9 @@ do
                 --known_cls_ratio $known_cls_ratio \
                 --labeled_ratio $labeled_ratio \
                 --seed $seed \
-                --num_train_epochs 100 \
                 --backbone 'bert' \
                 --config_file_name 'MSP' \
-                --gpu_id '1' \
+                --gpu_id '0' \
                 --train \
                 --save_results \
                 --results_file_name 'results_MSP.csv'
@@ -27,4 +24,3 @@ do
         done
     done
 done
-

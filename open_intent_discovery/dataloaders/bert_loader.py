@@ -8,26 +8,22 @@ import logging
 from pytorch_pretrained_bert.tokenization import BertTokenizer
 from torch.utils.data import (DataLoader, RandomSampler, SequentialSampler, TensorDataset)
 
-logger = logging.getLogger('Discovery')
-
 class BERT_Loader:
     
-    def __init__(self, args, base_attrs):
+    def __init__(self, args, base_attrs, logger_name = 'Discovery'):
 
-        self.get_examples(args, base_attrs)
-        self.get_dataloader(args, base_attrs)
-
-    def get_examples(self, args, base_attrs):
+        self.logger = logging.getLogger(logger_name)
 
         self.train_examples, self.train_labeled_examples, self.train_unlabeled_examples  = get_examples(args, base_attrs, 'train')
-        logger.info("Number of labeled samples = %s", str(len(self.train_labeled_examples)))
-        logger.info("Number of unlabeled samples = %s", str(len(self.train_unlabeled_examples)))
+        self.logger.info("Number of labeled training samples = %s", str(len(self.train_labeled_examples)))
+        self.logger.info("Number of unlabeled training samples = %s", str(len(self.train_unlabeled_examples)))
 
         self.eval_examples = get_examples(args, base_attrs, 'eval')
+        self.logger.info("Number of evaluation samples = %s", str(len(self.eval_examples)))
+        
         self.test_examples = get_examples(args, base_attrs, 'test')
-
-    def get_dataloader(self, args, base_attrs):
-
+        self.logger.info("Number of testing samples = %s", str(len(self.test_examples)))
+        
         self.train_labeled_loader = get_loader(self.train_labeled_examples, args, base_attrs['known_label_list'], 'train_labeled')
 
         self.train_unlabeled_loader = get_loader(self.train_unlabeled_examples, args, base_attrs['all_label_list'], 'train_unlabeled')
@@ -82,18 +78,25 @@ def get_loader(examples, args, label_list, mode):
     input_ids = torch.tensor([f.input_ids for f in features], dtype=torch.long)
     input_mask = torch.tensor([f.input_mask for f in features], dtype=torch.long)
     segment_ids = torch.tensor([f.segment_ids for f in features], dtype=torch.long)
-    label_ids = torch.tensor([f.label_id for f in features], dtype=torch.long)
+
+    if mode == 'train_unlabeled':
+        label_ids = torch.tensor([-1 for f in features], dtype=torch.long)
+    else:
+        label_ids = torch.tensor([f.label_id for f in features], dtype=torch.long)
+
     datatensor = TensorDataset(input_ids, input_mask, segment_ids, label_ids)
 
-    if mode == 'train_labeled' or mode == 'train_unlabeled':  
-
+    if mode == 'train_labeled':  
         sampler = RandomSampler(datatensor)
         dataloader = DataLoader(datatensor, sampler=sampler, batch_size = args.train_batch_size)    
 
     else:
         sampler = SequentialSampler(datatensor)
 
-        if mode == 'eval':
+        if mode == 'train_unlabeled':
+            dataloader = DataLoader(datatensor, sampler=sampler, batch_size = args.train_batch_size)    
+
+        elif mode == 'eval':
             dataloader = DataLoader(datatensor, sampler=sampler, batch_size = args.eval_batch_size)    
         
         elif mode == 'test':

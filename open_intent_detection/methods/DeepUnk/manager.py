@@ -32,6 +32,7 @@ class DeepUnkManager:
 
         if args.train:
             self.best_features = None
+            self.train_results = []
 
         else:
             restore_model(self.model, args.model_output_dir)
@@ -42,7 +43,8 @@ class DeepUnkManager:
         best_model = None
         best_eval_score = 0
         wait = 0
-        
+        train_results = []
+
         for epoch in trange(int(args.num_train_epochs), desc="Epoch"):
 
             self.model.train()
@@ -74,9 +76,12 @@ class DeepUnkManager:
             
             eval_results = {
                 'train_loss': loss,
-                'eval_acc': eval_score,
-                'best_acc':best_eval_score,
+                'eval_score': eval_score,
+                'best_eval_score':best_eval_score,
             }
+            
+            train_results.append(eval_results)
+
             self.logger.info("***** Epoch: %s: Eval results *****", str(epoch + 1))
             for key in sorted(eval_results.keys()):
                 self.logger.info("  %s = %s", key, str(eval_results[key]))
@@ -94,7 +99,7 @@ class DeepUnkManager:
                     break
                 
         self.model = best_model 
-
+        self.train_results = train_results
         np.save(os.path.join(args.method_output_dir, 'features.npy'), self.best_feats)
         
         if args.save_model:
@@ -155,7 +160,8 @@ class DeepUnkManager:
             return y_true, y_pred
 
     def test(self, args, data, show=False):
-    
+        
+        y_feat = self.get_outputs(args, data, mode = 'test', get_feats = True)
         y_true, y_pred = self.get_outputs(args, data, mode = 'test', train_feats = self.best_feats)
         cm = confusion_matrix(y_true, y_pred)
         test_results = F_measure(cm)
@@ -173,6 +179,7 @@ class DeepUnkManager:
 
         test_results['y_true'] = y_true
         test_results['y_pred'] = y_pred
+        test_results['y_feat'] = y_feat
 
         return test_results
     

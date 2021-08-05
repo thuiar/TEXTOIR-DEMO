@@ -1,4 +1,3 @@
-
 import os
 import torch
 import numpy as np
@@ -42,8 +41,8 @@ def save_results(args, test_results):
     if not os.path.exists(args.result_dir):
         os.makedirs(args.result_dir)
 
-    var = [args.dataset, args.method, args.backbone, args.known_cls_ratio, args.labeled_ratio, args.loss_fct, args.seed]
-    names = ['dataset', 'method', 'backbone', 'known_cls_ratio', 'labeled_ratio', 'loss', 'seed']
+    var = [args.dataset, args.method, args.backbone, args.known_cls_ratio, args.labeled_ratio, args.cluster_num_factor, args.seed]
+    names = ['dataset', 'method', 'backbone', 'known_cls_ratio', 'labeled_ratio', 'cluster_num_factor', 'seed']
     vars_dict = {k:v for k,v in zip(names, var) }
     results = dict(test_results,**vars_dict)
     keys = list(results.keys())
@@ -51,7 +50,7 @@ def save_results(args, test_results):
     
     results_path = os.path.join(args.result_dir, args.results_file_name)
     
-    if not os.path.exists(results_path):
+    if not os.path.exists(results_path) or os.path.getsize(results_path) == 0:
         ori = []
         ori.append(values)
         df1 = pd.DataFrame(ori,columns = keys)
@@ -64,46 +63,3 @@ def save_results(args, test_results):
     data_diagram = pd.read_csv(results_path)
     
     print('test_results', data_diagram)
-
-# def debug(outputs, data, manager, args):
-
-#     # args_attrs = ["max_seq_length","feat_dim","warmup_proportion","freeze_bert_parameters","task_name",
-#     #               "known_cls_ratio","labeled_ratio","method","seed","gpu_id","num_train_epochs","lr",
-#     #               "train_batch_size","eval_batch_size","wait_patient","threshold"]
-
-#     print('-----------------Data--------------------')
-#     data_attrs = ["data_dir","n_known_cls","num_labels","all_label_list","known_label_list"]
-
-#     for attr in data_attrs:
-#         attr_name = attr
-#         attr_value = data.__getattribute__(attr)
-#         print(attr_name,':',attr_value)
-
-#     print('-----------------Args--------------------')
-#     for k in list(vars(args).keys()):
-#         print(k,':',vars(args)[k])
-
-#     print('-----------------Manager--------------------')
-#     if args.train:
-#         manager_attrs = ["device","best_eval_score","test_results"]
-#     else:
-#         manager_attrs = ["device", "test_results"]
-
-#     for attr in manager_attrs:
-#         attr_name = attr
-#         attr_value = manager.__getattribute__(attr)
-#         print(attr_name,':',attr_value)
-    
-#     y_true, y_pred = outputs[0], outputs[1]
-#     predictions = list([data.label_list[idx] for idx in y_pred]) 
-#     true_labels = list([data.label_list[idx] for idx in y_true]) 
-#     print('-----------------Prediction Example--------------------')
-#     show_num = 10
-#     for i,example in enumerate(data.test_examples):
-#         if i >= show_num:
-#             break
-#         sentence = example.text_a
-#         true_label = true_labels[i]
-#         predict_label = predictions[i]
-#         print(i,':',sentence)
-#         print('Pred: {}; True: {}'.format(predict_label, true_label))

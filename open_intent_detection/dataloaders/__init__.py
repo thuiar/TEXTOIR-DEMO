@@ -10,8 +10,9 @@ max_seq_lengths = {
 
 backbone_loader_map = {
                             'bert': BERT_Loader,
-                            'bert_deepunk': BERT_Loader,
+                            'bert_norm': BERT_Loader,
                       }
+                      
 benchmark_labels = {
     'oos': 
             ['accept_reservations', 'account_blocked', 'alarm', 'application_status', 'apr', 
@@ -72,7 +73,7 @@ benchmark_labels = {
                             "matlab", "oracle", "osx", "qt", "scala", 
                             "sharepoint", "spring", "svn", "visual-studio", "wordpress"
                         ],
-    'snips':
+        'snips':
                 [
                     "AddToPlaylist", "BookRestaurant", "GetWeather", "PlayMusic", "RateBook", 
                     "SearchCreativeWork", "SearchScreeningEvent"

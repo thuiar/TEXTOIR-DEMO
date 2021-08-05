@@ -77,15 +77,15 @@ def TSNE_reduce_feats(feats, dim):
 
 def save_point_results(args, data, results):
     
-    centroids = np.load(os.path.join(args.method_output_dir, 'centroids.npy'))
-    deltas = np.load(os.path.join(args.method_output_dir, 'deltas.npy'))
+    # centroids = np.load(os.path.join(args.method_output_dir, 'centroids.npy'))
+    # deltas = np.load(os.path.join(args.method_output_dir, 'deltas.npy'))
 
-    test_trues = list([data.label_list[idx] for idx in results['y_true']]) 
-    test_preds = list([data.label_list[idx] for idx in results['y_pred']]) 
+    # test_trues = list([data.label_list[idx] for idx in results['y_true']]) 
+    # test_preds = list([data.label_list[idx] for idx in results['y_pred']]) 
     test_feats = results['y_feat']
 
-    reduce_centers = TSNE_reduce_feats(centroids, 2)
-    reduce_centers = [np.round(x, 2) for x in reduce_centers]
+    # reduce_centers = TSNE_reduce_feats(centroids, 2)
+    # reduce_centers = [np.round(x, 2) for x in reduce_centers]
     reduce_feats = TSNE_reduce_feats(test_feats, 2)
 
     save_dir = os.path.join(args.frontend_result_dir, args.type) 
@@ -95,7 +95,7 @@ def save_point_results(args, data, results):
     data_points = {}
     points = {}
     reduce_feats = [[round(float(item[0]), 2), round(float(item[1]), 2) ] for item in reduce_feats ]
-    for idx in range(len(reduce_centers)):
+    for idx in range(args.num_labels):
         pos = list(np.where(results['y_pred'] == idx)[0])
         label_item = data.label_list[idx]
 

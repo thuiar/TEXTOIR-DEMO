@@ -31,15 +31,18 @@ class DOCManager:
         self.loss_fct = loss_map[args.loss_fct]
         
         if args.train:
+            self.train_results = []
             self.best_mu_stds = None
 
         else:
             restore_model(self.model, args.model_output_dir)
         
     def train(self, args, data):     
+        
         best_model = None
         wait = 0
         best_eval_score = 0
+        train_results = []
 
         for epoch in trange(int(args.num_train_epochs), desc="Epoch"):
             self.model.train()
@@ -71,9 +74,11 @@ class DOCManager:
             
             eval_results = {
                 'train_loss': loss,
-                'eval_acc': eval_score,
-                'best_acc':best_eval_score,
+                'eval_score': eval_score,
+                'best_eval_score':best_eval_score,
             }
+            train_results.append(eval_results)
+
             self.logger.info("***** Epoch: %s: Eval results *****", str(epoch + 1))
             for key in sorted(eval_results.keys()):
                 self.logger.info("  %s = %s", key, str(eval_results[key]))  
@@ -90,6 +95,7 @@ class DOCManager:
                     break
 
         self.model = best_model 
+        self.train_results = train_results
 
         if args.save_model:
             save_model(self.model, args.model_output_dir)

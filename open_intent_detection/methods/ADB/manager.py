@@ -36,7 +36,7 @@ class ADBManager:
         self.train_dataloader = data.dataloader.train_labeled_loader
         self.eval_dataloader = data.dataloader.eval_loader 
         self.test_dataloader = data.dataloader.test_loader
-        
+
         self.loss_fct = loss_map[args.loss_fct]  
         
         if args.train:
@@ -72,22 +72,20 @@ class ADBManager:
                 input_ids, input_mask, segment_ids, label_ids = batch
 
                 with torch.set_grad_enabled(True):
-
-                    loss = self.model(input_ids, segment_ids, input_mask, label_ids, mode = "train", loss_fct = loss_map[args.loss_fct])
+                    loss = self.model(input_ids, segment_ids, input_mask, label_ids, mode = "train", loss_fct = self.loss_fct)
 
                     self.optimizer.zero_grad()
-
                     loss.backward()
                     self.optimizer.step()
-
+                    
                     tr_loss += loss.item()
                     nb_tr_examples += input_ids.size(0)
                     nb_tr_steps += 1
             
             loss = tr_loss / nb_tr_steps
             
-            y_true, y_pred, _ = self.get_outputs(args, data, self.eval_dataloader, pre_train=True)
-            eval_score = accuracy_score(y_true, y_pred)
+            y_true, y_pred = self.get_outputs(args, data, mode = 'eval', pre_train=True)
+            eval_score = round(accuracy_score(y_true, y_pred) * 100, 2)
 
             eval_results = {
                 'train_loss': loss,
@@ -156,15 +154,15 @@ class ADBManager:
 
             self.delta_points.append(self.delta)
 
-            tr_loss = tr_loss / nb_tr_steps
+            loss = tr_loss / nb_tr_steps
             
-            y_true, y_pred, _ = self.get_outputs(args, data, self.eval_dataloader)
-            eval_score = f1_score(y_true, y_pred, average='macro')
+            y_true, y_pred = self.get_outputs(args, data, mode = 'eval')
+            eval_score = round(f1_score(y_true, y_pred, average='macro') * 100, 2)
 
             eval_results = {
-                'train_loss': tr_loss,
+                'train_loss': loss,
                 'eval_score': eval_score,
-                'best_score': best_eval_score,
+                'best_eval_score': best_eval_score,
             }
             train_results.append(eval_results)
 
@@ -188,16 +186,20 @@ class ADBManager:
         self.delta = best_delta
         self.centroids = best_centroids
         self.train_results = train_results
-        
+
         if args.save_model:
 
             np.save(os.path.join(args.method_output_dir, 'centroids.npy'), self.centroids.detach().cpu().numpy())
             np.save(os.path.join(args.method_output_dir, 'deltas.npy'), self.delta.detach().cpu().numpy())
-                    
+            
 
-    def get_outputs(self, args, data, dataloader, get_feats = False, \
-                                    pre_train= False, delta = None):
-    
+    def get_outputs(self, args, data, mode = 'eval', get_feats = False, pre_train= False, delta = None):
+        
+        if mode == 'eval':
+            dataloader = self.eval_dataloader
+        elif mode == 'test':
+            dataloader = self.test_dataloader
+
         self.model.eval()
 
         total_labels = torch.empty(0,dtype=torch.long).to(self.device)
@@ -211,6 +213,7 @@ class ADBManager:
             batch = tuple(t.to(self.device) for t in batch)
             input_ids, input_mask, segment_ids, label_ids = batch
             with torch.set_grad_enabled(False):
+
                 pooled_output, logits = self.model(input_ids, segment_ids, input_mask)
                 
                 if not pre_train:
@@ -234,8 +237,8 @@ class ADBManager:
             y_pred = total_preds.cpu().numpy()
             y_true = total_labels.cpu().numpy()
             feats = total_features.cpu().numpy()
-
-            return y_true, y_pred, feats
+            
+            return y_true, y_pred
 
 
     def open_classify(self, data, features):
@@ -249,7 +252,8 @@ class ADBManager:
     
     def test(self, args, data, show=True):
         
-        y_true, y_pred, feats = self.get_outputs(args, data, self.test_dataloader)
+        y_feat = self.get_outputs(args, data, mode = 'test', get_feats = True)
+        y_true, y_pred = self.get_outputs(args, data, mode = 'test')
         
         cm = confusion_matrix(y_true, y_pred)
         test_results = F_measure(cm)
@@ -268,7 +272,7 @@ class ADBManager:
 
         test_results['y_true'] = y_true
         test_results['y_pred'] = y_pred
-        test_results['y_feat'] = feats
+        test_results['y_feat'] = y_feat
 
         return test_results
 

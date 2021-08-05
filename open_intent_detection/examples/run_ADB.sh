@@ -1,8 +1,8 @@
 #!/usr/bin bash
 
-for dataset in 'banking' 'oos' 'stackoverflow' 
+for dataset in 'stackoverflow' 'oos' 'banking'
 do
-    for known_cls_ratio in 0.25 0.5 0.75
+    for known_cls_ratio in 0.25 0.5 0.75 
     do
         for labeled_ratio in 1.0
         do
@@ -14,13 +14,13 @@ do
                 --known_cls_ratio $known_cls_ratio \
                 --labeled_ratio $labeled_ratio \
                 --seed $seed \
-                --num_train_epochs 100 \
                 --backbone 'bert' \
                 --config_file_name 'ADB' \
-                --gpu_id '1' \
+                --gpu_id '0' \
                 --train \
                 --save_results \
-                --results_file_name 'results_ADB.csv' 
+                --results_file_name 'results_ADB.csv' \
+                --save_model
             done
         done
     done

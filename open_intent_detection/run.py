@@ -21,8 +21,6 @@ def parse_arguments():
 
     parser.add_argument('--log_dir', type=str, default='logs', help="Logger directory.")
 
-    parser.add_argument('--log_id', type=str, default='1', help="Training record ID.")
-
     parser.add_argument("--dataset", default='banking', type=str, help="The name of the dataset to train selected")
 
     parser.add_argument("--known_cls_ratio", default=0.75, type=float, help="The number of known classes")
@@ -36,8 +34,6 @@ def parse_arguments():
     parser.add_argument("--save_model", action="store_true", help="save trained-model for open intent detection")
 
     parser.add_argument("--backbone", type=str, default='bert', help="which backbone to use")
-
-    parser.add_argument("--num_train_epochs", type=int, default=100, help = "The number of training epochs.")
 
     parser.add_argument("--config_file_name", type=str, default='ADB.py', help = "The name of the config file.")
 
@@ -59,7 +55,7 @@ def parse_arguments():
     parser.add_argument("--result_dir", type=str, default = 'results', help="The path to save results")
 
     parser.add_argument("--results_file_name", type=str, default = 'results.csv', help="The file name of all the results.")
-    
+
     parser.add_argument("--frontend_result_dir", type=str, default = '../frontend/static/jsons', help="The path to save results")
 
     parser.add_argument("--save_results", action="store_true", help="save final results for open intent detection")
@@ -79,7 +75,6 @@ def set_logger(args):
     
     time = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
     file_name = f"{args.method}_{args.dataset}_{args.backbone}_{args.known_cls_ratio}_{args.labeled_ratio}_{time}.log"
-    print(file_name)
     
     logger = logging.getLogger(args.logger_name)
     logger.setLevel(logging.DEBUG)
@@ -116,49 +111,55 @@ def run(args, data, model, logger):
     if args.save_results:
         logger.info('Results saved in %s', str(os.path.join(args.result_dir, args.results_file_name)))
         save_results(args, outputs)
-    
-    if args.save_frontend_results:
 
+    if args.save_frontend_results:
+        
+        logger.info('Save frontend results start...')
         save_train_results(args, method.train_results)
         save_evaluation_results(args, data, outputs)
         save_analysis_table_results(args, data, outputs)
 
-        map_save_analysis_figs = {
-            'ADB': save_point_results, 
-            'DeepUnk': save_point_results,
+        # map_save_analysis_figs = {
+        #     'ADB': save_point_results, 
+        #     'DeepUnk': save_point_results,
             
-        }
+        # }
 
-        map_save_analysis_figs[args.method](args, data, outputs)
+        # map_save_analysis_figs[args.method](args, data, outputs)
+        logger.info('Save frontend results finished...')
 
 if __name__ == '__main__':
     
     sys.path.append('.')
-    
     args = parse_arguments()
     logger = set_logger(args)
+
+    test = True
+    if test:
+        args.dataset = 'banking'
+        args.method = 'OpenMax'
+        args.config_file_name = 'OpenMax.py'
+        args.known_cls_ratio = 0.25
+        args.labeled_ratio = 0.2
+        args.train = True
+        args.save_frontend_results = True
+        args.log_id = '4'
+        args.save_model = True
 
     logger.info('Open Intent Detection Begin...')
     logger.info('Parameters Initialization...')
     param = ParamManager(args)
     args = param.args
 
+    if test:
+        args.num_train_epochs = 2
+        
     logger.debug("="*30+" Params "+"="*30)
     for k in args.keys():
         logger.debug(f"{k}:\t{args[k]}")
     logger.debug("="*30+" End Params "+"="*30)
 
-    test = True
-    if test:
-        args.dataset = 'banking'
-        args.num_train_epochs = 2
-        args.known_cls_ratio = 0.25
-        args.labeled_ratio = 0.2
-        args.train = True
-        args.save_frontend_results = True
-        args.log_id = '3'
-        args.save_model = True
-        
+
 
     logger.info('Data and Model Preparation...')
     data = DataManager(args)
