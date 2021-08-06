@@ -30,8 +30,11 @@ class OpenMaxManager:
         self.test_dataloader = data.dataloader.test_loader
 
         self.loss_fct = loss_map[args.loss_fct]
+        self.openmax_pred = None
+        self.softmax_pred = None
 
         if args.train:
+            self.train_results = []
             self.weibull_model = None
             
         else:
@@ -43,6 +46,7 @@ class OpenMaxManager:
         best_model = None
         wait = 0
         best_eval_score = 0
+        train_results = []
 
         for epoch in trange(int(args.num_train_epochs), desc="Epoch"):
             self.model.train()
@@ -75,6 +79,8 @@ class OpenMaxManager:
                 'eval_score': eval_score,
                 'best_eval_score': best_eval_score,
             }
+            train_results.append(eval_results)
+
             self.logger.info("***** Epoch: %s: Eval results *****", str(epoch + 1))
             for key in sorted(eval_results.keys()):
                 self.logger.info("  %s = %s", key, str(eval_results[key]))
@@ -90,6 +96,7 @@ class OpenMaxManager:
                 if wait >= args.wait_patient:
                     break
         
+        self.train_results = train_results
         self.model = best_model
         
         if args.save_model: 
@@ -98,7 +105,8 @@ class OpenMaxManager:
         self.logger.info('Training finished...')
 
     
-    def get_outputs(self, args, data, mode = 'eval', get_feats = False, compute_centroids=False):
+    def get_outputs(self, args, data, mode = 'eval', get_feats = False, \
+        compute_centroids=False, get_probs = False):
         
         if mode == 'eval':
             dataloader = self.eval_dataloader
@@ -142,6 +150,10 @@ class OpenMaxManager:
             total_maxprobs, total_preds = total_probs.max(dim = 1)
             y_probs = total_probs.cpu().numpy()
 
+            if get_probs:
+                y_prob = total_maxprobs.cpu().numpy()
+                return y_prob
+
             y_pred = total_preds.cpu().numpy()
             y_true = total_labels.cpu().numpy()
 
@@ -170,6 +182,7 @@ class OpenMaxManager:
             
         self.weibull_model = self.get_outputs(args, data, mode = 'train', compute_centroids=True)
         y_true, y_pred = self.get_outputs(args, data, mode = 'test')
+        y_prob = self.get_outputs(args, data, mode = 'test', get_probs = True)
 
         cm = confusion_matrix(y_true,y_pred)
         test_results = F_measure(cm)
@@ -187,12 +200,17 @@ class OpenMaxManager:
 
         test_results['y_true'] = y_true
         test_results['y_pred'] = y_pred
+        test_results['y_prob'] = y_prob
+        test_results['openmax_pred'] = self.openmax_pred
+        test_results['softmax_pred'] = self.softmax_pred
         
         return test_results
     
     def classify_openmax(self, args, data, num_samples, y_prob, y_logit):
             
         y_preds = []
+        openmax_preds = []
+        softmax_preds = []
 
         for i in range(num_samples):
 
@@ -205,11 +223,17 @@ class OpenMaxManager:
             openmax = np.array(openmax)
             pred = np.argmax(openmax)
             max_prob = max(openmax)
+            
+            openmax_preds.append(pred)
+            softmax_preds.append(np.argmax(np.array(softmax)))
 
             if max_prob < args.threshold:
                 pred = data.unseen_label_id
 
             y_preds.append(pred)    
+
+        self.openmax_pred = openmax_preds
+        self.softmax_pred = softmax_preds
 
         return y_preds
 

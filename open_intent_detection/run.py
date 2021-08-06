@@ -4,7 +4,7 @@ from backbones.base import ModelManager
 from methods import method_map
 from utils.functions import save_results
 from utils.frontend_evalulation import save_train_results, save_evaluation_results
-from utils.frontend_analysis import save_analysis_table_results, save_point_results
+from utils.frontend_analysis import save_analysis_table_results, save_point_results, save_MSP_results, save_DOC_results, save_OpenMax_results
 import logging
 import argparse
 import sys
@@ -20,6 +20,8 @@ def parse_arguments():
     parser.add_argument('--logger_name', type=str, default='Detection', help="Logger name for open intent detection.")
 
     parser.add_argument('--log_dir', type=str, default='logs', help="Logger directory.")
+
+    parser.add_argument('--log_id', type=str, default='1', help="Training record ID.")
 
     parser.add_argument("--dataset", default='banking', type=str, help="The name of the dataset to train selected")
 
@@ -119,13 +121,15 @@ def run(args, data, model, logger):
         save_evaluation_results(args, data, outputs)
         save_analysis_table_results(args, data, outputs)
 
-        # map_save_analysis_figs = {
-        #     'ADB': save_point_results, 
-        #     'DeepUnk': save_point_results,
-            
-        # }
+        map_save_analysis_figs = {
+            'ADB': save_point_results, 
+            'DeepUnk': save_point_results,
+            "MSP": save_MSP_results,
+            "DOC": save_DOC_results,
+            "OpenMax": save_OpenMax_results
+        }
 
-        # map_save_analysis_figs[args.method](args, data, outputs)
+        map_save_analysis_figs[args.method](args, data, outputs)
         logger.info('Save frontend results finished...')
 
 if __name__ == '__main__':
@@ -134,16 +138,16 @@ if __name__ == '__main__':
     args = parse_arguments()
     logger = set_logger(args)
 
-    test = True
+    test = False
     if test:
         args.dataset = 'banking'
-        args.method = 'OpenMax'
-        args.config_file_name = 'OpenMax.py'
+        args.method = 'DOC'
+        args.config_file_name = 'DOC.py'
         args.known_cls_ratio = 0.25
         args.labeled_ratio = 0.2
         args.train = True
         args.save_frontend_results = True
-        args.log_id = '4'
+        args.log_id = '0'
         args.save_model = True
 
     logger.info('Open Intent Detection Begin...')

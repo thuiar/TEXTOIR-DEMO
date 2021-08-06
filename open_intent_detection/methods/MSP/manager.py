@@ -98,7 +98,7 @@ class MSPManager:
         self.logger.info('Training finished...')
 
     
-    def get_outputs(self, args, data, mode = 'eval', get_feats = False):
+    def get_outputs(self, args, data, mode = 'eval', get_feats = False, get_probs = False):
 
         if mode == 'eval':
             dataloader = self.eval_dataloader
@@ -125,13 +125,17 @@ class MSPManager:
 
         if get_feats:  
             feats = total_features.cpu().numpy()
-            return feats 
+            return feats             
 
         else:
-            
+
             total_probs = F.softmax(total_logits.detach(), dim=1)
             total_maxprobs, total_preds = total_probs.max(dim = 1)
             y_prob = total_maxprobs.cpu().numpy()
+
+            if get_probs:
+                return y_prob
+
 
             y_true = total_labels.cpu().numpy()
             y_pred = total_preds.cpu().numpy()
@@ -145,7 +149,8 @@ class MSPManager:
     def test(self, args, data, show=False):
     
         y_true, y_pred = self.get_outputs(args, data, mode = 'test')
-    
+        y_prob = self.get_outputs(args, data, mode = 'test', get_probs = True)
+
         cm = confusion_matrix(y_true, y_pred)
         test_results = F_measure(cm)
 
@@ -162,6 +167,7 @@ class MSPManager:
 
         test_results['y_true'] = y_true
         test_results['y_pred'] = y_pred
+        test_results['y_prob'] = y_prob
 
         return test_results
 

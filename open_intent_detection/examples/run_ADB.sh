@@ -11,6 +11,7 @@ do
                 python run.py \
                 --dataset $dataset \
                 --method 'ADB' \
+                --log_id $seed \
                 --known_cls_ratio $known_cls_ratio \
                 --labeled_ratio $labeled_ratio \
                 --seed $seed \
@@ -20,7 +21,7 @@ do
                 --train \
                 --save_results \
                 --results_file_name 'results_ADB.csv' \
-                --save_model
+                --save_frontend_results
             done
         done
     done

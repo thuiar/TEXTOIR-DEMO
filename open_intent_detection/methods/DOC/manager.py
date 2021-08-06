@@ -29,7 +29,8 @@ class DOCManager:
         self.test_dataloader = data.dataloader.test_loader
 
         self.loss_fct = loss_map[args.loss_fct]
-        
+        self.thresholds = None
+
         if args.train:
             self.train_results = []
             self.best_mu_stds = None
@@ -104,6 +105,7 @@ class DOCManager:
     def test(self, args, data, show=False):
 
         y_true, y_pred = self.get_outputs(args, data, mode = 'test', mu_stds = self.best_mu_stds)
+        y_prob = self.get_outputs(args, data, mode = 'test', get_probs = True)
 
         cm = confusion_matrix(y_true, y_pred)
         test_results = F_measure(cm)
@@ -121,10 +123,13 @@ class DOCManager:
 
         test_results['y_true'] = y_true
         test_results['y_pred'] = y_pred
+        test_results['thresholds'] = self.thresholds
+        test_results['y_prob'] = y_prob
 
         return test_results
 
-    def get_outputs(self, args, data, mode = 'eval', get_feats = False, get_mu_stds = False, mu_stds = None):
+    def get_outputs(self, args, data, mode = 'eval', get_feats = False, get_mu_stds = False, \
+        get_probs = False, mu_stds = None):
         
         if mode == 'train':
             dataloader = self.train_dataloader
@@ -159,12 +164,19 @@ class DOCManager:
         else:
             
             total_probs = torch.sigmoid(total_logits.detach())
+            total_maxprobs, total_preds = total_probs.max(dim = 1)
+
             y_true = total_labels.cpu().numpy()
             y_prob = total_probs.cpu().numpy()
+            y_max_prob = total_maxprobs.cpu().numpy()
 
             if get_mu_stds:
                 mu_stds = self.cal_mu_std(y_prob, y_true, data.num_labels)
                 return mu_stds
+
+            if get_probs:
+                return y_max_prob
+
             else:
                 y_pred = self.classify_doc(data, args, y_prob, mu_stds)
                 return y_true, y_pred
@@ -180,6 +192,7 @@ class DOCManager:
             thresholds[label] = threshold
 
         self.logger.info('Probability thresholds of each class: %s', thresholds)
+        self.thresholds = thresholds
         
         y_pred = []
         for p in y_prob:

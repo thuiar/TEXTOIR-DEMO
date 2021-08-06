@@ -14,11 +14,13 @@ do
                 --known_cls_ratio $known_cls_ratio \
                 --labeled_ratio $labeled_ratio \
                 --seed $seed \
+                --log_id $seed \
                 --backbone 'bert' \
                 --config_file_name 'MSP' \
                 --gpu_id '0' \
                 --train \
                 --save_results \
+                --save_frontend_results \
                 --results_file_name 'results_MSP.csv'
             done
         done

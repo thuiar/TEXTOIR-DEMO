@@ -13,6 +13,7 @@ do
                 --method 'DOC' \
                 --known_cls_ratio $known_cls_ratio \
                 --labeled_ratio $labeled_ratio \
+                --log_id $seed \
                 --seed $seed \
                 --backbone bert \
                 --config_file_name DOC \
@@ -20,6 +21,7 @@ do
                 --train \
                 --save_results \
                 --results_file_name 'results_DOC.csv' \
+                --save_frontend_results
                 
             done
         done

@@ -3,6 +3,8 @@ from dataloaders.base import DataManager
 from backbones.base import ModelManager
 from methods import method_map
 from utils.functions import save_results
+from utils.frontend_evalulation import save_train_results, save_evaluation_results
+from utils.frontend_analysis import save_analysis_table_results, save_point_results
 import logging
 import argparse
 import sys
@@ -18,6 +20,8 @@ def parse_arguments():
     parser.add_argument('--logger_name', type=str, default='Discovery', help="Logger name for open intent discovery.")
 
     parser.add_argument('--log_dir', type=str, default='logs', help="Logger directory.")
+
+    parser.add_argument('--log_id', type=str, default='1', help="Training record ID.")
 
     parser.add_argument("--dataset", default='banking', type=str, help="The name of the dataset to train selected")
 
@@ -57,6 +61,8 @@ def parse_arguments():
     parser.add_argument("--result_dir", type=str, default = 'results', help="The path to save results")
 
     parser.add_argument("--results_file_name", type=str, default = 'results.csv', help="The file name of all the results.")
+
+    parser.add_argument("--frontend_result_dir", type=str, default = '/frontend/static/jsons', help="The path to save results")
 
     parser.add_argument("--save_results", action="store_true", help="save final results for open intent detection")
 
@@ -109,6 +115,22 @@ def run(args, data, model, logger):
         logger.info('Results saved in %s', str(os.path.join(args.result_dir, args.results_file_name)))
         save_results(args, outputs)
 
+    if args.save_frontend_results:
+            
+        logger.info('Save frontend results start...')
+        save_evaluation_results(args, data, outputs)
+        save_analysis_table_results(args, data, outputs)
+
+        map_save_analysis_figs = {
+            'ADB': save_point_results, 
+            'DeepUnk': save_point_results,
+            "MSP": save_MSP_results,
+            "DOC": save_DOC_results,
+            "OpenMax": save_OpenMax_results
+        }
+
+        map_save_analysis_figs[args.method](args, data, outputs)
+        logger.info('Save frontend results finished...')
 
 if __name__ == '__main__':
     

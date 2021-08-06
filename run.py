@@ -1,21 +1,21 @@
 
 import argparse
-
+import logging
 import os
 import datetime
 import sys
-import numpy as np
 import copy
-from keybert import KeyBERT
-from configs.base import ParamManager
-from utils.functions import save_pipeline_results
 
+from keybert import KeyBERT
+from pipeline.configs.base import ParamManager
+from pipeline.utils.functions import save_pipeline_results, save_results, combine_test_results
+from pipeline.dataloaders.base import Data_Detection, Data_Discovery
 
 def parse_arguments():
     
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--data_dir', type=str, default=os.path.join(sys.path[0], '../data'), help="Data Directory.") 
+    parser.add_argument('--data_dir', type=str, default=os.path.join(sys.path[0], 'data'), help="Data Directory.") 
 
     parser.add_argument('--type', type=str, default='pipeline', help="Type for methods")
 
@@ -49,6 +49,8 @@ def parse_arguments():
 
     parser.add_argument("--log_dir", type=str, default='logs', help = "The directory of logs.")
 
+    parser.add_argument('--log_id', type=str, default='1', help="Training record ID.")
+    
     parser.add_argument('--logger_name', type=str, default='pipeline', help="Logger name for open intent detection.")
 
     parser.add_argument("--pipe_data_dir", type=str, default = 'pipe_data', help="The path to save results")
@@ -103,11 +105,11 @@ def run_detect(args, logger):
     logger.debug("="*30+" End Params "+"="*30)
 
     logger.info('Data and Model Preparation...')
-    from dataloaders.base import Data_Detection
+    
     data = Data_Detection(args)
     
     from open_intent_detection.backbones.base import ModelManager as detection_model
-    model = detection_model(args, data)
+    model = detection_model(args, data, logger_name = 'Detection')
 
     from open_intent_detection.methods import method_map
     method_manager = method_map[args.method]
@@ -123,7 +125,6 @@ def run_detect(args, logger):
     outputs = method.test(args, data)
     logger.info('Testing finished...')
 
-    from utils.functions import save_results
     if args.save_results:
         logger.info('Results saved in %s', str(os.path.join(args.results_dir, args.type)))
         save_results(args, copy.copy(outputs))
@@ -146,7 +147,7 @@ def run_discover(args, logger):
     logger.debug("="*30+" End Params "+"="*30)
 
     logger.info('Data and Model Preparation...')
-    from dataloaders.base import Data_Discovery
+
     data = Data_Discovery(args, logger_name = args.logger_name)
 
     from open_intent_discovery.backbones.base import ModelManager
@@ -166,7 +167,6 @@ def run_discover(args, logger):
     outputs = method.test(args, data)
     logger.info('Testing finished...')
 
-    from utils.functions import save_results
     if args.save_results:
         logger.info('Results saved in %s', str(os.path.join(args.results_dir, args.type)))
         save_results(args, copy.copy(outputs))
@@ -175,7 +175,6 @@ def run_discover(args, logger):
 
 
 def run():
-
     
     args = parse_arguments()
     
@@ -185,8 +184,6 @@ def run():
     detection_results = run_detect(args, logger)
 
     discovery_results, discovery_data = run_discover(args, logger)
-
-    from utils.functions import combine_test_results, save_results
 
     final_results = combine_test_results(args, detection_results,\
      discovery_data, discovery_results, logger)
