@@ -8,7 +8,7 @@ import copy
 
 from keybert import KeyBERT
 from pipeline.configs.base import ParamManager
-from pipeline.utils.functions import save_pipeline_results, save_results, combine_test_results
+from pipeline.utils.functions import save_pipeline_results, combine_test_results
 from pipeline.dataloaders.base import Data_Detection, Data_Discovery
 
 def parse_arguments():
@@ -27,37 +27,41 @@ def parse_arguments():
     
     parser.add_argument('--seed', type=int, default=0, help="random seed for initialization")
 
-    parser.add_argument("--detection_method", type=str, default='ADB', help="which detection method to use")
+    parser.add_argument("--method", type=str, default='ADB', help="which detection method to use")
 
     parser.add_argument("--config_detection_file", type=str, default='ADB.py', help = "The name of the detection config file.")
 
-    parser.add_argument("--detection_train", action="store_true", help="Whether train the detection model.")
+    parser.add_argument("--train", action="store_true", help="Whether train the detection model.")
 
-    parser.add_argument("--detection_save_model", action="store_true", help="Whether save the detection model.")
+    parser.add_argument("--backbone", type=str, default='bert', help="which backbone to use")
 
-    parser.add_argument("--detection_save_results", action="store_true", help="Whether save the detection results.")
+    parser.add_argument("--save_model", action="store_true", help="Whether save the detection model.")
 
-    parser.add_argument("--discovery_method", type=str, default='DeepAligned', help="which discovery method to use")
+    parser.add_argument("--save_results", action="store_true", help="Whether save the detection results.")
+
+    parser.add_argument("--model_dir", default='models', type=str, 
+                        help="The output directory where the model predictions and checkpoints will be written.") 
+
+    # parser.add_argument("--discovery_method", type=str, default='DeepAligned', help="which discovery method to use")
 
     parser.add_argument("--config_discovery_file", type=str, default='DeepAligned.py', help = "The name of the discovery config file.")
 
-    parser.add_argument("--discovery_train", action="store_true", help="Whether train the discovery model.")
-
-    parser.add_argument("--discovery_save_model", action="store_true", help="Whether save the discovery model.")
-
-    parser.add_argument("--discovery_save_results", action="store_true", help="Whether save the discovery results.")
+    parser.add_argument("--output_dir", default= '/home/sharing/disk2/zhanghanlei/save_data_162/TEXTOIR/outputs', type=str, 
+                        help="The output directory where all train data will be written.")
+    
+    parser.add_argument("--gpu_id", type=str, default='0', help="Select the GPU id")
 
     parser.add_argument("--log_dir", type=str, default='logs', help = "The directory of logs.")
 
     parser.add_argument('--log_id', type=str, default='1', help="Training record ID.")
-    
+
     parser.add_argument('--logger_name', type=str, default='pipeline', help="Logger name for open intent detection.")
 
     parser.add_argument("--pipe_data_dir", type=str, default = 'pipe_data', help="The path to save results")
 
     parser.add_argument("--frontend_result_dir", type=str, default = '/frontend/static/jsons', help="The path to save results")
 
-    parser.add_argument("--results_dir", type=str, default = 'results', help="The path to save results")
+    parser.add_argument("--result_dir", type=str, default = 'results', help="The path to save results")
 
     parser.add_argument("--results_file_name", type=str, default = 'pipeline_results.csv', help="The file name of all the results.")
 
@@ -108,10 +112,14 @@ def run_detect(args, logger):
     
     data = Data_Detection(args)
     
+    working_path = '/home/zhanghanlei/git/submit/TEXTOIR-DEMO/open_intent_detection'
+    sys.path.insert(0, working_path)
+
     from open_intent_detection.backbones.base import ModelManager as detection_model
     model = detection_model(args, data, logger_name = 'Detection')
-
+    
     from open_intent_detection.methods import method_map
+    
     method_manager = method_map[args.method]
     method = method_manager(args, data, model, logger_name = args.logger_name)
 
@@ -126,12 +134,16 @@ def run_detect(args, logger):
     logger.info('Testing finished...')
 
     if args.save_results:
-        logger.info('Results saved in %s', str(os.path.join(args.results_dir, args.type)))
+        logger.info('Results saved in %s', str(os.path.join(args.result_dir, args.type)))
+        from open_intent_detection.utils.functions import save_results
         save_results(args, copy.copy(outputs))
 
+    logger.info('Save pipeline results begin...')
     save_pipeline_results(args, data, method, outputs)
-
+    logger.info('Save pipeline results finished...')
+    
     return outputs
+
 
 def run_discover(args, logger):
 
@@ -149,9 +161,13 @@ def run_discover(args, logger):
     logger.info('Data and Model Preparation...')
 
     data = Data_Discovery(args, logger_name = args.logger_name)
-
+    
+    working_path = '/home/zhanghanlei/git/submit/TEXTOIR-DEMO/open_intent_discovery/'
+    sys.path.insert(0, working_path)
+    
     from open_intent_discovery.backbones.base import ModelManager
     model = ModelManager(args, data)
+
 
     from open_intent_discovery.methods import method_map
     method_manager = method_map[args.method]
@@ -179,16 +195,19 @@ def run():
     args = parse_arguments()
     
     logger = set_logger(args)
-    logger.info('This is the pipeline for open intent detection and discovery...')
+    # logger.info('This is the pipeline for open intent detection and discovery...')
     
-    detection_results = run_detect(args, logger)
-
-    discovery_results, discovery_data = run_discover(args, logger)
-
-    final_results = combine_test_results(args, detection_results,\
-     discovery_data, discovery_results, logger)
+    if args.type == 'Detection':
+        detection_results = run_detect(args, logger)
     
-    save_results(args, final_results)
+    elif args.type == 'Discovery':
+        discovery_results, discovery_data = run_discover(args, logger)
+
+    # else:
+    #     final_results = combine_test_results(args, detection_results,\
+    #     discovery_data, discovery_results, logger)
+    
+    # save_results(args, final_results)
 
 if __name__ == '__main__':
 

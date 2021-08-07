@@ -38,7 +38,7 @@ class Param():
             'save_model': False, 
             'backbone': 'bert',
             'num_train_epochs': 100,
-            'gpu_id': '1',
+            'gpu_id': '0',
             'output_dir': '/home/sharing/disk2/zhanghanlei/save_data_162/TEXTOIR/outputs', 
             'model_dir': 'models', 
             'results_dir': 'results',

@@ -1,7 +1,10 @@
 import os
 import json
 import numpy as np
+import logging
 from sklearn.manifold import TSNE
+from torch.utils.data import dataset
+from keybert import KeyBERT
 
 def json_read(path):
     
@@ -11,62 +14,167 @@ def json_read(path):
     return json_r
 
 def json_add(predict_t_f, path):
-    
+
     with open(path, 'w') as f:
         json.dump(predict_t_f, f, indent=4)
 
-def save_analysis_table_results(args, data, results):
+def save_analysis_table_results(args, data, results, logger_name):
 
-    test_trues = list([data.label_list[idx] for idx in results['y_true']]) 
-    test_preds = list([data.label_list[idx] for idx in results['y_pred']]) 
+    test_trues = list([data.all_label_list[idx] for idx in results['y_true']]) 
+    test_preds = list([data.all_label_list[idx] for idx in results['y_pred']]) 
     
-    test_texts = [example.text_a for example in data.dataloader.test_examples]
-
+    if args.backbone == 'bert':
+        test_texts = np.array([example.text_a for example in data.dataloader.test_examples])
+    elif args.setting == 'unsupervised':
+        test_texts = np.array([text for text in data.dataloader.ori_test_data.text])
+    
     save_dir = os.path.join(args.frontend_result_dir, args.type) 
     save_file_name = 'analysis_table_info.json' 
     results_path = os.path.join(save_dir, save_file_name)
-    if os.path.exists(results_path):
+
+    if not os.path.exists(save_dir):
+        os.mkdir(save_dir)
+
+    if not os.path.exists(results_path):
+        f = open(results_path, 'w')
+    elif os.path.exists(results_path) and (os.path.getsize(results_path) != 0):
         results = json_read(results_path)
     
+    logger = logging.getLogger(logger_name)
+    logger.info('Loading KeyBERT model start...')
+    keywords_model = KeyBERT('distilbert-base-nli-mean-tokens')
+    logger.info('Loading KeyBERT model finished...')
+
+    keywords = []
+    label_list = []
     predict_labels = np.unique(np.array(test_preds))
-    known_samples_nums = 0
-    class_list = []
-    data_info = {}
+    
+    dataset_info = {}
 
     for label in predict_labels:
-        text_list = []
-        text_true_list_tmp = []
-        known_sample_ids = [idx for idx, elem in enumerate(test_preds) if elem == label]
-        known_samples_nums += len(known_sample_ids)
+        label_sample_ids = [idx for idx, elem in enumerate(test_preds) if elem == label]
+        label_texts = test_texts[label_sample_ids]
+        doc = " ".join(label_texts)
+        keywords = keywords_model.extract_keywords(doc, keyphrase_ngram_range=(1,2), top_n = 3)
 
-        for idx in known_sample_ids:
-            text_true_list_tmp.append(test_trues[idx])
+        name_list = []
+        for keyword in keywords:
+            name = '(' + str(keyword[0]) + ', ' + str(keyword[1]) + str( '%.2f' % (keyword[1]*100) ) + '%)'
+            name_list.append(name)
+        
+        label_item = ', '.join(name_list)
+        label_list.append({
+            "label_name": label_item,
+            "label_text_num": len(label_texts),
+            "dataset_name": args.dataset,
+            "method": args.method,
+            "class_type": "open"
+        })
+
+        text_list = []
+        for sent in label_texts:
+
+            keywords_sent = keywords_model.extract_keywords(sent, keyphrase_ngram_range=(1,2), top_n = 3)
+            keywords_sent_len = len(keywords_sent)
+            can_1, can_2, can_3 = 'None', 'None', 'None'
+            conf_1, conf_2, conf_3 = '0', '0', '0'
+
+            if keywords_sent_len == 0:
+                
+                can_1 = keywords[0][0]
+                conf_1 = '%.2f' % (keywords[0][1] * 100) + '%'
+                can_2 = keywords[1][0]
+                conf_2 = '%.2f' % (keywords[1][1] *100) + '%'
+            
+            elif keywords_sent_len == 1:
+                
+                can_1 = keywords_sent[0][0]
+                conf_1 = '%.2f' % (keywords_sent[0][1] * 100) + '%'
+                can_2 = keywords[0][0]
+                conf_2 = '%.2f' % (keywords[0][1] * 100) + '%'
+                can_3 = keywords[1][0]
+                conf_3 = '%.2f' % (keywords[1][1] * 100) + '%'
+            
+            elif keywords_sent_len == 2:
+                
+                can_1 = keywords_sent[0][0]
+                conf_1 = '%.2f' % (keywords_sent[0][1] * 100) + '%'
+                can_2 = keywords_sent[1][0]
+                conf_2 = '%.2f' % (keywords_sent[1][1] * 100) + '%'
+                can_3 = keywords[0][0]
+                conf_3 = '%.2f' % (keywords[0][1] * 100) + '%'
+
+            elif keywords_sent_len == 3:
+
+                can_1 = keywords_sent[0][0]
+                conf_1 = '%.2f' % (keywords_sent[0][1] * 100) + '%'
+                can_2 = keywords_sent[1][0]
+                conf_2 = '%.2f' % (keywords_sent[1][1]*100) + '%'
+                can_3 = keywords_sent[2][0]
+                conf_3 = '%.2f' % (keywords_sent[2][1] * 100) + '%'
+            
+            else:
+                print('Error')
+        
             text_list.append(
                 {
-                    'dataset_name':args.dataset,
-                    'class_type': 'known',
-                    'label_name': test_trues[idx], 
-                    'method': args.method,
-                    'text': test_texts[idx]
+                    "dataset_name": args.dataset, 
+                    "class_type":'open',
+                    "label_name": label_item,
+                    "method": args.method,
+                    "can_1": can_1,
+                    "can_2": can_2,
+                    "can_3":can_3,
+                    "conf_1": conf_1,
+                    "conf_2": conf_2,
+                    "conf_3": conf_3,
+                    "text": sent
                 }
             )
         
-        class_list.append(
-            {
-                'label_name': label,
-                'label_text_num': len(known_sample_ids),
-                'dataset_name': args.dataset, 
-                'method': args.method,
-                'class_type': 'known'
-            }
-        )
-        text_sample_name = 'text_list_' + args.dataset + "_" + args.method + "_" + args.log_id + "_known_"  + label
-        data_info[text_sample_name] = text_list
+        sample_name = 'text_list_'+ args.dataset + "_" + args.method + "_" + str(args.log_id) + "_open_" + label_item
+        dataset_info[sample_name] = text_list
     
-    class_sample_name = 'class_list_' + args.dataset + "_" + args.method + "_" + args.log_id + "_known" 
-    data_info[class_sample_name] = class_list
+    class_name = "class_list_"  + args.dataset + "_" + args.method + "_" + str(args.log_id) + "_open"
+    dataset_info[class_name] = label_list
 
-    json_add(data_info, results_path)
+    json_add(dataset_info, results_path)
+
+
+def save_centroid_analysis(args, data, results):
+
+    test_feats = results['y_feat']
+    reduce_feats = TSNE_reduce_feats(test_feats, 2)
+
+    save_dir = os.path.join(args.frontend_result_dir, args.type) 
+    save_file_name = 'Discovery_analysis.json'
+    results_path = os.path.join(save_dir, save_file_name)
+
+    all_dict = {}
+    reduce_centers = []
+    for idx in range(args.num_labels):
+        pos = list(np.where(results['y_pred'] == idx)[0])
+        center = np.mean(reduce_feats[pos], axis = 0)
+        center = [round(float(x), 2) for x in center]
+        reduce_centers.append(center)
+    
+    known_centers = []
+    open_centers = []
+    for idx, center in enumerate(reduce_centers):
+        label = data.all_label_list[idx]
+        if label in data.known_label_list:
+            point = center + [label]
+            known_centers.append(point)
+        else:
+            point = center + [label]
+            open_centers.append(point)
+
+    center_dict = {}
+    center_dict['Known Intent Centers'] = known_centers
+    center_dict['Open Intent Centers'] = open_centers
+    name = str(args.dataset) + '_' +  str(args.method) + '_' + str(args.log_id)
+    all_dict[name] = center_dict
+    json_add(all_dict, results_path)
 
 def TSNE_reduce_feats(feats, dim):
 
@@ -103,257 +211,3 @@ def save_point_results(args, data, results):
     all_dict[sample_name] = data_points 
     json_add(all_dict, results_path)
 
-def save_MSP_results(args, data, results):
-    
-    interval = 0.1
-    y_true, y_pred, y_prob = results["y_true"], results["y_pred"], results["y_prob"]
-
-    xais = []
-    score = 0
-
-    while True:
-
-        score += interval
-
-        if score >= 1:
-            break
-
-        xais.append(round(score, 2))
-
-    known_intents = []
-    open_intents = []
-    scores = []
-
-    for point in xais:
-
-        up_score = point
-        low_score = point - interval
-
-        pos = [idx for idx, prob in enumerate(y_prob) if (prob >= low_score and prob <= up_score)]
-
-        num_knowns = len([p for p in pos if y_true[p] != data.unseen_label_id])
-        num_opens = -len([p for p in pos if y_true[p] == data.unseen_label_id])
-
-        known_intents.append(num_knowns)
-        open_intents.append(num_opens)
-
-        pos_neg = [idx for idx, prob in enumerate(y_prob) if prob <= point]
-        pos_pos = [idx for idx, prob in enumerate(y_prob) if prob > point]
-
-        neg_correct_samples = 0
-        pos_correct_samples = 0
-        for idx in pos_neg:
-
-            if y_true[idx] == data.unseen_label_id:
-                neg_correct_samples += 1
-
-        for idx in pos_pos:
-            if y_true[idx] == y_pred[idx]:
-                pos_correct_samples += 1
-
-        score = (neg_correct_samples + pos_correct_samples) / len(y_true)
-        scores.append(score)
-
-    save_dir = os.path.join(args.frontend_result_dir, args.type) 
-    save_file_name = args.method + '_analysis.json'
-    results_path = os.path.join(save_dir, save_file_name)
-
-    sample_data = {}
-    sample_data["Known_Intent"] = known_intents
-    sample_data["Open_Intent"] = open_intents
-    sample = {}
-    sample["data"] = sample_data
-
-    data_x = {}
-    data_x['xais'] = xais
-    data_x["score"] = scores
-
-    sample["data_x"] = data_x
-    sample_name = args.dataset + '_' + args.method + '_' + args.log_id
-    all_dicts = {}
-    all_dicts[sample_name] = sample   
-
-    json_add(all_dicts, results_path)
-
-def save_DOC_results(args, data, results):
-
-    interval = 0.1
-    y_true, y_pred, y_prob = results["y_true"], results["y_pred"], results["y_prob"]
-    thresholds = results["thresholds"]
-
-    xais_list = []
-    score = 0
-
-    while True:
-
-        score += interval
-
-        if score >= 1:
-            break
-
-        xais_list.append(round(score, 2))
-
-    labels = np.unique(y_true)
-    labels = labels[:-1]
-
-    xais = {}
-    labels_name = list([data.label_list[idx] for idx in labels]) 
-
-    for label in labels:
-        xais_name = str(labels_name[label]) + '_xais'
-        xais[xais_name] = xais_list
-
-    index = {}
-    label_list = []
-    threshold_list = []
-    for key in thresholds.keys():
-        threshold = thresholds[key]
-        label_list.append(key)
-        threshold_list.append(threshold)
-
-    index["Intent_Class"] = label_list
-    index["Intent_Threshold"] = threshold_list
-
-    content = {}
-    scores = []
-
-    for i, label in enumerate(labels):
-        
-        known_intents = []
-        open_intents = []
-
-        label_pos = list(np.where(y_pred == label)[0])
-
-        for point in xais_list:
-
-            up_score = point
-            low_score = point - interval
-
-            pos = [idx for idx in label_pos if (y_prob[idx] >= low_score) and (y_prob[idx] <= up_score)]
-            
-            num_knowns = len([p for p in pos if y_true[p] != data.unseen_label_id])
-            num_opens = -len([p for p in pos if y_true[p] == data.unseen_label_id])
-
-            known_intents.append(num_knowns)
-            open_intents.append(num_opens)
-        
-        intent_sample = {}
-        intent_sample['Known_Intent'] = known_intents
-        intent_sample['Open_Intent'] = open_intents
-        
-        label_name = labels_name[label]
-        content[label_name] = intent_sample
-
-
-        pos_neg = [idx for idx, prob in enumerate(y_prob) if prob <= threshold_list[i]]
-        pos_pos = [idx for idx, prob in enumerate(y_prob) if prob > threshold_list[i]]
-
-        neg_correct_samples = 0
-        pos_correct_samples = 0
-        for idx in pos_neg:
-
-            if y_true[idx] == data.unseen_label_id:
-                neg_correct_samples += 1
-
-        for idx in pos_pos:
-            if y_true[idx] == y_pred[idx]:
-                pos_correct_samples += 1
-
-        score = (neg_correct_samples + pos_correct_samples) / len(y_true)
-        scores.append(score)
-
-    index["Intent_score"] = scores
-
-    save_dir = os.path.join(args.frontend_result_dir, args.type) 
-    save_file_name = args.method + '_analysis.json'
-    results_path = os.path.join(save_dir, save_file_name)
-
-    sample = {}
-    sample["index"] = index
-    sample["xais"] = xais
-    sample["content"] = content
-    sample_name = args.dataset + '_' + args.method + '_' + args.log_id
-    all_dicts = {}
-    all_dicts[sample_name] = sample
-    print(all_dicts.keys())
-    json_add(all_dicts, results_path)
-
-def save_OpenMax_results(args, data, results):
-    
-    interval = 0.1
-    y_true, y_pred, y_prob = results["y_true"], results["y_pred"], results["y_prob"]
-    openmax_pred = results["openmax_pred"]
-    softmax_pred = results["softmax_pred"]
-
-    xais = []
-    threshold = 0
-
-    while True:
-
-        threshold += interval
-
-        if threshold >= 1:
-            break
-
-        xais.append(round(threshold, 2))
-
-    known_intents = []
-    open_intents = []
-    predicted_open_intents = []
-    scores = []
-
-    for point in xais:
-
-        up_score = point
-        low_score = point - interval
-
-        pos = [idx for idx, prob in enumerate(y_prob) if (prob >= low_score and prob <= up_score)]
-
-        num_knowns = len([p for p in pos if y_true[p] != data.unseen_label_id])
-        num_opens = -len([p for p in pos if y_true[p] == data.unseen_label_id])
-        num_predicted_opens = -len([p for p in pos if openmax_pred == data.unseen_label_id])
-
-        known_intents.append(num_knowns)
-        open_intents.append(num_opens)
-        predicted_open_intents.append(num_predicted_opens)
-
-        pos_neg = [idx for idx, prob in enumerate(y_prob) if prob <= point]
-        pos_pos = [idx for idx, prob in enumerate(y_prob) if prob > point]
-
-        neg_correct_samples = 0
-        pos_correct_samples = 0
-        for idx in pos_neg:
-
-            if (openmax_pred[idx] == data.unseen_label_id) or (y_true[idx] == data.unseen_label_id):
-                neg_correct_samples += 1
-
-        for idx in pos_pos:
-            if y_true[idx] == softmax_pred[idx]:
-                pos_correct_samples += 1
-
-        score = (neg_correct_samples + pos_correct_samples) / len(y_true)
-        scores.append(score)
-
-    save_dir = os.path.join(args.frontend_result_dir, args.type) 
-    save_file_name = args.method + '_analysis.json'
-    results_path = os.path.join(save_dir, save_file_name)
-
-    index = {}
-    index["score"] = scores
-    index["xais"] = xais
-
-    intent_data = {}
-    intent_data["known_intent"] = known_intents
-    intent_data["open_intent"] = open_intents
-    intent_data["predicted_open_intent"] = predicted_open_intents
-
-    sample_data = {}
-    sample_data["Threshold"] = intent_data
-    sample_data["Index"] = index
-
-    all_data = {}
-    sample_name = args.dataset + '_' + args.method + '_' + args.log_id
-    all_data[sample_name] = sample_data
-
-
-    json_add(all_data, results_path)

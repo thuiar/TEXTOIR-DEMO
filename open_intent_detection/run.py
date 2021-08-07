@@ -58,7 +58,7 @@ def parse_arguments():
 
     parser.add_argument("--results_file_name", type=str, default = 'results.csv', help="The file name of all the results.")
 
-    parser.add_argument("--frontend_result_dir", type=str, default = '../frontend/static/jsons', help="The path to save results")
+    parser.add_argument("--frontend_result_dir", type=str, default = sys.path[0] + '/../frontend/static/jsons', help="The path to save results")
 
     parser.add_argument("--save_results", action="store_true", help="save final results for open intent detection")
 
@@ -138,15 +138,14 @@ if __name__ == '__main__':
     args = parse_arguments()
     logger = set_logger(args)
 
-    test = False
+    test = True
     if test:
         args.dataset = 'banking'
-        args.method = 'DOC'
-        args.config_file_name = 'DOC.py'
-        args.known_cls_ratio = 0.25
-        args.labeled_ratio = 0.2
+        args.method = 'ADB'
+        args.config_file_name = 'ADB.py'
+        args.known_cls_ratio = 0.75
+        args.labeled_ratio = 1.0
         args.train = True
-        args.save_frontend_results = True
         args.log_id = '0'
         args.save_model = True
 

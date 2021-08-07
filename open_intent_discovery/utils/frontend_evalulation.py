@@ -11,42 +11,9 @@ def json_read(path):
     return json_r
 
 def json_add(predict_t_f, path):
-    
+
     with open(path, 'w') as f:
         json.dump(predict_t_f, f, indent=4)
-
-def save_train_results(args, result_list):
-
-    save_dir = os.path.join(args.frontend_result_dir, args.type)  
-    save_file_name = 'json_detection_results.json'
-    results_path = os.path.join(save_dir, save_file_name)
-
-    train_loss_list = []
-    valid_score_list = []
-
-    for elem in result_list:
-        train_loss_list.append(elem['train_loss'])
-        valid_score_list.append(elem['eval_score'])
-    
-    record_name = 'detection_' + str(args.dataset) + '_' + str(args.method) + '_' + str(args.log_id)
-
-    if not os.path.exists(results_path) or os.path.getsize(results_path) == 0:
-
-        json_data = {}
-        json_data[record_name] = {}
-        json_data[record_name]['Train'] = train_loss_list[:20]
-        json_data[record_name]['Valid'] = valid_score_list[:20]
-
-    else:
-
-        with open(results_path, 'r') as f:
-            json_data = json.load(f)
-
-        json_data[record_name] = {}
-        json_data[record_name]['Train'] = train_loss_list[:20]
-        json_data[record_name]['Valid'] = valid_score_list[:20]
-
-    json_add(json_data, results_path)
 
 def cal_true_false(true_labels, predictions):
             
@@ -84,24 +51,34 @@ def save_evaluation_results(args, data, results):
 
     save_dir = os.path.join(args.frontend_result_dir, args.type)  
 
-    predictions = list([data.label_list[idx] for idx in results['y_pred']])
-    true_labels = list([data.label_list[idx] for idx in results['y_true']])
+    predictions = list([data.all_label_list[idx] for idx in results['y_pred']])
+    true_labels = list([data.all_label_list[idx] for idx in results['y_true']])
 
     predict_t_f, predict_t_f_fine = cal_true_false(true_labels, predictions)
+
+    if not os.path.exists(save_dir):
+        os.mkdir(save_dir)
 
     tf_overall_path = os.path.join(save_dir, 'true_false_overall.json')
     tf_fine_path = os.path.join(save_dir, 'true_false_fine.json')
 
+    if not os.path.exists(tf_overall_path):
+        f = open(tf_overall_path, 'w')
+    elif os.path.exists(tf_overall_path) and (os.path.getsize(tf_overall_path) != 0):
+        results = json_read(tf_overall_path)
+
+    if not os.path.exists(tf_fine_path):
+        f = open(tf_fine_path, 'w')
+        
+    elif os.path.exists(tf_fine_path) and (os.path.getsize(tf_fine_path) != 0):
+        results_fine = json_read(tf_fine_path)
+
     results = {}
     results_fine = {}
     key = str(args.dataset) + '_'  + str(args.method) + '_' + str(args.log_id)
-    if os.path.exists(tf_overall_path):
-        results = json_read(tf_overall_path)
+
     
     results[key] = predict_t_f
-
-    if os.path.exists(tf_fine_path):
-        results_fine = json_read(tf_fine_path)
 
     results_fine[key] = predict_t_f_fine
 

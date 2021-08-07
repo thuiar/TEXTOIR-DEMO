@@ -11,34 +11,15 @@ class ParamManager:
         if type == 'detection':
 
             config_file_name = args.config_detection_file
-            method_common_param, method_hyper_param = self.get_method_param(config_file_name, type)
-            method_common_param['method'] = args.detection_method
-            method_common_param['train'] = args.detection_train
-            method_common_param['save_model'] = args.detection_save_model
-            method_common_param['save_results'] = args.detection_save_results
+            method_hyper_param = self.get_method_param(args, config_file_name, type)
 
         elif type == 'discovery':
 
             config_file_name = args.config_discovery_file
-            method_common_param, method_hyper_param = self.get_method_param(config_file_name, type)
-            method_common_param['method'] = args.discovery_method
-            method_common_param['train'] = args.discovery_train
-            method_common_param['save_model'] = args.discovery_save_model
-            method_common_param['save_results'] = args.discovery_save_results
+            method_hyper_param = self.get_method_param(args, config_file_name, type)
         
         else:
             print('This type of OIR is not implemented, please check if the spell is correct.')
-
-        method_common_param['known_cls_ratio'] = args.known_cls_ratio
-        method_common_param['dataset'] = args.dataset
-        method_common_param['labeled_ratio'] = args.labeled_ratio
-
-        args = EasyDict(
-                            dict(
-                                vars(args),
-                                **method_common_param, 
-                            )
-                        )
 
         output_path_param = self.add_output_path_param(args)
 
@@ -50,7 +31,7 @@ class ParamManager:
                                     )
                             )
 
-    def get_method_param(self, config_file_name, type):
+    def get_method_param(self, args, config_file_name, type):
         
         if config_file_name.endswith('.py'):
             module_name = "pipeline.configs." + str(type) + '.' + str(config_file_name[:-3])
@@ -60,9 +41,9 @@ class ParamManager:
         config = importlib.import_module(module_name)
 
         method_param = config.Param
-        method_args = method_param()
+        method_args = method_param(args)
 
-        return method_args.common_param, method_args.hyper_param
+        return method_args.hyper_param
 
     def add_output_path_param(self, args):
         

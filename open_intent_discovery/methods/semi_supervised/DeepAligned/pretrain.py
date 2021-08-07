@@ -87,6 +87,8 @@ class PretrainDeepAlignedManager:
 
         if args.save_model:
             pretrained_model_dir = os.path.join(args.method_output_dir, 'pretrain')
+            self.logger.info("Pretrained model saved to %s", pretrained_model_dir)
+            
             if not os.path.exists(pretrained_model_dir):
                 os.makedirs(pretrained_model_dir)
             save_model(self.model, pretrained_model_dir)

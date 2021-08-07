@@ -163,6 +163,7 @@ class KCLManager:
     def test(self, args, data):
         
         y_true, y_pred = self.get_outputs(args, mode = 'test')
+        y_feat = self.get_outputs(args, mode = 'test', get_feats = True)
         test_results = clustering_score(y_true, y_pred)
         cm = confusion_matrix(y_true, y_pred)
         
@@ -176,5 +177,6 @@ class KCLManager:
 
         test_results['y_true'] = y_true
         test_results['y_pred'] = y_pred
+        test_results['y_feat'] = y_feat
 
         return test_results

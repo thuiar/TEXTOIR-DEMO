@@ -3,8 +3,8 @@ from dataloaders.base import DataManager
 from backbones.base import ModelManager
 from methods import method_map
 from utils.functions import save_results
-from utils.frontend_evalulation import save_train_results, save_evaluation_results
-from utils.frontend_analysis import save_analysis_table_results, save_point_results
+from utils.frontend_evalulation import save_evaluation_results
+from utils.frontend_analysis import save_analysis_table_results, save_centroid_analysis
 import logging
 import argparse
 import sys
@@ -62,14 +62,15 @@ def parse_arguments():
 
     parser.add_argument("--results_file_name", type=str, default = 'results.csv', help="The file name of all the results.")
 
-    parser.add_argument("--frontend_result_dir", type=str, default = '/frontend/static/jsons', help="The path to save results")
+    parser.add_argument("--frontend_result_dir", type=str, default = sys.path[0] + '/../frontend/static/jsons', help="The path to save results")
 
     parser.add_argument("--save_results", action="store_true", help="save final results for open intent detection")
 
+    parser.add_argument("--save_frontend_results", action="store_true", help="save final frontend results for open intent detection")
+    
     args = parser.parse_args()
 
     return args
-
 
 def set_logger(args):
 
@@ -119,17 +120,9 @@ def run(args, data, model, logger):
             
         logger.info('Save frontend results start...')
         save_evaluation_results(args, data, outputs)
-        save_analysis_table_results(args, data, outputs)
+        save_analysis_table_results(args, data, outputs, logger_name = args.logger_name)
+        save_centroid_analysis(args, data, outputs)
 
-        map_save_analysis_figs = {
-            'ADB': save_point_results, 
-            'DeepUnk': save_point_results,
-            "MSP": save_MSP_results,
-            "DOC": save_DOC_results,
-            "OpenMax": save_OpenMax_results
-        }
-
-        map_save_analysis_figs[args.method](args, data, outputs)
         logger.info('Save frontend results finished...')
 
 if __name__ == '__main__':
@@ -138,6 +131,20 @@ if __name__ == '__main__':
     args = parse_arguments()
     logger = set_logger(args)
     
+    test = True
+    if test:
+        args.dataset = 'banking'
+        args.method = 'DeepAligned'
+        args.setting = 'semi_supervised'
+        args.config_file_name = 'DeepAligned.py'
+        args.backbone = 'bert'
+        args.known_cls_ratio = 0.75
+        args.labeled_ratio = 0.1
+        args.train = True
+        # args.save_frontend_results = True
+        args.log_id = '0'
+        args.save_model = True
+
     logger.info('Open Intent Discovery Begin...')
     logger.info('Parameters Initialization...')
     param = ParamManager(args)
@@ -147,6 +154,10 @@ if __name__ == '__main__':
     for k in args.keys():
         logger.debug(f"{k}:\t{args[k]}")
     logger.debug("="*30+" End Params "+"="*30)
+
+    if test:
+        args.num_train_epochs = 1
+        args.num_pretrain_epochs = 1
 
     logger.info('Data and Model Preparation...')
     data = DataManager(args)

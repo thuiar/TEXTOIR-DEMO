@@ -1,5 +1,6 @@
 from open_intent_detection.dataloaders.base import DataManager as Detection
 from open_intent_discovery.dataloaders.base import DataManager as Discovery
+from open_intent_discovery.dataloaders.bert_loader import get_loader
 import numpy as np
 import os
 import copy
@@ -63,7 +64,7 @@ class Data_Discovery(Discovery):
         self.dataloader.eval_examples = self.get_pipe_examples(args, mode = 'eval')
         self.dataloader.test_examples = self.get_pipe_examples(args, mode = 'test')
 
-        self.dataloader.get_dataloader(args, self.get_attrs())
+        # self.dataloader.get_dataloader(args, self.get_attrs())
         
 
     def get_pipe_examples(self, args, mode = None):

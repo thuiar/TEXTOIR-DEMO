@@ -1,6 +1,7 @@
 import pandas as pd
 import os 
 import numpy as np
+import copy
 from keras.preprocessing.text import Tokenizer
 from nltk.tokenize import word_tokenize
 from keras.preprocessing.sequence import pad_sequences
@@ -18,7 +19,9 @@ class UNSUP_Loader:
         self.all_data['text'] = self.all_data['words'].apply(lambda l: " ".join(l))
         self.train_data, self.test_data = self.all_data.iloc[self.train_data.index], self.all_data.iloc[self.test_data.index]
         self.test_true_labels = self.all_data.y_true.values[self.test_data.index]
-        
+
+        self.ori_train_data, self.ori_test_data = copy.copy(self.train_data), copy.copy(self.test_data)
+
         if args.backbone == 'glove':
             self.embedding_matrix, self.index_word, self.train_data, self.test_data = \
                 get_glove_data(args, self.all_data, self.train_data, self.test_data)
