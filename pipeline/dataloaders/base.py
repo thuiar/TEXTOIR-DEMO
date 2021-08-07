@@ -87,6 +87,14 @@ class Data_Discovery(Discovery):
 
             elif mode == 'eval' or mode == 'test':
                 return ori_examples
+    
+    def get_attrs(self):
+    
+        attrs = {}
+        for name, value in vars(self).items():
+            attrs[name] = value
+
+        return attrs
 
             
 

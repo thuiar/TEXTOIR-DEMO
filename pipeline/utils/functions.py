@@ -2,6 +2,7 @@ import os
 import numpy as np
 import pandas as pd   
 import csv
+import json
 import logging
 
 def save_data(save_path, file_name, texts, labels):
@@ -16,6 +17,31 @@ def save_data(save_path, file_name, texts, labels):
         writer.writerow(['text', 'label'])
         for text, label in zip(texts, labels):
             writer.writerow([text, label]) 
+
+def save_numpy_results(save_path, save_list):
+
+    if not os.path.exists(save_path):
+        f = open(save_path, 'wb')
+
+    with open(save_path, "wb") as f:
+        np.save(f, save_list)
+
+def save_json_results(output_dir, test_results):
+    
+    if not os.path.exists(output_dir):
+        f = open(output_dir, 'w')
+
+    # #Save outputs
+    for key in test_results.keys():
+        if type(test_results[key]) is np.ndarray:
+            test_results[key] = test_results[key].tolist()
+    
+    with open(output_dir, 'w') as f:
+        json_str = json.dumps(test_results, indent = 4)
+        f.write(json_str)
+    # if not os.path.exists(output_dir):
+    #     f = open(output_dir, 'w')
+    #     json.dump(test_results, f, indent=4)
 
 def save_pipeline_results(args, data, manager, test_results):
     
@@ -58,7 +84,7 @@ def save_pipeline_results(args, data, manager, test_results):
         np.save(os.path.join(args.pipe_data_dir, 'known_labels.npy'), np.array(data.known_label_list))
 
 def save_results(args, test_results):
-
+    
     if 'y_true' in test_results.keys():
         del test_results['y_true']
     if 'y_pred' in test_results.keys():
@@ -100,33 +126,36 @@ def save_results(args, test_results):
     logger = logging.getLogger(args.logger_name)
     logger.info('test_results: %s', data_diagram)
 
-def combine_test_results(args,  detection_results, \
+def combine_test_results(args,  detection_preds, \
     discovery_data, discovery_results, logger):
     
-    pred_known_ids = [idx for idx, label in enumerate(detection_results['y_pred']) if label != discovery_data.unseen_token_id]
-    pred_open_ids = [idx for idx, label  in enumerate(detection_results['y_pred']) if label == discovery_data.unseen_token_id]
+    numpy_keys = ['y_pred', 'y_true', 'y_feat']
+    for key in numpy_keys:
+        discovery_results[key] = np.array(discovery_results[key])
 
-    open_feats = discovery_results['feats'][pred_open_ids]
+    pred_known_ids = [idx for idx, label in enumerate(detection_preds) if label != discovery_data["unseen_token_id"]]
+    pred_open_ids = [idx for idx, label  in enumerate(detection_preds) if label == discovery_data["unseen_token_id"]]
 
-    open_k_num = discovery_data.num_labels - discovery_data.n_known_cls
+    open_feats = discovery_results['y_feat'][pred_open_ids]
+
+    open_k_num = discovery_data["num_labels"] - discovery_data["n_known_cls"]
     from sklearn.cluster import KMeans
     km = KMeans(n_clusters=open_k_num, n_jobs=-1, random_state = args.seed)
     km.fit(open_feats)
-    open_labels = km.labels_ + discovery_data.n_known_cls
+    open_labels = km.labels_ + discovery_data["n_known_cls"]
 
-    discovery_results['y_pred'][pred_known_ids] = detection_results['y_pred'][pred_known_ids]
+    discovery_results['y_pred'][pred_known_ids] = detection_preds[pred_known_ids]
     discovery_results['y_pred'][pred_open_ids] = open_labels
 
     test_known_ids =  [idx for idx, label in enumerate(discovery_results['y_true']) \
-        if discovery_data.all_label_list[label] in discovery_data.known_label_list]
+        if discovery_data["all_label_list"][label] in discovery_data["known_label_list"]]
 
     from sklearn.metrics import accuracy_score, f1_score
     known_intent_acc = accuracy_score(discovery_results['y_true'][test_known_ids], discovery_results['y_pred'][test_known_ids])
     known_intent_f1 = f1_score(discovery_results['y_true'][test_known_ids], discovery_results['y_pred'][test_known_ids], average = 'macro')
     
     test_open_ids = [idx for idx, label in enumerate(discovery_results['y_true']) \
-        if discovery_data.all_label_list[label] not in discovery_data.known_label_list]
-    print(discovery_results)
+        if discovery_data["all_label_list"][label] not in discovery_data["known_label_list"]]
     
     from sklearn.metrics import normalized_mutual_info_score, adjusted_rand_score
     open_intent_nmi = normalized_mutual_info_score(discovery_results['y_true'][test_open_ids], discovery_results['y_pred'][test_open_ids])
@@ -138,9 +167,5 @@ def combine_test_results(args,  detection_results, \
                 'open_intent_nmi': round(open_intent_nmi * 100, 2),
                 'open_intent_ari': round(open_intent_ari * 100, 2),
               }
-
-    logger.info("***** Final results *****")
-    for key in sorted(results.keys()):
-        logger.info("  %s = %s", key, str(results[key]))  
 
     return results 

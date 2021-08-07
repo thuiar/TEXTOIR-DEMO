@@ -4,11 +4,13 @@ import logging
 import os
 import datetime
 import sys
+import json
 import copy
+import numpy as np
 
 from keybert import KeyBERT
 from pipeline.configs.base import ParamManager
-from pipeline.utils.functions import save_pipeline_results, combine_test_results
+from pipeline.utils.functions import save_pipeline_results, save_json_results, save_numpy_results, combine_test_results
 from pipeline.dataloaders.base import Data_Detection, Data_Discovery
 
 def parse_arguments():
@@ -29,7 +31,7 @@ def parse_arguments():
 
     parser.add_argument("--method", type=str, default='ADB', help="which detection method to use")
 
-    parser.add_argument("--config_detection_file", type=str, default='ADB.py', help = "The name of the detection config file.")
+    parser.add_argument("--config_file_name", type=str, default='ADB.py', help = "The name of the detection config file.")
 
     parser.add_argument("--train", action="store_true", help="Whether train the detection model.")
 
@@ -39,12 +41,12 @@ def parse_arguments():
 
     parser.add_argument("--save_results", action="store_true", help="Whether save the detection results.")
 
+    parser.add_argument('--setting', type=str, default='semi_supervised', help="Type for clustering methods.")
+
+    parser.add_argument("--cluster_num_factor", default=1.0, type=float, help="The factor (magnification) of the number of clusters K.")
+
     parser.add_argument("--model_dir", default='models', type=str, 
                         help="The output directory where the model predictions and checkpoints will be written.") 
-
-    # parser.add_argument("--discovery_method", type=str, default='DeepAligned', help="which discovery method to use")
-
-    parser.add_argument("--config_discovery_file", type=str, default='DeepAligned.py', help = "The name of the discovery config file.")
 
     parser.add_argument("--output_dir", default= '/home/sharing/disk2/zhanghanlei/save_data_162/TEXTOIR/outputs', type=str, 
                         help="The output directory where all train data will be written.")
@@ -134,16 +136,19 @@ def run_detect(args, logger):
     logger.info('Testing finished...')
 
     if args.save_results:
-        logger.info('Results saved in %s', str(os.path.join(args.result_dir, args.type)))
+
+        logger.info('Results saved in %s', str(args.result_dir))
         from open_intent_detection.utils.functions import save_results
         save_results(args, copy.copy(outputs))
+
+        output_dir = os.path.join(args.pipe_data_dir, args.type + '.npy')
+        # save_json_results(output_json_dir, outputs)
+        save_numpy_results(output_dir, outputs['y_pred'])
+
 
     logger.info('Save pipeline results begin...')
     save_pipeline_results(args, data, method, outputs)
     logger.info('Save pipeline results finished...')
-    
-    return outputs
-
 
 def run_discover(args, logger):
 
@@ -161,6 +166,13 @@ def run_discover(args, logger):
     logger.info('Data and Model Preparation...')
 
     data = Data_Discovery(args, logger_name = args.logger_name)
+    data_properties = data.get_attrs()
+    save_properties = {}
+    property_list = ['num_labels', 'n_known_cls', 'known_label_list', 'all_label_list', 'unseen_token_id']
+
+    for i, key in enumerate(property_list):
+        save_properties[key] = data_properties[key]
+
     
     working_path = '/home/zhanghanlei/git/submit/TEXTOIR-DEMO/open_intent_discovery/'
     sys.path.insert(0, working_path)
@@ -184,29 +196,52 @@ def run_discover(args, logger):
     logger.info('Testing finished...')
 
     if args.save_results:
-        logger.info('Results saved in %s', str(os.path.join(args.results_dir, args.type)))
-        save_results(args, copy.copy(outputs))
         
-    return outputs, data
+        logger.info('Results saved in %s', str(args.result_dir))
+        from open_intent_discovery.utils.functions import save_results
+        save_results(args, copy.copy(outputs))
 
+        output_json_dir = os.path.join(args.pipe_data_dir, args.type + '_outputs.json')
+        
+        save_json_results(output_json_dir, outputs)
+        output_data_dir = os.path.join(args.pipe_data_dir, args.type + '_data.json')
+        save_json_results(output_data_dir, save_properties)
 
 def run():
     
     args = parse_arguments()
     
     logger = set_logger(args)
-    # logger.info('This is the pipeline for open intent detection and discovery...')
     
     if args.type == 'Detection':
-        detection_results = run_detect(args, logger)
+        run_detect(args, logger)
     
     elif args.type == 'Discovery':
-        discovery_results, discovery_data = run_discover(args, logger)
+        run_discover(args, logger)
 
-    # else:
-    #     final_results = combine_test_results(args, detection_results,\
-    #     discovery_data, discovery_results, logger)
-    
+    elif args.type == 'Pipeline':
+
+        logger.info('This is the pipeline for open intent detection and discovery...')
+
+        detection_load_path = os.path.join(args.pipe_data_dir, 'Detection.npy')
+        with open(detection_load_path, 'r')  as f:
+            detection_preds = np.load(detection_load_path)
+
+        outputs_load_path = os.path.join(args.pipe_data_dir, 'Discovery_outputs.json')
+        with open(outputs_load_path, 'r')  as f:
+            discovery_results = json.load(f)  
+        
+        data_load_path = os.path.join(args.pipe_data_dir, 'Discovery_data.json')
+        with open(data_load_path, 'r')  as f:
+            discovery_data = json.load(f)          
+        
+        final_results = combine_test_results(args, detection_preds,\
+            discovery_data, discovery_results, logger)
+
+        logger.info("***** Final results *****")
+        for key in sorted(final_results.keys()):
+            logger.info("  %s = %s", key, str(final_results[key]))
+
     # save_results(args, final_results)
 
 if __name__ == '__main__':

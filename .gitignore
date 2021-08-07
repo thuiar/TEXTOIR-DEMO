@@ -2,6 +2,7 @@ results
 logs
 final_results
 archive
+pipe_data
 __pycache__
 open_intent_detection_v1
 open_intent_detection_v2

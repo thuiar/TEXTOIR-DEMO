@@ -35,8 +35,12 @@ def save_results(args, test_results):
     true_labels_path = os.path.join(args.method_output_dir, 'y_true.npy')
     np.save(true_labels_path, test_results['y_true'])
 
-    del test_results['y_pred']
-    del test_results['y_true']
+    if 'y_true' in test_results.keys():
+        del test_results['y_true']
+    if 'y_pred' in test_results.keys():
+        del test_results['y_pred']
+    if 'y_feat' in test_results.keys():
+        del test_results['y_feat']
 
     if not os.path.exists(args.result_dir):
         os.makedirs(args.result_dir)

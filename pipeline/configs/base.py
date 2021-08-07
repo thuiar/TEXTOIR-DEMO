@@ -8,19 +8,7 @@ class ParamManager:
     
     def __init__(self, args, type = None): 
 
-        if type == 'detection':
-
-            config_file_name = args.config_detection_file
-            method_hyper_param = self.get_method_param(args, config_file_name, type)
-
-        elif type == 'discovery':
-
-            config_file_name = args.config_discovery_file
-            method_hyper_param = self.get_method_param(args, config_file_name, type)
-        
-        else:
-            print('This type of OIR is not implemented, please check if the spell is correct.')
-
+        method_hyper_param = self.get_method_param(args, args.config_file_name, type)
         output_path_param = self.add_output_path_param(args)
 
         self.args = EasyDict(
