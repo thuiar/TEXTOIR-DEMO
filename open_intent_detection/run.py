@@ -119,7 +119,7 @@ def run(args, data, model, logger):
         logger.info('Save frontend results start...')
         save_train_results(args, method.train_results)
         save_evaluation_results(args, data, outputs)
-        save_analysis_table_results(args, data, outputs)
+        save_analysis_table_results(args, data, outputs, type = args.type)
 
         map_save_analysis_figs = {
             'ADB': save_point_results, 
@@ -138,7 +138,7 @@ if __name__ == '__main__':
     args = parse_arguments()
     logger = set_logger(args)
 
-    test = True
+    test = False
     if test:
         args.dataset = 'banking'
         args.method = 'ADB'

@@ -41,9 +41,9 @@ class Data_Discovery(Discovery):
 
         logger = logging.getLogger(logger_name)
 
-        self.data_dir = args.pipe_data_dir
-        self.known_label_list = list(np.load(os.path.join(args.pipe_data_dir, 'known_labels.npy'), allow_pickle=True))
-        self.all_label_list = list(np.load(os.path.join(args.pipe_data_dir, 'all_labels.npy'), allow_pickle=True))
+        self.data_dir = args.exp_dir
+        self.known_label_list = list(np.load(os.path.join(args.exp_dir, 'known_labels.npy'), allow_pickle=True))
+        self.all_label_list = list(np.load(os.path.join(args.exp_dir, 'all_labels.npy'), allow_pickle=True))
 
         self.n_known_cls = len(self.known_label_list)
         self.num_labels = int((len(self.all_label_list)) * args.cluster_num_factor)   
@@ -64,7 +64,7 @@ class Data_Discovery(Discovery):
         self.dataloader.eval_examples = self.get_pipe_examples(args, mode = 'eval')
         self.dataloader.test_examples = self.get_pipe_examples(args, mode = 'test')
 
-        # self.dataloader.get_dataloader(args, self.get_attrs())
+        self.dataloader.get_dataloader(args, self.get_attrs())
         
 
     def get_pipe_examples(self, args, mode = None):
@@ -87,14 +87,6 @@ class Data_Discovery(Discovery):
 
             elif mode == 'eval' or mode == 'test':
                 return ori_examples
-    
-    def get_attrs(self):
-    
-        attrs = {}
-        for name, value in vars(self).items():
-            attrs[name] = value
-
-        return attrs
 
             
 

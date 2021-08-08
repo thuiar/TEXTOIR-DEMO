@@ -131,7 +131,7 @@ if __name__ == '__main__':
     args = parse_arguments()
     logger = set_logger(args)
     
-    test = True
+    test = False
     if test:
         args.dataset = 'banking'
         args.method = 'DeepAligned'

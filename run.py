@@ -8,9 +8,8 @@ import json
 import copy
 import numpy as np
 
-from keybert import KeyBERT
 from pipeline.configs.base import ParamManager
-from pipeline.utils.functions import save_pipeline_results, save_json_results, save_numpy_results, combine_test_results
+from pipeline.utils.functions import save_pipeline_results, save_final_results, save_json_results, save_numpy_results, combine_test_results
 from pipeline.dataloaders.base import Data_Detection, Data_Discovery
 
 def parse_arguments():
@@ -41,6 +40,8 @@ def parse_arguments():
 
     parser.add_argument("--save_results", action="store_true", help="Whether save the detection results.")
 
+    parser.add_argument("--save_frontend_results", action="store_true", help="save final frontend results for open intent recognition.")
+
     parser.add_argument('--setting', type=str, default='semi_supervised', help="Type for clustering methods.")
 
     parser.add_argument("--cluster_num_factor", default=1.0, type=float, help="The factor (magnification) of the number of clusters K.")
@@ -55,13 +56,13 @@ def parse_arguments():
 
     parser.add_argument("--log_dir", type=str, default='logs', help = "The directory of logs.")
 
-    parser.add_argument('--log_id', type=str, default='1', help="Training record ID.")
-
     parser.add_argument('--logger_name', type=str, default='pipeline', help="Logger name for open intent detection.")
 
-    parser.add_argument("--pipe_data_dir", type=str, default = 'pipe_data', help="The path to save results")
+    parser.add_argument("--exp_dir", type=str, default = 'exp', help="The path to save experimental results")
 
-    parser.add_argument("--frontend_result_dir", type=str, default = '/frontend/static/jsons', help="The path to save results")
+    parser.add_argument("--exp_name", type=str, default = 'DeepAligned_ADB', help="The experimental name.")
+
+    parser.add_argument("--frontend_result_dir", type=str, default = sys.path[0] + '/frontend/static/jsons', help="The path to save results")
 
     parser.add_argument("--result_dir", type=str, default = 'results', help="The path to save results")
 
@@ -76,8 +77,9 @@ def set_logger(args):
 
     if not os.path.exists(args.log_dir):
         os.makedirs(args.log_dir)
+
     time = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
-    file_name = f"{time}.log"
+    file_name = f"{args.method}_{args.dataset}_{args.known_cls_ratio}_{args.labeled_ratio}_{args.seed}_{time}.log"
     
     logger = logging.getLogger(args.logger_name)
     logger.setLevel(logging.DEBUG)
@@ -98,7 +100,6 @@ def set_logger(args):
 
 def run_detect(args, logger):
     
-
     param = ParamManager(args, type = 'detection')
     args = param.args
     
@@ -113,9 +114,7 @@ def run_detect(args, logger):
     logger.info('Data and Model Preparation...')
     
     data = Data_Detection(args)
-    
-    working_path = '/home/zhanghanlei/git/submit/TEXTOIR-DEMO/open_intent_detection'
-    sys.path.insert(0, working_path)
+    sys.path.insert(0, args.working_path)
 
     from open_intent_detection.backbones.base import ModelManager as detection_model
     model = detection_model(args, data, logger_name = 'Detection')
@@ -141,14 +140,19 @@ def run_detect(args, logger):
         from open_intent_detection.utils.functions import save_results
         save_results(args, copy.copy(outputs))
 
-        output_dir = os.path.join(args.pipe_data_dir, args.type + '.npy')
-        # save_json_results(output_json_dir, outputs)
+        output_dir = os.path.join(args.exp_dir, args.type + '.npy')
         save_numpy_results(output_dir, outputs['y_pred'])
 
 
     logger.info('Save pipeline results begin...')
     save_pipeline_results(args, data, method, outputs)
     logger.info('Save pipeline results finished...')
+
+    if args.save_frontend_results:
+
+        from open_intent_detection.utils.frontend_analysis import save_analysis_table_results
+        save_analysis_table_results(args, data, outputs, pipeline = True, type = 'open_intent_recognition')
+
 
 def run_discover(args, logger):
 
@@ -173,13 +177,10 @@ def run_discover(args, logger):
     for i, key in enumerate(property_list):
         save_properties[key] = data_properties[key]
 
-    
-    working_path = '/home/zhanghanlei/git/submit/TEXTOIR-DEMO/open_intent_discovery/'
-    sys.path.insert(0, working_path)
+    sys.path.insert(0, args.working_path)
     
     from open_intent_discovery.backbones.base import ModelManager
     model = ModelManager(args, data)
-
 
     from open_intent_discovery.methods import method_map
     method_manager = method_map[args.method]
@@ -201,16 +202,21 @@ def run_discover(args, logger):
         from open_intent_discovery.utils.functions import save_results
         save_results(args, copy.copy(outputs))
 
-        output_json_dir = os.path.join(args.pipe_data_dir, args.type + '_outputs.json')
+        output_json_dir = os.path.join(args.exp_dir, args.type + '_outputs.json')
         
         save_json_results(output_json_dir, outputs)
-        output_data_dir = os.path.join(args.pipe_data_dir, args.type + '_data.json')
+        output_data_dir = os.path.join(args.exp_dir, args.type + '_data.json')
         save_json_results(output_data_dir, save_properties)
 
 def run():
     
     args = parse_arguments()
-    
+
+    args.exp_name = '_'.join([str(x) for x in [args.exp_name, args.dataset, args.known_cls_ratio, args.labeled_ratio, args.seed]])
+    args.exp_dir = os.path.join(args.exp_dir, args.exp_name)
+    if not os.path.exists(args.exp_dir):
+        os.makedirs(args.exp_dir)
+
     logger = set_logger(args)
     
     if args.type == 'Detection':
@@ -223,15 +229,15 @@ def run():
 
         logger.info('This is the pipeline for open intent detection and discovery...')
 
-        detection_load_path = os.path.join(args.pipe_data_dir, 'Detection.npy')
+        detection_load_path = os.path.join(args.exp_dir, 'Detection.npy')
         with open(detection_load_path, 'r')  as f:
             detection_preds = np.load(detection_load_path)
 
-        outputs_load_path = os.path.join(args.pipe_data_dir, 'Discovery_outputs.json')
+        outputs_load_path = os.path.join(args.exp_dir, 'Discovery_outputs.json')
         with open(outputs_load_path, 'r')  as f:
             discovery_results = json.load(f)  
         
-        data_load_path = os.path.join(args.pipe_data_dir, 'Discovery_data.json')
+        data_load_path = os.path.join(args.exp_dir, 'Discovery_data.json')
         with open(data_load_path, 'r')  as f:
             discovery_data = json.load(f)          
         
@@ -241,8 +247,9 @@ def run():
         logger.info("***** Final results *****")
         for key in sorted(final_results.keys()):
             logger.info("  %s = %s", key, str(final_results[key]))
-
-    # save_results(args, final_results)
+        
+        if args.save_results:
+            save_final_results(args, final_results)
 
 if __name__ == '__main__':
 

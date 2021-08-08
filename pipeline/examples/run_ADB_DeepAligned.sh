@@ -2,7 +2,7 @@
 
 for seed in 0
 do
-    for dataset in 'banking'
+    for dataset in 'clinc'
     do
         for known_cls_ratio in 0.25
         do
@@ -18,28 +18,33 @@ do
                 --seed $seed \
                 --train \
                 --backbone 'bert' \
-                --save_model \
                 --save_results \
+                --save_frontend_results \
                 --results_file_name 'results_ADB.csv' 
 
-                python ../run.py \
-                --type 'Discovery' \
-                --dataset $dataset \
-                --method 'DeepAligned' \
-                --setting 'semi_supervised' \
-                --config_file_name 'DeepAligned' \
-                --known_cls_ratio $known_cls_ratio \
-                --labeled_ratio $labeled_ratio \
-                --seed $seed \
-                --train \
-                --backbone 'bert' \
-                --save_model \
-                --save_results \
-                --results_file_name 'results_DeepAligned.csv'   
+                # python ../run.py \
+                # --type 'Discovery' \
+                # --dataset $dataset \
+                # --method 'DeepAligned' \
+                # --setting 'semi_supervised' \
+                # --config_file_name 'DeepAligned.py' \
+                # --known_cls_ratio $known_cls_ratio \
+                # --labeled_ratio $labeled_ratio \
+                # --seed $seed \
+                # --train \
+                # --backbone 'bert' \
+                # --save_results \
+                # --results_file_name 'results_DeepAligned.csv'   
 
-                python ../run.py \
-                --type 'Pipeline' \
-                --seed $seed 
+                # python ../run.py \
+                # --type 'Pipeline' \
+                # --seed $seed \
+                # --dataset $dataset \
+                # --known_cls_ratio $known_cls_ratio \
+                # --labeled_ratio $labeled_ratio \
+                # --method 'ADB+DeepAligned' \
+                # --save_results \
+                # --results_file_name 'results_ADB_DeepAligned.csv'
             done
         done
     done

@@ -39,9 +39,6 @@ def save_json_results(output_dir, test_results):
     with open(output_dir, 'w') as f:
         json_str = json.dumps(test_results, indent = 4)
         f.write(json_str)
-    # if not os.path.exists(output_dir):
-    #     f = open(output_dir, 'w')
-    #     json.dump(test_results, f, indent=4)
 
 def save_pipeline_results(args, data, manager, test_results):
     
@@ -74,44 +71,42 @@ def save_pipeline_results(args, data, manager, test_results):
         test_texts = [example.text_a for example in data.dataloader.test_examples]
         
         #Save file for training discovery
-        save_data(args.pipe_data_dir, 'train.tsv', train_texts, train_labels)
-        save_data(args.pipe_data_dir, 'dev.tsv', eval_texts, eval_labels)
-        save_data(args.pipe_data_dir, 'test.tsv', test_texts, test_true_labels)
-        save_data(args.pipe_data_dir, 'test_preds.tsv', test_texts, test_labels)
+        save_data(args.exp_dir, 'train.tsv', train_texts, train_labels)
+        save_data(args.exp_dir, 'dev.tsv', eval_texts, eval_labels)
+        save_data(args.exp_dir, 'test.tsv', test_texts, test_true_labels)
+        save_data(args.exp_dir, 'test_preds.tsv', test_texts, test_labels)
 
         #Save labels
-        np.save(os.path.join(args.pipe_data_dir, 'all_labels.npy'), np.array(data.all_label_list))
-        np.save(os.path.join(args.pipe_data_dir, 'known_labels.npy'), np.array(data.known_label_list))
+        np.save(os.path.join(args.exp_dir, 'all_labels.npy'), np.array(data.all_label_list))
+        np.save(os.path.join(args.exp_dir, 'known_labels.npy'), np.array(data.known_label_list))
 
-def save_results(args, test_results):
+def save_final_results(args, test_results):
     
     if 'y_true' in test_results.keys():
         del test_results['y_true']
     if 'y_pred' in test_results.keys():
         del test_results['y_pred']
-    if 'feats' in test_results.keys():
+    if 'y_feat' in test_results.keys():
         del test_results['feats']
 
-    if not os.path.exists(args.results_dir):
-        os.makedirs(args.results_dir)
+    if not os.path.exists(args.result_dir):
+        os.makedirs(args.result_dir)
 
-    type_results_path = os.path.join(args.results_dir, args.type)
-    if not os.path.exists(type_results_path):
-        os.makedirs(type_results_path)
+    import datetime
+    created_time = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
 
-    var = [args.dataset, args.detection_method, args.discovery_method, \
-        args.known_cls_ratio, args.labeled_ratio, args.seed]
+    var = [args.dataset, args.method, args.known_cls_ratio, args.labeled_ratio, args.seed, created_time]
 
-    names = ['dataset', 'detection_method', 'discovery_method', 'known_cls_ratio', 'labeled_ratio',  'seed']
+    names = ['dataset', 'method', 'known_cls_ratio', 'labeled_ratio',  'seed', 'create_time']
 
     vars_dict = {k:v for k,v in zip(names, var) }
     results = dict(test_results,**vars_dict)
     keys = list(results.keys())
     values = list(results.values())
     
-    results_path = os.path.join(type_results_path, args.results_file_name)
+    results_path = os.path.join(args.result_dir, args.results_file_name)
     
-    if not os.path.exists(results_path):
+    if not os.path.exists(results_path) or os.path.getsize(results_path) == 0:
         ori = []
         ori.append(values)
         df1 = pd.DataFrame(ori,columns = keys)
@@ -125,6 +120,7 @@ def save_results(args, test_results):
     
     logger = logging.getLogger(args.logger_name)
     logger.info('test_results: %s', data_diagram)
+
 
 def combine_test_results(args,  detection_preds, \
     discovery_data, discovery_results, logger):

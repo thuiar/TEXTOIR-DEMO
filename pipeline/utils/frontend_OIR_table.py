@@ -3,6 +3,7 @@ import json
 import numpy as np
 import logging
 from sklearn.manifold import TSNE
+from torch.utils.data import dataset
 from keybert import KeyBERT
 
 def json_read(path):
@@ -18,11 +19,11 @@ def json_add(predict_t_f, path):
         json.dump(predict_t_f, f, indent=4)
 
 def save_analysis_table_results(args, data, results, logger_name):
-
+    
     test_trues = list([data.all_label_list[idx] for idx in results['y_true']]) 
     test_preds = list([data.all_label_list[idx] for idx in results['y_pred']]) 
     
-    if args.backbone == 'semi_supervised':
+    if args.backbone == 'bert':
         test_texts = np.array([example.text_a for example in data.dataloader.test_examples])
     elif args.setting == 'unsupervised':
         test_texts = np.array([text for text in data.dataloader.ori_test_data.text])
@@ -138,75 +139,3 @@ def save_analysis_table_results(args, data, results, logger_name):
     dataset_info[class_name] = label_list
 
     json_add(dataset_info, results_path)
-
-
-def save_centroid_analysis(args, data, results):
-
-    test_feats = results['y_feat']
-    reduce_feats = TSNE_reduce_feats(test_feats, 2)
-
-    save_dir = os.path.join(args.frontend_result_dir, args.type) 
-    save_file_name = 'Discovery_analysis.json'
-    results_path = os.path.join(save_dir, save_file_name)
-
-    all_dict = {}
-    reduce_centers = []
-    for idx in range(args.num_labels):
-        pos = list(np.where(results['y_pred'] == idx)[0])
-        center = np.mean(reduce_feats[pos], axis = 0)
-        center = [round(float(x), 2) for x in center]
-        reduce_centers.append(center)
-    
-    known_centers = []
-    open_centers = []
-    for idx, center in enumerate(reduce_centers):
-        label = data.all_label_list[idx]
-        if label in data.known_label_list:
-            point = center + [label]
-            known_centers.append(point)
-        else:
-            point = center + [label]
-            open_centers.append(point)
-
-    center_dict = {}
-    center_dict['Known Intent Centers'] = known_centers
-    center_dict['Open Intent Centers'] = open_centers
-    name = str(args.dataset) + '_' +  str(args.method) + '_' + str(args.log_id)
-    all_dict[name] = center_dict
-    json_add(all_dict, results_path)
-
-def TSNE_reduce_feats(feats, dim):
-
-    estimator = TSNE(n_components=dim)
-    reduce_feats = estimator.fit_transform(feats)
-    
-    return reduce_feats
-
-def save_point_results(args, data, results):
-    
-    test_feats = results['y_feat']
-    reduce_feats = TSNE_reduce_feats(test_feats, 2)
-
-    save_dir = os.path.join(args.frontend_result_dir, args.type) 
-    save_file_name = args.method + '_analysis.json'
-    results_path = os.path.join(save_dir, save_file_name)
-
-    data_points = {}
-    points = {}
-    reduce_feats = [[round(float(item[0]), 2), round(float(item[1]), 2) ] for item in reduce_feats ]
-    for idx in range(args.num_labels):
-        pos = list(np.where(results['y_pred'] == idx)[0])
-        label_item = data.label_list[idx]
-
-        samples = []
-        for i, feat in enumerate(reduce_feats):
-            if i in pos:
-                samples.append(feat)
-        points[label_item] = samples
-    data_points['points'] = points
-
-    all_dict = {}
-    sample_name = args.dataset + '_' + args.method + '_' + args.log_id
-    all_dict[sample_name] = data_points 
-    json_add(all_dict, results_path)
-

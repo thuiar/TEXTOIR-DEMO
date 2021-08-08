@@ -15,17 +15,23 @@ def json_add(predict_t_f, path):
     with open(path, 'w') as f:
         json.dump(predict_t_f, f, indent=4)
 
-def save_analysis_table_results(args, data, results):
+def save_analysis_table_results(args, data, results, pipeline = False, type = 'open_intent_detection'):
 
     test_trues = list([data.label_list[idx] for idx in results['y_true']]) 
     test_preds = list([data.label_list[idx] for idx in results['y_pred']]) 
     
     test_texts = [example.text_a for example in data.dataloader.test_examples]
 
-    save_dir = os.path.join(args.frontend_result_dir, args.type) 
+    save_dir = os.path.join(args.frontend_result_dir, type) 
     save_file_name = 'analysis_table_info.json' 
     results_path = os.path.join(save_dir, save_file_name)
-    if os.path.exists(results_path):
+
+    if not os.path.exists(save_dir):
+        os.mkdir(save_dir)
+    
+    if not os.path.exists(results_path):
+        f = open(results_path, 'w')
+    elif os.path.exists(results_path) and (os.path.getsize(results_path) != 0):
         results = json_read(results_path)
     
     predict_labels = np.unique(np.array(test_preds))
@@ -60,10 +66,19 @@ def save_analysis_table_results(args, data, results):
                 'class_type': 'known'
             }
         )
-        text_sample_name = 'text_list_' + args.dataset + "_" + args.method + "_" + args.log_id + "_known_"  + label
+
+        if pipeline:
+            text_sample_name = 'text_list_' + args.dataset + "_known_"  + label
+        else:
+            text_sample_name = 'text_list_' + args.dataset + "_" + args.method + "_" + args.log_id + "_known_"  + label
+
         data_info[text_sample_name] = text_list
     
-    class_sample_name = 'class_list_' + args.dataset + "_" + args.method + "_" + args.log_id + "_known" 
+    if pipeline:
+        class_sample_name = 'class_list_' + args.dataset + "_known" 
+    else:
+        class_sample_name = 'class_list_' + args.dataset + "_" + args.method + "_" + args.log_id + "_known" 
+
     data_info[class_sample_name] = class_list
 
     json_add(data_info, results_path)
