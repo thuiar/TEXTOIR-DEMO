@@ -60,7 +60,7 @@ def parse_arguments():
 
     parser.add_argument("--exp_dir", type=str, default = 'exp', help="The path to save experimental results")
 
-    parser.add_argument("--exp_name", type=str, default = 'DeepAligned_ADB', help="The experimental name.")
+    parser.add_argument("--exp_name", type=str, default = 'ADB_DeepAligned', help="The experimental name.")
 
     parser.add_argument("--frontend_result_dir", type=str, default = sys.path[0] + '/frontend/static/jsons', help="The path to save results")
 
@@ -150,8 +150,10 @@ def run_detect(args, logger):
 
     if args.save_frontend_results:
 
+        logger.info('Save detection frontend results begin...')
         from open_intent_detection.utils.frontend_analysis import save_analysis_table_results
-        save_analysis_table_results(args, data, outputs, pipeline = True, type = 'open_intent_recognition')
+        save_analysis_table_results(args, data, outputs, pipeline = True, save_dir = 'open_intent_recognition')
+        logger.info('Save detection frontend results begin...')
 
 
 def run_discover(args, logger):
@@ -207,6 +209,13 @@ def run_discover(args, logger):
         save_json_results(output_json_dir, outputs)
         output_data_dir = os.path.join(args.exp_dir, args.type + '_data.json')
         save_json_results(output_data_dir, save_properties)
+
+    if args.save_frontend_results:
+        
+        logger.info('Save discovery frontend results begin...')
+        from open_intent_discovery.utils.frontend_analysis import save_analysis_table_results
+        save_analysis_table_results(args, data, outputs, args.logger_name, pipeline = True, save_dir = 'open_intent_recognition')
+        logger.info('Save discovery frontend results finished...')
 
 def run():
     

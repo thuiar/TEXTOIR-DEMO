@@ -119,7 +119,7 @@ def run(args, data, model, logger):
         logger.info('Save frontend results start...')
         save_train_results(args, method.train_results)
         save_evaluation_results(args, data, outputs)
-        save_analysis_table_results(args, data, outputs, type = args.type)
+        save_analysis_table_results(args, data, outputs, save_dir = args.type)
 
         map_save_analysis_figs = {
             'ADB': save_point_results, 

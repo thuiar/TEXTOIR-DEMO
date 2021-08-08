@@ -3,6 +3,7 @@ import json
 import numpy as np
 import logging
 from sklearn.manifold import TSNE
+from torch.utils.data import dataset
 from keybert import KeyBERT
 
 def json_read(path):
@@ -17,18 +18,23 @@ def json_add(predict_t_f, path):
     with open(path, 'w') as f:
         json.dump(predict_t_f, f, indent=4)
 
-def save_analysis_table_results(args, data, results, logger_name):
+def save_analysis_table_results(args, data, results, logger_name, pipeline = False, save_dir = 'open_intent_discovery'):
 
     test_trues = list([data.all_label_list[idx] for idx in results['y_true']]) 
     test_preds = list([data.all_label_list[idx] for idx in results['y_pred']]) 
     
-    if args.backbone == 'semi_supervised':
+    if args.setting == 'semi_supervised':
         test_texts = np.array([example.text_a for example in data.dataloader.test_examples])
     elif args.setting == 'unsupervised':
         test_texts = np.array([text for text in data.dataloader.ori_test_data.text])
     
-    save_dir = os.path.join(args.frontend_result_dir, args.type) 
-    save_file_name = 'analysis_table_info.json' 
+    save_dir = os.path.join(args.frontend_result_dir, save_dir) 
+    
+    if pipeline:
+        save_file_name = args.exp_name + '.json'
+    else:
+        save_file_name = 'analysis_table_info.json' 
+    
     results_path = os.path.join(save_dir, save_file_name)
 
     if not os.path.exists(save_dir):
@@ -38,7 +44,12 @@ def save_analysis_table_results(args, data, results, logger_name):
         f = open(results_path, 'w')
     elif os.path.exists(results_path) and (os.path.getsize(results_path) != 0):
         results = json_read(results_path)
-    
+
+    if pipeline:
+        dataset_info = json_read(results_path)
+    else:
+        dataset_info = {}
+
     logger = logging.getLogger(logger_name)
     logger.info('Loading KeyBERT model start...')
     keywords_model = KeyBERT('distilbert-base-nli-mean-tokens')
@@ -48,9 +59,8 @@ def save_analysis_table_results(args, data, results, logger_name):
     label_list = []
     predict_labels = np.unique(np.array(test_preds))
     
-    dataset_info = {}
-
     for label in predict_labels:
+
         label_sample_ids = [idx for idx, elem in enumerate(test_preds) if elem == label]
         label_texts = test_texts[label_sample_ids]
         doc = " ".join(label_texts)
@@ -131,10 +141,19 @@ def save_analysis_table_results(args, data, results, logger_name):
                 }
             )
         
-        sample_name = 'text_list_'+ args.dataset + "_" + args.method + "_" + str(args.log_id) + "_open_" + label_item
+        if pipeline:
+            sample_name = 'text_list_'+ args.dataset + "_open_" + label_item
+
+        else:
+            sample_name = 'text_list_'+ args.dataset + "_" + args.method + "_" + str(args.log_id) + "_open_" + label_item
+
         dataset_info[sample_name] = text_list
     
-    class_name = "class_list_"  + args.dataset + "_" + args.method + "_" + str(args.log_id) + "_open"
+    if pipeline:
+        class_name = "class_list_"  + args.dataset + "_open"
+    else:
+        class_name = "class_list_"  + args.dataset + "_" + args.method + "_" + str(args.log_id) + "_open"
+
     dataset_info[class_name] = label_list
 
     json_add(dataset_info, results_path)

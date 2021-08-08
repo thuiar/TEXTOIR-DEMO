@@ -15,15 +15,20 @@ def json_add(predict_t_f, path):
     with open(path, 'w') as f:
         json.dump(predict_t_f, f, indent=4)
 
-def save_analysis_table_results(args, data, results, pipeline = False, type = 'open_intent_detection'):
+def save_analysis_table_results(args, data, results, pipeline = False, save_dir = 'open_intent_detection'):
 
     test_trues = list([data.label_list[idx] for idx in results['y_true']]) 
     test_preds = list([data.label_list[idx] for idx in results['y_pred']]) 
     
     test_texts = [example.text_a for example in data.dataloader.test_examples]
 
-    save_dir = os.path.join(args.frontend_result_dir, type) 
-    save_file_name = 'analysis_table_info.json' 
+    save_dir = os.path.join(args.frontend_result_dir, save_dir) 
+    
+    if pipeline:
+        save_file_name = args.exp_name + '.json'
+    else:
+        save_file_name = 'analysis_table_info.json' 
+    
     results_path = os.path.join(save_dir, save_file_name)
 
     if not os.path.exists(save_dir):
