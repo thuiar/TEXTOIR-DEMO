@@ -4,6 +4,8 @@ import pandas as pd
 import csv
 import json
 import logging
+from sklearn.metrics import confusion_matrix, accuracy_score, normalized_mutual_info_score, adjusted_rand_score
+from open_intent_detection.utils.metrics import F_measure
 
 def save_data(save_path, file_name, texts, labels):
     
@@ -146,22 +148,42 @@ def combine_test_results(args,  detection_preds, \
     test_known_ids =  [idx for idx, label in enumerate(discovery_results['y_true']) \
         if discovery_data["all_label_list"][label] in discovery_data["known_label_list"]]
 
-    from sklearn.metrics import accuracy_score, f1_score
-    known_intent_acc = accuracy_score(discovery_results['y_true'][test_known_ids], discovery_results['y_pred'][test_known_ids])
-    known_intent_f1 = f1_score(discovery_results['y_true'][test_known_ids], discovery_results['y_pred'][test_known_ids], average = 'macro')
+    known_true = discovery_results['y_true'][test_known_ids]
+    known_pred = discovery_results['y_pred'][test_known_ids]
     
+    unseen_label_id = len(np.unique(known_true))
+    for idx, elem in enumerate(known_pred):
+        if elem >= unseen_label_id:
+            known_pred[idx] = unseen_label_id
+
+    known_cm = confusion_matrix(known_true, known_pred)
+
+    logger.info("***** Confusion Matrix on Known Intents*****")
+    logger.info("%s", str(known_cm))
+    logger.info("***** ***** ***** ***** ***** ***** ***** *****")
+
+    known_intent_acc = accuracy_score(known_true, known_pred)
+    known_intent_f1 = F_measure(known_cm)['F1-known']
+
     test_open_ids = [idx for idx, label in enumerate(discovery_results['y_true']) \
         if discovery_data["all_label_list"][label] not in discovery_data["known_label_list"]]
     
-    from sklearn.metrics import normalized_mutual_info_score, adjusted_rand_score
-    open_intent_nmi = normalized_mutual_info_score(discovery_results['y_true'][test_open_ids], discovery_results['y_pred'][test_open_ids])
-    open_intent_ari = adjusted_rand_score(discovery_results['y_true'][test_open_ids], discovery_results['y_pred'][test_open_ids])
+    open_true = discovery_results['y_true'][test_open_ids]
+    open_pred = discovery_results['y_pred'][test_open_ids]
+    open_cm = confusion_matrix(open_true, open_pred)
+
+    logger.info("***** Confusion Matrix on Open Intents*****")
+    logger.info("%s", str(open_cm))
+    logger.info("***** ***** ***** ***** ***** ***** ***** *****")
+
+    open_intent_nmi = normalized_mutual_info_score(open_true, open_pred)
+    open_intent_ari = adjusted_rand_score(open_true, open_pred)
 
     results = {
                 'known_intent_acc': round(known_intent_acc * 100, 2),
-                'known_intent_f1': round(known_intent_f1 * 100, 2),
+                'known_intent_f1': round(known_intent_f1, 2),
                 'open_intent_nmi': round(open_intent_nmi * 100, 2),
-                'open_intent_ari': round(open_intent_ari * 100, 2),
+                'open_intent_ari': round(open_intent_ari * 100, 2)
               }
 
     return results 

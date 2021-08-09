@@ -80,7 +80,17 @@ def save_analysis_table_results(args, data, results, pipeline = False, save_dir 
         data_info[text_sample_name] = text_list
     
     if pipeline:
+
+        dataset_list = {}
+        dataset_list["dataset_name"] = args.dataset
+        dataset_list["known_num"] = len([elem for elem in test_preds if elem != '<UNK>'])
+        dataset_list["unknown"] = len(test_trues) - dataset_list["known_num"]
+        known_intent_num = len(np.unique(np.array(test_preds))) - 1
+        dataset_list["open"] = len(data.all_label_list) - known_intent_num
+        data_info["dataset_list"] = dataset_list
+        
         class_sample_name = 'class_list_' + args.dataset + "_known" 
+        
     else:
         class_sample_name = 'class_list_' + args.dataset + "_" + args.method + "_" + args.log_id + "_known" 
 

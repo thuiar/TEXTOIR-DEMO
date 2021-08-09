@@ -29,7 +29,7 @@ class Param():
 
             'bert_model': "/home/sharing/disk1/pretrained_embedding/bert/uncased_L-12_H-768_A-12/",
             "working_path": '/home/zhanghanlei/git/submit/TEXTOIR-DEMO/open_intent_detection',
-            'num_train_epochs': 1,
+            'num_train_epochs': 100,
             'num_labels': None,
             'max_seq_length': None, 
             'freeze_bert_parameters': True,

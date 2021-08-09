@@ -2,9 +2,9 @@
 
 for seed in 0
 do
-    for dataset in 'clinc'
+    for dataset in 'clinc' 'banking' 'stackoverflow' 'snips'
     do
-        for known_cls_ratio in 0.25
+        for known_cls_ratio in 0.5 0.75
         do
             for labeled_ratio in 1.0
             do 
@@ -19,6 +19,7 @@ do
                 --train \
                 --backbone 'bert' \
                 --save_results \
+                --save_model \
                 --save_frontend_results \
                 --exp_name 'ADB_DeepAligned' \
                 --results_file_name 'results_ADB.csv' 
@@ -34,6 +35,7 @@ do
                 --seed $seed \
                 --train \
                 --backbone 'bert' \
+                --save_model \
                 --save_results \
                 --save_frontend_results \
                 --exp_name 'ADB_DeepAligned' \
