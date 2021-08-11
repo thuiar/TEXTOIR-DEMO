@@ -1,9 +1,8 @@
 # TEXTOIR: An Integrated and Visualized Platform for Text Open Intent Recognition
 
 ## :pushpin: What is TEXTOIR
-**TEXOIR** is the first integrated and visualized platform for text Open Intent Recognition. This repo contains a pipeline framework to 
+**TEXOIR** is the first integrated and visualized platform for text Open Intent Recognition. This repo is based on the [TEXTOIR toolkit](https://github.com/thuiar/TEXTOIR). It contains a pipeline framework to perform [open intent detection](./open_intent_detection) and [open_intent_discovery](./open_intent_discovery) simultaneously. It also consists of a [visualization system](./frontend) to demonstrate the whole process of the two sub-modules and the pipeline framework. 
 
-We divide OIR into two categories, open intent detection and open intent discovery. Though both of them are both essential modules for OIR, they have different characteristics and implementation methods. However, there is little related work for integrating these two modules. Although some toolkits are developed for Named Entity Recognition, Sentiment Analysis, there is little related work for intent recognition, not even in open-world settings. Therefore, we build a text open intent recognition platform to fill the blank.
 
 ## :couple: Audiences
 
