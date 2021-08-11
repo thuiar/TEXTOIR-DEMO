@@ -15,18 +15,33 @@ def json_add(predict_t_f, path):
     with open(path, 'w') as f:
         json.dump(predict_t_f, f, indent=4)
 
-def save_train_results(args, result_list):
+def save_test_result(args, test_results):
 
-    save_dir = os.path.join(args.frontend_result_dir, args.type)  
-    save_file_name = 'json_detection_results.json'
-    results_path = os.path.join(save_dir, save_file_name)
+    if os.path.exists(args.test_results_dir):
+        json_data = json_read(args.test_results_dir)
+    
+    
+    record_name =  str(args.dataset) + '_' + str(args.method) + '_' + str(args.log_id)
+    json_data[record_name]={}
+    json_data[record_name]['Acc'] = test_results['Acc']
+    json_data[record_name]['F1'] = test_results['F1']
+    json_data[record_name]['F1-known'] = test_results['F1-known']
+    json_data[record_name]['F1-open'] = test_results['F1-open']  
+
+    json_add(json_data, args.test_results_dir)
+
+def save_train_results(args, result_list):
+    
+    results_path = args.train_results_path
 
     train_loss_list = []
     valid_score_list = []
 
-    for elem in result_list:
-        train_loss_list.append(elem['train_loss'])
-        valid_score_list.append(elem['eval_score'])
+    for i, elem in enumerate(result_list):
+        
+        if i % 5 == 0:
+            train_loss_list.append(elem['train_loss'])
+            valid_score_list.append(elem['eval_score'])
     
     record_name = 'detection_' + str(args.dataset) + '_' + str(args.method) + '_' + str(args.log_id)
 
@@ -34,8 +49,9 @@ def save_train_results(args, result_list):
 
         json_data = {}
         json_data[record_name] = {}
-        json_data[record_name]['Train'] = train_loss_list[:20]
-        json_data[record_name]['Valid'] = valid_score_list[:20]
+        
+        json_data[record_name]['Training'] = train_loss_list[:20]
+        json_data[record_name]['Validation'] = valid_score_list[:20]
 
     else:
 
@@ -43,8 +59,8 @@ def save_train_results(args, result_list):
             json_data = json.load(f)
 
         json_data[record_name] = {}
-        json_data[record_name]['Train'] = train_loss_list[:20]
-        json_data[record_name]['Valid'] = valid_score_list[:20]
+        json_data[record_name]['Training'] = train_loss_list[:20]
+        json_data[record_name]['Validation'] = valid_score_list[:20]
 
     json_add(json_data, results_path)
 

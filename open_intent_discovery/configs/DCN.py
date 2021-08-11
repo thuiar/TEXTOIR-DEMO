@@ -19,7 +19,6 @@ class Param():
             model_name (str): The name of the DCN model (saved in the format of keras).
         """
         hyper_parameters = {
-            'SAE_feats_path': os.path.join('_'.join([str(x) for x in ['SAE', args.dataset, 'sae', str(args.seed)]]), 'models', 'SAE.h5'),
             'num_train_epochs_SAE': 5000,
             'num_train_epochs_DCN': 12000,
             'feat_dim': 2000,

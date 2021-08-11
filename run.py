@@ -155,7 +155,6 @@ def run_detect(args, logger):
         save_analysis_table_results(args, data, outputs, pipeline = True, save_dir = 'open_intent_recognition')
         logger.info('Save detection frontend results begin...')
 
-
 def run_discover(args, logger):
 
     param = ParamManager(args, type = 'discovery')

@@ -37,9 +37,6 @@ def save_analysis_table_results(args, data, results, logger_name, pipeline = Fal
     
     results_path = os.path.join(save_dir, save_file_name)
 
-    if not os.path.exists(save_dir):
-        os.mkdir(save_dir)
-
     if not os.path.exists(results_path):
         f = open(results_path, 'w')
     elif os.path.exists(results_path) and (os.path.getsize(results_path) != 0):
@@ -164,9 +161,7 @@ def save_centroid_analysis(args, data, results):
     test_feats = results['y_feat']
     reduce_feats = TSNE_reduce_feats(test_feats, 2)
 
-    save_dir = os.path.join(args.frontend_result_dir, args.type) 
-    save_file_name = 'Discovery_analysis.json'
-    results_path = os.path.join(save_dir, save_file_name)
+    results_path = args.analysis_file_name
 
     all_dict = {}
     reduce_centers = []
@@ -200,32 +195,3 @@ def TSNE_reduce_feats(feats, dim):
     reduce_feats = estimator.fit_transform(feats)
     
     return reduce_feats
-
-def save_point_results(args, data, results):
-    
-    test_feats = results['y_feat']
-    reduce_feats = TSNE_reduce_feats(test_feats, 2)
-
-    save_dir = os.path.join(args.frontend_result_dir, args.type) 
-    save_file_name = args.method + '_analysis.json'
-    results_path = os.path.join(save_dir, save_file_name)
-
-    data_points = {}
-    points = {}
-    reduce_feats = [[round(float(item[0]), 2), round(float(item[1]), 2) ] for item in reduce_feats ]
-    for idx in range(args.num_labels):
-        pos = list(np.where(results['y_pred'] == idx)[0])
-        label_item = data.label_list[idx]
-
-        samples = []
-        for i, feat in enumerate(reduce_feats):
-            if i in pos:
-                samples.append(feat)
-        points[label_item] = samples
-    data_points['points'] = points
-
-    all_dict = {}
-    sample_name = args.dataset + '_' + args.method + '_' + args.log_id
-    all_dict[sample_name] = data_points 
-    json_add(all_dict, results_path)
-

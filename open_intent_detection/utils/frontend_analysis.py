@@ -110,9 +110,9 @@ def save_point_results(args, data, results):
     test_feats = results['y_feat']
     reduce_feats = TSNE_reduce_feats(test_feats, 2)
 
-    save_dir = os.path.join(args.frontend_result_dir, args.type) 
-    save_file_name = args.method + '_analysis.json'
-    results_path = os.path.join(save_dir, save_file_name)
+    all_data = {} 
+    if os.path.exists(args.analysis_output_dir):
+        all_data = json_read(args.analysis_output_dir)
 
     data_points = {}
     points = {}
@@ -128,10 +128,9 @@ def save_point_results(args, data, results):
         points[label_item] = samples
     data_points['points'] = points
 
-    all_dict = {}
     sample_name = args.dataset + '_' + args.method + '_' + args.log_id
-    all_dict[sample_name] = data_points 
-    json_add(all_dict, results_path)
+    all_data[sample_name] = data_points 
+    json_add(all_data, args.analysis_output_dir)
 
 def save_MSP_results(args, data, results):
     
@@ -184,9 +183,9 @@ def save_MSP_results(args, data, results):
         score = (neg_correct_samples + pos_correct_samples) / len(y_true)
         scores.append(score)
 
-    save_dir = os.path.join(args.frontend_result_dir, args.type) 
-    save_file_name = args.method + '_analysis.json'
-    results_path = os.path.join(save_dir, save_file_name)
+    all_data = {} 
+    if os.path.exists(args.analysis_output_dir):
+        all_data = json_read(args.analysis_output_dir)
 
     sample_data = {}
     sample_data["Known_Intent"] = known_intents
@@ -195,15 +194,15 @@ def save_MSP_results(args, data, results):
     sample["data"] = sample_data
 
     data_x = {}
-    data_x['xais'] = xais
+    data_x['xaxis'] = xais
     data_x["score"] = scores
 
     sample["data_x"] = data_x
     sample_name = args.dataset + '_' + args.method + '_' + args.log_id
-    all_dicts = {}
-    all_dicts[sample_name] = sample   
 
-    json_add(all_dicts, results_path)
+    all_data[sample_name] = sample   
+
+    json_add(all_data, args.analysis_output_dir)
 
 def save_DOC_results(args, data, results):
 
@@ -230,7 +229,7 @@ def save_DOC_results(args, data, results):
     labels_name = list([data.label_list[idx] for idx in labels]) 
 
     for label in labels:
-        xais_name = str(labels_name[label]) + '_xais'
+        xais_name = str(labels_name[label]) + '_xaxis'
         xais[xais_name] = xais_list
 
     index = {}
@@ -294,19 +293,19 @@ def save_DOC_results(args, data, results):
 
     index["Intent_score"] = scores
 
-    save_dir = os.path.join(args.frontend_result_dir, args.type) 
-    save_file_name = args.method + '_analysis.json'
-    results_path = os.path.join(save_dir, save_file_name)
+    all_data = {} 
+    if os.path.exists(args.analysis_output_dir):
+        all_data = json_read(args.analysis_output_dir)
 
     sample = {}
     sample["index"] = index
-    sample["xais"] = xais
+    sample["xaxis"] = xais
     sample["content"] = content
     sample_name = args.dataset + '_' + args.method + '_' + args.log_id
-    all_dicts = {}
-    all_dicts[sample_name] = sample
-    print(all_dicts.keys())
-    json_add(all_dicts, results_path)
+
+    all_data[sample_name] = sample
+    print(all_data.keys())
+    json_add(all_data, args.analysis_output_dir)
 
 def save_OpenMax_results(args, data, results):
     
@@ -364,26 +363,24 @@ def save_OpenMax_results(args, data, results):
         score = (neg_correct_samples + pos_correct_samples) / len(y_true)
         scores.append(score)
 
-    save_dir = os.path.join(args.frontend_result_dir, args.type) 
-    save_file_name = args.method + '_analysis.json'
-    results_path = os.path.join(save_dir, save_file_name)
+    all_data = {} 
+    if os.path.exists(args.analysis_output_dir):
+        all_data = json_read(args.analysis_output_dir)
 
     index = {}
     index["score"] = scores
-    index["xais"] = xais
+    index["xaxis"] = xais
 
     intent_data = {}
-    intent_data["known_intent"] = known_intents
-    intent_data["open_intent"] = open_intents
-    intent_data["predicted_open_intent"] = predicted_open_intents
+    intent_data["Known_Intent"] = known_intents
+    intent_data["Open_Intent"] = open_intents
+
 
     sample_data = {}
-    sample_data["Threshold"] = intent_data
-    sample_data["Index"] = index
-
-    all_data = {}
+    sample_data["data"] = intent_data
+    sample_data["data_x"] = index
     sample_name = args.dataset + '_' + args.method + '_' + args.log_id
     all_data[sample_name] = sample_data
 
 
-    json_add(all_data, results_path)
+    json_add(all_data, args.analysis_output_dir)

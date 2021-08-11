@@ -4,9 +4,9 @@ for seed in 0
 do
     for dataset in 'clinc' 'banking' 'stackoverflow' 'snips'
     do
-        for known_cls_ratio in 0.5 0.75
+        for known_cls_ratio in 0.25 0.5 0.75
         do
-            for labeled_ratio in 1.0
+            for labeled_ratio in 0.5
             do 
                 python ../run.py \
                 --type 'Detection' \
