@@ -14,7 +14,7 @@ backports.os==0.1.1
 backports.shutil-get-terminal-size==1.0.0
 bitarray==0.8.3
 bkcharts==0.2
-bleach==3.1.0
+bleach==3.3.0
 bokeh==1.0.4
 boto==2.49.0
 Bottleneck==1.2.1
