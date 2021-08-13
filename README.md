@@ -89,11 +89,11 @@ Our platform supports training the algorithms in two modules. Users can add a ne
 
 After training starts, users can monitor the training status (finished or failed), observe the set training information, and jump to the evaluation and analysis module corresponding to the training record.
 
-Training for open intent detection:  
+Example of training for open intent detection:  
 
 ![Example](materials/detection_train.png "Example")
 
-Training for open intent discovery:  
+Example of training for open intent discovery:  
 
 ![Example](materials/discovery_train.png "Example")
 
@@ -101,22 +101,22 @@ Training for open intent discovery:
 
 In this module, we show the basic information about the training record, the training results (loss and validation score), the testing results. Moreover, the fine-grained performance of each class and the corresponding error analysis.
 
-Example for parameters and testing results:  
+1. Example of training parameters and testing results:  
 
 ![Example](materials/evaluation_param_test.png "Example")
 
-Example for training results:
+2. Example of training results:
 
-<img src="materials/training_results.png" width="500" height = "170">
+![Example](materials/training_results.png "Example")
 
 
-Example for fine-grained performance:
+3. Example of fine-grained performance:
 
-<img src="materials/fine-grained.png" width="400" height = "200">
+<img src="materials/fine-grained.png" width="700" height = "350">
 
-Evaluation for error analysis:  
+4. Example of error analysis:  
 
-<img src="materials/error_analysis.png" width="400" height = "200">
+<img src="materials/error_analysis.png" width="700" height = "350">
 
 ### Model Analysis
 
@@ -126,11 +126,11 @@ In this module, we first show the fine-grained predicted results of each sample.
 
 We divide the methods into threshold-based methods and geometrical feature based methods. Threshold-based methods are shown in the format of probability distribution. Geometrical feature based methods show the intent features of different points.
 
-Example of analysis table:
+1. Example of analysis table:
 
 ![Example](materials/analysis_table.png "Example")
 
-Example of analysis results:
+2. Example of analysis results:
 ![Example](materials/detection_analysis.png "Example")
 
 
@@ -139,16 +139,19 @@ Example of analysis results:
 
 As we adopt clustering methods (semi-supervised and unsupervised) in this module, we obtain clusters of each discovered open intent. We extract the top-3 high-confidence keywords for each cluster and each sample. The distribution of cluster centroids is shown in the 2D plane.
 
-Example of analysis table:
+1. Example of analysis table:
 ![Example](materials/discovery_table.png "Example")
 
-Example of analysis results:
-<img src="materials/discovery_analysis.png" width="400" height = "300">
+2. Example of analysis results:
+
+<img src="materials/discovery_analysis.PNG" width="700" height = "500">
 
 
 ### Open Intent Recognition
 
 This module visualizes the results of the pipeline framework. It shows the identified known intents and the detected open intent from the open intent detection module, and the discovered open intents (keywords with confidence scores) from the open intent discovery module.
+
+Example of open intent recognition:
 
 ![Example](materials/oir.png "Example")
 
@@ -156,16 +159,18 @@ This module visualizes the results of the pipeline framework. It shows the ident
 
 ### Environments
 
-1. Use anaconda to create Python (version >= 3.6) environment.
+1. Use anaconda to create Python (version >= 3.6) environment:
 ```
 conda create --name textoir python=3.6
 conda activate textoir
 ```
-2. Install PyTorch (Cuda version 11.2).
+
+2. Install PyTorch (Cuda version 11.2):
 ```
 conda install pytorch torchvision torchaudio cudatoolkit=11.0 -c pytorch -c conda-forge  
 ```
-3. Install MySQL. 
+
+3. Install MySQL:
 ```
 sudo apt-get install mysql-server
 sudo apt-get install mysql-client
@@ -175,12 +180,12 @@ pip install pymysql
 ```
 ### Database Configuration 
 
-1. Login MySQL with root.
+1. Login MySQL with root:
 ```
 $ mysql -u root -p
 ```
 
-2. Create a database and make configuration.
+2. Create a database and make configuration:
 ```
 mysql> CREATE DATABASE ds;
 mysql> CREATE USER ds IDENTIFIED BY 'your password';
@@ -205,31 +210,33 @@ DATABASES = {
 ```
 
 ### Quick Start
-1. Clone the TEXTOIR-DEMO repository.
+
+1. Clone the TEXTOIR-DEMO repository:
 ```
 git@github.com:HanleiZhang/TEXTOIR-DEMO.git
 cd TEXTOIR-DEMO
 ```
 2. Install related environmental dependencies
 
-Open intent detection
+Open intent detection:
 ```
 cd open_intent_detection
 pip install -r requirements.txt
 ```
 
-Open intent discovery
+Open intent discovery:
 ```
 cd open_intent_discovery
 pip install -r requirements.txt
 ```
 
-3. Run frontend interfaces.
+3. Run frontend interfaces:
 ```
 cd frontend
 python manage.py runserver 0.0.0.0:8080
 ```
-4. Run open intent recognition examples.
+
+4. Run open intent recognition examples:
 ```
 cd pipeline
 sh examples/run_ADB_DeepAligned.sh
