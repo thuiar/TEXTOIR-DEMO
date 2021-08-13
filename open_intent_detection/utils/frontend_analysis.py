@@ -16,7 +16,7 @@ def json_add(predict_t_f, path):
         json.dump(predict_t_f, f, indent=4)
 
 def save_analysis_table_results(args, data, results, pipeline = False, save_dir = 'open_intent_detection'):
-
+        
     test_trues = list([data.label_list[idx] for idx in results['y_true']]) 
     test_preds = list([data.label_list[idx] for idx in results['y_pred']]) 
     
@@ -45,6 +45,10 @@ def save_analysis_table_results(args, data, results, pipeline = False, save_dir 
     data_info = {}
 
     for label in predict_labels:
+        
+        if pipeline and (label == '<UNK>'):
+            continue
+
         text_list = []
         text_true_list_tmp = []
         known_sample_ids = [idx for idx, elem in enumerate(test_preds) if elem == label]
@@ -304,7 +308,7 @@ def save_DOC_results(args, data, results):
     sample_name = args.dataset + '_' + args.method + '_' + args.log_id
 
     all_data[sample_name] = sample
-    print(all_data.keys())
+    
     json_add(all_data, args.analysis_output_dir)
 
 def save_OpenMax_results(args, data, results):

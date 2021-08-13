@@ -119,6 +119,45 @@
                                     
                                      
                             </div>
+                            <div style="font-weight:700; font-size:20px;color:#555555;margin-left:1.5%">Parameter List</div>
+                            <div style="color:#6F6F6F;margin-left:1.5%;">--Show the parameter list.</div> 
+                            <div class="layui-form " style="margin:0 auto  ;width: 650px;" >
+                                <div >
+                                    <table lay-even class="layui-table lay-even">
+                                        <colgroup>
+                                            <col width = ''>
+                                            <col width = '30%'>
+                                            <!--50% 18.1%-->
+                                        </colgroup>
+                                        <theda>
+                                            <tr>
+                                                <th style='background-color:#eeeded'> Name</th>
+                                                <th style='background-color:#eeeded'> Value</th>
+                                            </tr>
+                                        </theda>
+                                        <tbody id='textarea_parm'>
+                                           
+                                            {% for parameter in parameters %}
+                                            <tr>
+
+                                           
+                                            <td>{{parameter.param_name}}</td>
+                                            <td>{{parameter.default_value}}</td>
+                                        </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+
                             <div style="font-weight:700; font-size:20px;color:#555555">Analysis of Model Results </div>
                             <div style="color:#6F6F6F">--Show the model results of identified intents.</div>
                             <div class="layui-card-body ">
@@ -373,7 +412,8 @@
             console.log(data_chart)
             data_chart_1 = data_chart[data_str][doc_intent];
             data_length = data_chart_1.Known_Intent.length-1;
-            doc_threshold = data_chart[th_str]["Intent_Threshold"]//拿到所有的阈值
+            doc_threshold = data_chart[th_str]["Intent_Threshold"]
+            doc_score = data_chart[th_str]["Intent_score"]
             console.log("low_threshold: "+doc_threshold)
 
             doc_data_chart_x = data_chart[x_str][x_key];
@@ -390,7 +430,7 @@
                                     color:'blue',
                                     fontWeight: 'bolder',
                                     formatter: function (params) {
-                                    str = "Statistics Threshold: " + doc_threshold[t]                                            
+                                    str ="Score:"+doc_score[t].toFixed(1)+"\n"+ "Statistics Threshold: " + doc_threshold[t].toFixed(1)                                            
                                     return str
                                     },          
                                 },
@@ -400,7 +440,8 @@
                                         type:"solid",
                                         color:"blue",
                                     },
-                                    xAxis: doc_threshold[t],
+                                    xAxis: (doc_threshold[t].toString()).substring(0,3),
+                                    // (doc_threshold[t].toString()).substring(0,3)
                                 }]
                             }
                 }) 
@@ -455,7 +496,7 @@
                                 +params[0].name+"<br>"+'</span>'
                                 +params[0].seriesName+": "+'<span style="font-weight:800;font-size:13px;">'+sumNum_k+"<br>"+'</span>'
                                 +params[1].seriesName+": "+'<span style="font-weight:800;font-size:13px;">'+sumNum_n+"<br>"+'</span>'
-                                +'Score: '+'<span style="font-weight:800;font-size:13px;">'+score+"<br>"+'</span>';
+                                ;
                                 return mystr
                             }
                         },
@@ -627,18 +668,48 @@
                     model_detection = $('#model_detection_1').val()  
                     log_id = $('#create_time').val()
                     console.log('log_id: ',log_id)
-/*
-                    console.log('data===='+data);                   
-                    var form_data = new FormData();
-                    form_data.append('model_detection', $('#model_detection').val());
-                    form_data.append('dataset_select_detection', $('#dataset_select_detection').val());
-                    console.log(form_data);*/
-                    //image_show
-                    //model_detection = model_detection_1
-                    // dataset_select_detection = $('#dataset_select_detection').val()
-                    //dataset_select_detection = dataset_name_select_2
-                    console.log("datasetname:   "+dataset_select_detection)
 
+                    $.get('/detection/model_test/show_hyper_parameters?log_id='+log_id, function (data) {                            
+                           if (data.code != 200){ 
+
+                            }
+                    
+                                    form.render('select');
+                                    console.log("_____________________750_____________________")
+                                    $("#textarea_parm").empty();
+                               
+                                    $("#textarea_parm").append('<tr>');
+                                        
+                                        $("#textarea_parm").append("<td style='font-weight:bold;'>known intent ratio</td>");
+                                        $("#textarea_parm").append("<td style='font-weight:bold;'>"+data['ratio'][0]+"</td>");
+                                        
+                                    $("#textarea_parm").append('</tr>');
+
+                                    $("#textarea_parm").append('<tr>');
+                                        
+                                        $("#textarea_parm").append("<td style='font-weight:bold;'>labeled ratio</td>");
+                                        $("#textarea_parm").append("<td style='font-weight:bold;'>"+data['ratio'][1]+"</td>");
+                                        
+                                    $("#textarea_parm").append('</tr>');
+
+                               
+                                for(var i = 0; i<data.data.length;i++){
+                                    $("#textarea_parm").append('<tr>');
+                                        
+                                        $("#textarea_parm").append("<td>"+data.data[i].param_name+"</td>");
+                                        $("#textarea_parm").append("<td>"+data.data[i].default_value+"</td>");
+                                        
+                                    $("#textarea_parm").append('</tr>');
+
+     
+                                }
+                               
+                                   
+
+                                   },'json');
+
+
+                    
                     if(model_detection == 'Open Intent Detection'){
                         layer.msg('Please select Model');
                     } else if( dataset_select_detection == -1 ||  dataset_select_detection == 'Dataset' ){
@@ -712,7 +783,7 @@
                                 var errorMsg = 'Error Analyze'
                             data_chart = data.data;
                             if (data.code != 200){ errorConfirm(errorMsg); return false; }
-                                myChart4.setOption(DeepUnk_chart(data_chart));
+                                myChart4.setOption(ADB_chart(data_chart));
                             },'json')
                     }else if(model_detection == 'DOC'){
                         $('#doc').show();
@@ -759,7 +830,7 @@
                                 var errorMsg = 'Error Analyze'
                             data_chart = data.data;
                             if (data.code != 200){ errorConfirm(errorMsg); return false; }
-                                myChart4.setOption(OpenMax_chart(data_chart));
+                                myChart4.setOption(MSP_chart(data_chart));
                             },'json')
                     }
                     }
@@ -784,6 +855,7 @@
                 form.render('select');
             }
             doc_threshold = data_chart.index.Intent_Threshold 
+            doc_score_0 = data_chart["index"]["Intent_score"][0]
             doc_content_str = "content";
             data_chart_1 = data_chart.content[data_chart.index["Intent_Class"][0]]
             console.log(data_chart_1)
@@ -808,7 +880,7 @@
                                         color:'blue',
                                         fontWeight: 'bolder',
                                         formatter: function (params) {
-                                        str = "Statistics Threshold: " + (doc_threshold[0]).slice(-3);                                            
+                                        str = "Score:"+doc_score_0.toFixed(1)+"\n"+"Statistics Threshold: " + doc_threshold[0].toFixed(1);                                            
                                         return str
                                         },          
                                     },
@@ -818,7 +890,7 @@
                                             type:"solid",
                                             color:'blue',  
                                         },
-                                        xAxis: doc_threshold[0],
+                                        xAxis: (doc_threshold[0].toString()).substring(0,3),
                                     }]
                                 }
                     })
@@ -874,7 +946,7 @@
                             mystr = 'Threshold: '+'<span style="font-weight:800;font-size:13px;">'+((params[0].name))+"<br>"+'</span>'
                             +params[0].seriesName+": "+'<span style="font-weight:800;font-size:13px;">'+sumNum_k+"<br>"+'</span>'
                             +params[1].seriesName+": "+'<span style="font-weight:800;font-size:13px;">'+sumNum_n+"<br>"+'</span>'
-                            +'Score: '+'<span style="font-weight:800;font-size:13px;">'+score+"<br>"+'</span>';
+                            ;
                             return mystr
                         }
                     },
@@ -901,7 +973,7 @@
                         },
                         axisLabel:{
                             show: true,
-                            rotate:"42",
+                            rotate:"0",
                             textStyle:{
                             fontWeight: 550,
                             fontSize:12
@@ -1238,7 +1310,7 @@
                             //get cluster.json
                             layui.jquery.get('/static/jsons/open_intent_detection/ADB_analysis.json', function (data) {
                                 //get cluster
-                                data_chart_5 = data["points_banking"];
+                                data_chart_5 = data["points"];
                                 myChart4.clear();//清除缓存
                                 //循环显示散点
                                 //换行显示legend
@@ -1345,7 +1417,7 @@
        console.log("ADB_chart---------------1342")
        var mylegend = new Array();
        var series = new Array();
-       data_chart_5 = data_chart["points_banking"];   
+       data_chart_5 = data_chart["points"];   
                
        mylegend.push('');
        console.log("ADB_chart---------------1348")
@@ -1367,7 +1439,7 @@
 '#FF7F50','#CD853F','#FF69B4','#8B4513','#FFB6C1','#CD2626','#FF00FF','#BA55D3','#EE9572','#D8BFD8',
 '#36648B','#9B30FF','#009ACD','#AB82FF','#A4D3EE','#BFEFFF','#8B008B','#FF34B3','#FF8C00','#228B22'
        ];
-       data_chart_5 = data_chart["points_banking"];
+       data_chart_5 = data_chart["points"];
        for (var key in data_chart_5){
            console.log(key)
            mylegend.push(key);
@@ -1385,8 +1457,7 @@
                            var dotHtml2 = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#666666"></span>'
                            mystr ='<span style="font-size:10px;">'+params.seriesName+"</br>"
                                +dotHtml2+"Point:"+'</span>' + '<span style="font-weight:800;font-size:14px;">'+"  " +'('+params.data[0]+','+params.data[1]+')'+'</span>'+'<br>'
-                               +dotHtml2+"Center:"+'</span>' + '<span style="font-weight:800;font-size:14px;">'+"  " +'('+params.data[2]+','+params.data[3]+')'+'</span>'+'<br>'
-                               +dotHtml2+"Radiu:"+'</span>' + '<span style="font-weight:800;font-size:14px;">'+"  " +params.data[4]+'</span>';
+                
                            return mystr;
                        }                                                
                }
@@ -1412,8 +1483,11 @@
        var i = 0;
        var intent_data = new Array() ;                          
        var my_color = ['rgba(255, 102, 102,0.8)','rgba(102, 204, 204,0.8)'];
-       msp_data_chart_x = data_chart["data_x"]["xais"];
-       console.log(data_chart.data)
+       msp_data_chart_x = data_chart["data_x"]["xaxis"];
+       msp_score = data_chart["data_x"]["score"];
+
+       console.log(msp_score)
+      
        console.log("MSP---1416")
        data_length = data_chart.data.Known_Intent.length-1;
 
@@ -1428,7 +1502,7 @@
         //                            color:'blue',
         //                            fontWeight: 'bolder',
         //                            formatter: function (params) {
-        //                            str = "Default Threshold: " + '0.5'                                            
+        //                            str =  "Score: " + '0.5'  + '\n' + "Default Threshold: " + '0.5'                                 
         //                            return str
         //                            },          
         //                        },
@@ -1461,7 +1535,9 @@
                    axisPointer:{
                        lineStyle:{color:"blue", type:'line',}
                    },
-                   formatter:function(params){                                        
+                   formatter:function(params){ 
+                       console.log(params);
+                       console.log('1468-----')                                       
                        var sumNum_k = 0;
                        var sumNum_n = 0;
                        var sumAll = 0;
@@ -1490,7 +1566,7 @@
                            mystr = 'Threshold: '+'<span style="font-weight:800;font-size:13px;">'+params[0].name+"<br>"+'</span>'
                            +params[0].seriesName+": "+'<span style="font-weight:800;font-size:13px;">'+sumNum_k+"<br>"+'</span>'
                            +params[1].seriesName+": "+'<span style="font-weight:800;font-size:13px;">'+sumNum_n+"<br>"+'</span>'
-                           +'Score: '+'<span style="font-weight:800;font-size:13px;">'+score+"<br>"+'</span>';
+                           +'Score: '+'<span style="font-weight:800;font-size:13px;">'+msp_score[params[0].dataIndex].toFixed(2)+"<br>"+'</span>';
                            return mystr
                        }                         
                    },

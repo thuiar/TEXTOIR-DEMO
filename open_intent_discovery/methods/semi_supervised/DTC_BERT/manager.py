@@ -2,6 +2,7 @@ import logging
 import copy
 import torch
 import torch.nn.functional as F
+import os
 from .pretrain import PretrainDTCManager
 from sklearn.cluster import KMeans
 from sklearn.metrics import confusion_matrix
@@ -53,6 +54,10 @@ class DTCManager:
                 args.num_train_epochs, args.lr, args.warmup_proportion)
 
         else:
+            self.pretrained_model = restore_model(pretrain_manager.model, os.path.join(args.method_output_dir, 'pretrain'))
+            args.num_labels = data.num_labels
+            self.model = model.set_model(args, data, 'bert')
+            self.load_pretrained_model(pretrain_manager.model)
             self.model = restore_model(self.model, args.model_output_dir)
 
 

@@ -71,20 +71,27 @@
                     }
                     ,cols: [[ //表头
                             {field: 'model_name', title: 'Name' , align: 'center'}
-                            ,{field: 'paper_source', title: 'Paper Source', align: 'center' , templet: function(d){
-                                return '<a style = "text-decoration: underline ; color :blue;"  href="' + d.paper_source + '" target=_blank>Source</a>'
+                            ,{field: 'paper_source', title: 'Source', align: 'center' , templet: function(d){
+
+                                if(d.paper_source!=''&d.code_source!=''){return '<a style = "text-decoration: underline ; color :blue;"  href="' + d.paper_source + '" target=_blank>Paper</a> &nbsp&nbsp <a style = "text-decoration: underline ; color :blue;"  href="' + d.code_source + '" target=_blank>Code</a>'}
+                                else if(d.paper_source=='' & d.code_source!=''){return '<a style = "text-decoration: underline ; color :blue;"  href="' + d.code_source + '" target=_blank>Code</a>'}
+                                else if(d.paper_source!='' & d.code_source==''){return '<a style = "text-decoration: underline ; color :blue;"  href="' + d.paper_source + '" target=_blank>Paper</a>'}
+                                
                                 }
                             }
-                            ,{field: 'code_source', title: 'Code Source', align: 'center' , templet: function(d){
-                                return '<a style = "text-decoration: underline ; color :blue;"  href="' + d.code_source + '" target=_blank>Source</a>'
-                                }
-                            }
+                                
+                            
+                            /*,{field: 'code_source', title: 'Code Source', align: 'center' , templet: function(d){
+                                
+                            }*/
                             ,{field: '', title: 'Method Type' , align: 'center' , templet: function(d){
-                                return 'New Intent Detection'
+                                if(d.model_name=='ADB'|d.model_name=='DeepUnk'){return 'Geometrical feature based'}
+                                else {return 'Threshold-based'}
+                                
                                 }
                             }
-                            ,{field: 'create_time', title: 'Create Time' , align: 'center'}
-                            ,{field: 'right', title: 'Operation', align: 'center' , toolbar: '#barDemo' }
+                            ,{field: 'create_time', title: 'Created Time' , align: 'center'}
+                            ,{field: 'right', title: 'Detailed Information', align: 'center' , toolbar: '#barDemo' }
                             ]] //设置表头
                     ,id: 'search'
                     ,where: {

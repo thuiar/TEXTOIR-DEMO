@@ -1,0 +1,7399 @@
+{
+    "banking_DOC_330": {
+        "index": {
+            "Intent_Class": [
+                "pending_top_up",
+                "why_verify_identity",
+                "top_up_failed",
+                "supported_cards_and_currencies",
+                "exchange_via_app",
+                "declined_card_payment",
+                "unable_to_verify_identity",
+                "exchange_rate",
+                "passcode_forgotten",
+                "verify_my_identity",
+                "declined_cash_withdrawal",
+                "top_up_limits",
+                "apple_pay_or_google_pay",
+                "lost_or_stolen_card",
+                "lost_or_stolen_phone",
+                "balance_not_updated_after_cheque_or_cash_deposit",
+                "change_pin",
+                "getting_virtual_card",
+                "pin_blocked",
+                "get_disposable_virtual_card",
+                "top_up_reverted",
+                "reverted_card_payment?",
+                "topping_up_by_card",
+                "top_up_by_bank_transfer_charge",
+                "virtual_card_not_working",
+                "balance_not_updated_after_bank_transfer",
+                "request_refund",
+                "verify_source_of_funds",
+                "atm_support",
+                "disposable_card_limits",
+                "pending_transfer",
+                "age_limit",
+                "declined_transfer",
+                "card_acceptance",
+                "compromised_card",
+                "card_about_to_expire",
+                "edit_personal_details",
+                "getting_spare_card",
+                "top_up_by_card_charge",
+                "activate_my_card",
+                "exchange_charge",
+                "transfer_not_received_by_recipient",
+                "card_linking",
+                "wrong_exchange_rate_for_cash_withdrawal",
+                "card_swallowed",
+                "direct_debit_payment_not_recognised",
+                "transaction_charged_twice",
+                "extra_charge_on_statement",
+                "card_payment_wrong_exchange_rate",
+                "Refund_not_showing_up",
+                "wrong_amount_of_cash_received",
+                "card_not_working",
+                "automatic_top_up",
+                "terminate_account",
+                "card_payment_fee_charged",
+                "receiving_money",
+                "cash_withdrawal_charge",
+                "verify_top_up"
+            ],
+            "Intent_Threshold": [
+                0.702112212121212,
+                0.5,
+                0.8929,
+                0.5,
+                0.506237042480167,
+                0.5,
+                0.5,
+                0.7334165712346825,
+                0.5328926832217631,
+                0.5,
+                0.5993147271309784,
+                0.5,
+                0.546429246882711,
+                0.5,
+                0.5901314782945553,
+                0.733400660197813,
+                0.5222380428120237,
+                0.5,
+                0.5,
+                0.5,
+                0.5442429681760707,
+                0.5606513248499759,
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                0.5994730989466588,
+                0.5042233669437282,
+                0.5,
+                0.5005895907470321,
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                0.69071390214971,
+                0.6744886011474134,
+                0.5071094658251185,
+                0.5414469676493292,
+                0.6830912682940602,
+                0.5,
+                0.643577164492667,
+                0.5404589652116696,
+                0.7169848030805084,
+                0.8413678825838263,
+                0.6723744535186545,
+                0.7448859511246974,
+                0.5,
+                0.5,
+                0.6274418996465623,
+                0.7581325058772157,
+                0.5,
+                0.745706229627378,
+                0.5
+            ],
+            "Intent_score": [
+                0.3596753246753247,
+                0.3496753246753247,
+                0.3496753246753247,
+                0.3496753246753247,
+                0.3496753246753247,
+                0.3496753246753247,
+                0.3496753246753247,
+                0.38246753246753246,
+                0.3496753246753247,
+                0.3496753246753247,
+                0.35,
+                0.3496753246753247,
+                0.3496753246753247,
+                0.3496753246753247,
+                0.3496753246753247,
+                0.38246753246753246,
+                0.3496753246753247,
+                0.3496753246753247,
+                0.3496753246753247,
+                0.3496753246753247,
+                0.3496753246753247,
+                0.3496753246753247,
+                0.3496753246753247,
+                0.3496753246753247,
+                0.3496753246753247,
+                0.3496753246753247,
+                0.35,
+                0.3496753246753247,
+                0.3496753246753247,
+                0.3496753246753247,
+                0.3496753246753247,
+                0.3496753246753247,
+                0.3496753246753247,
+                0.3496753246753247,
+                0.3496753246753247,
+                0.3496753246753247,
+                0.3496753246753247,
+                0.3496753246753247,
+                0.3496753246753247,
+                0.3672077922077922,
+                0.3626623376623377,
+                0.3496753246753247,
+                0.3496753246753247,
+                0.3665584415584416,
+                0.3496753246753247,
+                0.3516233766233766,
+                0.3496753246753247,
+                0.3762987012987013,
+                0.3412337662337662,
+                0.36233766233766235,
+                0.3827922077922078,
+                0.3496753246753247,
+                0.3496753246753247,
+                0.350974025974026,
+                0.3775974025974026,
+                0.3496753246753247,
+                0.38181818181818183,
+                0.3496753246753247
+            ]
+        },
+        "xaxis": {
+            "pending_top_up_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "why_verify_identity_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "top_up_failed_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "supported_cards_and_currencies_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "exchange_via_app_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "declined_card_payment_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "unable_to_verify_identity_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "exchange_rate_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "passcode_forgotten_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "verify_my_identity_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "declined_cash_withdrawal_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "top_up_limits_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "apple_pay_or_google_pay_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "lost_or_stolen_card_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "lost_or_stolen_phone_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "balance_not_updated_after_cheque_or_cash_deposit_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "change_pin_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "getting_virtual_card_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "pin_blocked_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "get_disposable_virtual_card_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "top_up_reverted_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "reverted_card_payment?_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "topping_up_by_card_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "top_up_by_bank_transfer_charge_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "virtual_card_not_working_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "balance_not_updated_after_bank_transfer_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "request_refund_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "verify_source_of_funds_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "atm_support_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "disposable_card_limits_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "pending_transfer_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "age_limit_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "declined_transfer_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "card_acceptance_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "compromised_card_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "card_about_to_expire_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "edit_personal_details_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "getting_spare_card_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "top_up_by_card_charge_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "activate_my_card_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "exchange_charge_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "transfer_not_received_by_recipient_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "card_linking_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "wrong_exchange_rate_for_cash_withdrawal_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "card_swallowed_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "direct_debit_payment_not_recognised_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "transaction_charged_twice_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "extra_charge_on_statement_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "card_payment_wrong_exchange_rate_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "Refund_not_showing_up_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "wrong_amount_of_cash_received_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "card_not_working_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "automatic_top_up_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "terminate_account_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "card_payment_fee_charged_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "receiving_money_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "cash_withdrawal_charge_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "verify_top_up_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ]
+        },
+        "content": {
+            "pending_top_up": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    3,
+                    9,
+                    13,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -1,
+                    -3,
+                    -2,
+                    0,
+                    0
+                ]
+            },
+            "why_verify_identity": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    7,
+                    23,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "top_up_failed": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    2,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "supported_cards_and_currencies": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    15,
+                    27,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -14,
+                    -11,
+                    0,
+                    0
+                ]
+            },
+            "exchange_via_app": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    9,
+                    11,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -8,
+                    -6,
+                    0,
+                    0
+                ]
+            },
+            "declined_card_payment": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    9,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -1,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "unable_to_verify_identity": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    2,
+                    9,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "exchange_rate": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    7,
+                    45,
+                    9
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -12,
+                    -11,
+                    0
+                ]
+            },
+            "passcode_forgotten": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    12,
+                    9,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -4,
+                    0,
+                    0
+                ]
+            },
+            "verify_my_identity": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    26,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -1,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "declined_cash_withdrawal": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    15,
+                    40,
+                    22,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -2,
+                    -8,
+                    0,
+                    0
+                ]
+            },
+            "top_up_limits": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    34,
+                    1,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "apple_pay_or_google_pay": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    7,
+                    29,
+                    28,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -3,
+                    -10,
+                    0,
+                    0
+                ]
+            },
+            "lost_or_stolen_card": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    2,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "lost_or_stolen_phone": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    10,
+                    50,
+                    22,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -2,
+                    -14,
+                    -1,
+                    0
+                ]
+            },
+            "balance_not_updated_after_cheque_or_cash_deposit": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    22,
+                    111,
+                    2
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -26,
+                    -78,
+                    0
+                ]
+            },
+            "change_pin": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    26,
+                    9,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -1,
+                    -11,
+                    -3,
+                    0
+                ]
+            },
+            "getting_virtual_card": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "pin_blocked": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    8,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "get_disposable_virtual_card": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    19,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "top_up_reverted": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    6,
+                    44,
+                    47,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -3,
+                    -9,
+                    0,
+                    0
+                ]
+            },
+            "reverted_card_payment?": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    4,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "topping_up_by_card": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "top_up_by_bank_transfer_charge": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    2,
+                    0,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "virtual_card_not_working": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "balance_not_updated_after_bank_transfer": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    5,
+                    4,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -3,
+                    -7,
+                    0,
+                    0
+                ]
+            },
+            "request_refund": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    6,
+                    15,
+                    22,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -4,
+                    -18,
+                    0,
+                    0
+                ]
+            },
+            "verify_source_of_funds": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    3,
+                    31,
+                    7,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -10,
+                    -19,
+                    0,
+                    0
+                ]
+            },
+            "atm_support": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    3,
+                    0,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "disposable_card_limits": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    39,
+                    8,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -5,
+                    -3,
+                    0,
+                    0
+                ]
+            },
+            "pending_transfer": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    4,
+                    22,
+                    11,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -11,
+                    -19,
+                    -2,
+                    0
+                ]
+            },
+            "age_limit": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    3,
+                    27,
+                    5,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "declined_transfer": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    6,
+                    15,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -1,
+                    -10,
+                    0,
+                    0
+                ]
+            },
+            "card_acceptance": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "compromised_card": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "card_about_to_expire": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    3,
+                    14,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -2,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "edit_personal_details": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    2,
+                    22,
+                    3,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -1,
+                    -1,
+                    0,
+                    0
+                ]
+            },
+            "getting_spare_card": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    3,
+                    24,
+                    1,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -20,
+                    -10,
+                    0,
+                    0
+                ]
+            },
+            "top_up_by_card_charge": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    2,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -2,
+                    -1,
+                    0,
+                    0
+                ]
+            },
+            "activate_my_card": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    5,
+                    261,
+                    102,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -4,
+                    -86,
+                    -5,
+                    0
+                ]
+            },
+            "exchange_charge": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    13,
+                    44,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -1,
+                    -10,
+                    -14,
+                    0
+                ]
+            },
+            "transfer_not_received_by_recipient": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    12,
+                    6,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -1,
+                    -19,
+                    -4,
+                    0
+                ]
+            },
+            "card_linking": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    4,
+                    10,
+                    3,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -1,
+                    -4,
+                    0,
+                    0
+                ]
+            },
+            "wrong_exchange_rate_for_cash_withdrawal": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    3,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -1,
+                    0,
+                    -3,
+                    0
+                ]
+            },
+            "card_swallowed": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "direct_debit_payment_not_recognised": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    2,
+                    20,
+                    33,
+                    1
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -22,
+                    -20,
+                    0
+                ]
+            },
+            "transaction_charged_twice": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    5,
+                    2,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -1,
+                    0
+                ]
+            },
+            "extra_charge_on_statement": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    4,
+                    23,
+                    7
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -3,
+                    -4,
+                    0
+                ]
+            },
+            "card_payment_wrong_exchange_rate": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    14,
+                    55
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -2,
+                    0
+                ]
+            },
+            "Refund_not_showing_up": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    2,
+                    27,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -3,
+                    -1,
+                    0
+                ]
+            },
+            "wrong_amount_of_cash_received": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    12,
+                    82,
+                    13
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -2,
+                    -26,
+                    0
+                ]
+            },
+            "card_not_working": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    2,
+                    1,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "automatic_top_up": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    2,
+                    14,
+                    9,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -3,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "terminate_account": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    2,
+                    10,
+                    38,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -1,
+                    -4,
+                    0,
+                    0
+                ]
+            },
+            "card_payment_fee_charged": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    24,
+                    127,
+                    26
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -5,
+                    -34,
+                    -8
+                ]
+            },
+            "receiving_money": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "cash_withdrawal_charge": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    13,
+                    53,
+                    9
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -6,
+                    -15,
+                    -2
+                ]
+            },
+            "verify_top_up": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    7,
+                    2,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            }
+        }
+    },
+    "snips_DOC_408": {
+        "index": {
+            "Intent_Class": [
+                "SearchScreeningEvent"
+            ],
+            "Intent_Threshold": [
+                0.5
+            ],
+            "Intent_score": [
+                0.5542857142857143
+            ]
+        },
+        "xaxis": {
+            "SearchScreeningEvent_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ]
+        },
+        "content": {
+            "SearchScreeningEvent": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    47,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -252,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            }
+        }
+    },
+    "snips_DOC_410": {
+        "index": {
+            "Intent_Class": [
+                "SearchScreeningEvent",
+                "GetWeather"
+            ],
+            "Intent_Threshold": [
+                0.5,
+                0.5467212493671436
+            ],
+            "Intent_score": [
+                0.30857142857142855,
+                0.3514285714285714
+            ]
+        },
+        "xaxis": {
+            "SearchScreeningEvent_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "GetWeather_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ]
+        },
+        "content": {
+            "SearchScreeningEvent": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    12,
+                    16,
+                    47,
+                    30,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -131,
+                    -253,
+                    -93,
+                    -1,
+                    0
+                ]
+            },
+            "GetWeather": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    10,
+                    34,
+                    59,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -2,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            }
+        }
+    },
+    "snips_DOC_446": {
+        "index": {
+            "Intent_Class": [
+                "SearchScreeningEvent",
+                "GetWeather"
+            ],
+            "Intent_Threshold": [
+                0.5,
+                0.5467212493671436
+            ],
+            "Intent_score": [
+                0.30857142857142855,
+                0.3514285714285714
+            ]
+        },
+        "xaxis": {
+            "SearchScreeningEvent_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "GetWeather_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ]
+        },
+        "content": {
+            "SearchScreeningEvent": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    12,
+                    16,
+                    47,
+                    30,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -131,
+                    -253,
+                    -93,
+                    -1,
+                    0
+                ]
+            },
+            "GetWeather": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    10,
+                    34,
+                    59,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -2,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            }
+        }
+    },
+    "banking_DOC_447": {
+        "index": {
+            "Intent_Class": [
+                "pending_top_up",
+                "why_verify_identity",
+                "top_up_failed",
+                "supported_cards_and_currencies",
+                "exchange_via_app",
+                "declined_card_payment",
+                "unable_to_verify_identity",
+                "exchange_rate",
+                "passcode_forgotten",
+                "verify_my_identity",
+                "declined_cash_withdrawal",
+                "top_up_limits",
+                "apple_pay_or_google_pay",
+                "lost_or_stolen_card",
+                "lost_or_stolen_phone",
+                "balance_not_updated_after_cheque_or_cash_deposit",
+                "change_pin",
+                "getting_virtual_card",
+                "pin_blocked",
+                "get_disposable_virtual_card",
+                "top_up_reverted",
+                "reverted_card_payment?",
+                "topping_up_by_card"
+            ],
+            "Intent_Threshold": [
+                0.8764599622335127,
+                0.9822586144131643,
+                0.9148458386831894,
+                0.9810957041709039,
+                0.9919951593126982,
+                0.9876509714910822,
+                0.9685467110564648,
+                0.9896136005725579,
+                0.9895733533933624,
+                0.9583499020931252,
+                0.9350738665877103,
+                0.9821412431323864,
+                0.987400373324619,
+                0.9720783146797397,
+                0.9837154026058224,
+                0.9884079096645023,
+                0.9923827763410493,
+                0.9932926115981944,
+                0.9866897029542926,
+                0.9725176391676998,
+                0.9739033926826639,
+                0.9650697828550847,
+                0.9285874839789515
+            ],
+            "Intent_score": [
+                0.6107142857142858,
+                0.6876623376623376,
+                0.6133116883116884,
+                0.6798701298701298,
+                0.7675324675324675,
+                0.7269480519480519,
+                0.6386363636363637,
+                0.7457792207792208,
+                0.7448051948051948,
+                0.6275974025974026,
+                0.6155844155844156,
+                0.687012987012987,
+                0.7266233766233766,
+                0.6451298701298701,
+                0.6987012987012987,
+                0.7344155844155844,
+                0.7717532467532467,
+                0.7899350649350649,
+                0.7217532467532467,
+                0.6461038961038961,
+                0.6535714285714286,
+                0.6331168831168831,
+                0.6146103896103896
+            ]
+        },
+        "xaxis": {
+            "pending_top_up_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "why_verify_identity_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "top_up_failed_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "supported_cards_and_currencies_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "exchange_via_app_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "declined_card_payment_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "unable_to_verify_identity_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "exchange_rate_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "passcode_forgotten_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "verify_my_identity_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "declined_cash_withdrawal_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "top_up_limits_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "apple_pay_or_google_pay_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "lost_or_stolen_card_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "lost_or_stolen_phone_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "balance_not_updated_after_cheque_or_cash_deposit_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "change_pin_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "getting_virtual_card_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "pin_blocked_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "get_disposable_virtual_card_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "top_up_reverted_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "reverted_card_payment?_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "topping_up_by_card_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ]
+        },
+        "content": {
+            "pending_top_up": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    37
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -4,
+                    -56
+                ]
+            },
+            "why_verify_identity": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    39
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -1
+                ]
+            },
+            "top_up_failed": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    42
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -4
+                ]
+            },
+            "supported_cards_and_currencies": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    38
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -94
+                ]
+            },
+            "exchange_via_app": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    34
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -39
+                ]
+            },
+            "declined_card_payment": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    39
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -46
+                ]
+            },
+            "unable_to_verify_identity": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    37
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -1
+                ]
+            },
+            "exchange_rate": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    40
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -48
+                ]
+            },
+            "passcode_forgotten": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    40
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "verify_my_identity": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    44
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -15
+                ]
+            },
+            "declined_cash_withdrawal": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    43
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -198
+                ]
+            },
+            "top_up_limits": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    41
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -12
+                ]
+            },
+            "apple_pay_or_google_pay": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    40
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -1
+                ]
+            },
+            "lost_or_stolen_card": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    41
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -61
+                ]
+            },
+            "lost_or_stolen_phone": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    37
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -6
+                ]
+            },
+            "balance_not_updated_after_cheque_or_cash_deposit": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    37
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -66
+                ]
+            },
+            "change_pin": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    41
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -9
+                ]
+            },
+            "getting_virtual_card": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    41
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -8
+                ]
+            },
+            "pin_blocked": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    32
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -10
+                ]
+            },
+            "get_disposable_virtual_card": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    34
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -62
+                ]
+            },
+            "top_up_reverted": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    39
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -5
+                ]
+            },
+            "reverted_card_payment?": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    37
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -306
+                ]
+            },
+            "topping_up_by_card": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    37
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -54
+                ]
+            }
+        }
+    },
+    "banking_DOC_453": {
+        "index": {
+            "Intent_Class": [
+                "pending_top_up",
+                "why_verify_identity",
+                "top_up_failed",
+                "supported_cards_and_currencies",
+                "exchange_via_app",
+                "declined_card_payment",
+                "unable_to_verify_identity",
+                "exchange_rate",
+                "passcode_forgotten",
+                "verify_my_identity",
+                "declined_cash_withdrawal",
+                "top_up_limits",
+                "apple_pay_or_google_pay",
+                "lost_or_stolen_card",
+                "lost_or_stolen_phone",
+                "balance_not_updated_after_cheque_or_cash_deposit",
+                "change_pin",
+                "getting_virtual_card",
+                "pin_blocked",
+                "get_disposable_virtual_card",
+                "top_up_reverted",
+                "reverted_card_payment?",
+                "topping_up_by_card"
+            ],
+            "Intent_Threshold": [
+                0.8764599622335127,
+                0.9822586144131643,
+                0.9148458386831894,
+                0.9810957041709039,
+                0.9919951593126982,
+                0.9876509714910822,
+                0.9685467110564648,
+                0.9896136005725579,
+                0.9895733533933624,
+                0.9583499020931252,
+                0.9350738665877103,
+                0.9821412431323864,
+                0.987400373324619,
+                0.9720783146797397,
+                0.9837154026058224,
+                0.9884079096645023,
+                0.9923827763410493,
+                0.9932926115981944,
+                0.9866897029542926,
+                0.9725176391676998,
+                0.9739033926826639,
+                0.9650697828550847,
+                0.9285874839789515
+            ],
+            "Intent_score": [
+                0.6107142857142858,
+                0.6876623376623376,
+                0.6133116883116884,
+                0.6798701298701298,
+                0.7675324675324675,
+                0.7269480519480519,
+                0.6386363636363637,
+                0.7457792207792208,
+                0.7448051948051948,
+                0.6275974025974026,
+                0.6155844155844156,
+                0.687012987012987,
+                0.7266233766233766,
+                0.6451298701298701,
+                0.6987012987012987,
+                0.7344155844155844,
+                0.7717532467532467,
+                0.7899350649350649,
+                0.7217532467532467,
+                0.6461038961038961,
+                0.6535714285714286,
+                0.6331168831168831,
+                0.6146103896103896
+            ]
+        },
+        "xaxis": {
+            "pending_top_up_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "why_verify_identity_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "top_up_failed_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "supported_cards_and_currencies_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "exchange_via_app_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "declined_card_payment_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "unable_to_verify_identity_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "exchange_rate_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "passcode_forgotten_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "verify_my_identity_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "declined_cash_withdrawal_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "top_up_limits_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "apple_pay_or_google_pay_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "lost_or_stolen_card_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "lost_or_stolen_phone_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "balance_not_updated_after_cheque_or_cash_deposit_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "change_pin_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "getting_virtual_card_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "pin_blocked_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "get_disposable_virtual_card_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "top_up_reverted_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "reverted_card_payment?_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "topping_up_by_card_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ]
+        },
+        "content": {
+            "pending_top_up": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    37
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -4,
+                    -56
+                ]
+            },
+            "why_verify_identity": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    39
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -1
+                ]
+            },
+            "top_up_failed": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    42
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -4
+                ]
+            },
+            "supported_cards_and_currencies": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    38
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -94
+                ]
+            },
+            "exchange_via_app": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    34
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -39
+                ]
+            },
+            "declined_card_payment": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    39
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -46
+                ]
+            },
+            "unable_to_verify_identity": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    37
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -1
+                ]
+            },
+            "exchange_rate": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    40
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -48
+                ]
+            },
+            "passcode_forgotten": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    40
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "verify_my_identity": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    44
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -15
+                ]
+            },
+            "declined_cash_withdrawal": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    43
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -198
+                ]
+            },
+            "top_up_limits": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    41
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -12
+                ]
+            },
+            "apple_pay_or_google_pay": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    40
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -1
+                ]
+            },
+            "lost_or_stolen_card": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    41
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -61
+                ]
+            },
+            "lost_or_stolen_phone": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    37
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -6
+                ]
+            },
+            "balance_not_updated_after_cheque_or_cash_deposit": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    37
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -66
+                ]
+            },
+            "change_pin": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    41
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -9
+                ]
+            },
+            "getting_virtual_card": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    41
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -8
+                ]
+            },
+            "pin_blocked": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    32
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -10
+                ]
+            },
+            "get_disposable_virtual_card": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    34
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -62
+                ]
+            },
+            "top_up_reverted": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    39
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -5
+                ]
+            },
+            "reverted_card_payment?": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    37
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -306
+                ]
+            },
+            "topping_up_by_card": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    37
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -54
+                ]
+            }
+        }
+    },
+    "stackoverflow_DOC_467": {
+        "index": {
+            "Intent_Class": [
+                "visual-studio",
+                "apache",
+                "wordpress",
+                "linq",
+                "matlab",
+                "svn",
+                "haskell",
+                "qt",
+                "drupal",
+                "bash",
+                "excel",
+                "scala",
+                "magento",
+                "hibernate",
+                "spring"
+            ],
+            "Intent_Threshold": [
+                0.816240116543296,
+                0.8774085880537321,
+                0.8692764384574537,
+                0.8615198535887071,
+                0.8393823264819449,
+                0.9012785394438259,
+                0.8865707178951417,
+                0.8231548623574739,
+                0.8605610161175431,
+                0.8978176159562746,
+                0.8262078620788023,
+                0.8560022753079315,
+                0.8760205882645914,
+                0.8602467719013513,
+                0.8313397212089787
+            ],
+            "Intent_score": [
+                0.7055,
+                0.7166666666666667,
+                0.7126666666666667,
+                0.7116666666666667,
+                0.708,
+                0.7321666666666666,
+                0.7215,
+                0.706,
+                0.7115,
+                0.7296666666666667,
+                0.706,
+                0.7096666666666667,
+                0.7158333333333333,
+                0.711,
+                0.7066666666666667
+            ]
+        },
+        "xaxis": {
+            "visual-studio_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "apache_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "wordpress_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "linq_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "matlab_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "svn_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "haskell_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "qt_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "drupal_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "bash_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "excel_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "scala_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "magento_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "hibernate_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "spring_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ]
+        },
+        "content": {
+            "visual-studio": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    8,
+                    275
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -42,
+                    -129
+                ]
+            },
+            "apache": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    3,
+                    281
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -15,
+                    -198
+                ]
+            },
+            "wordpress": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    2,
+                    297
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -5,
+                    -60
+                ]
+            },
+            "linq": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    8,
+                    287
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -22,
+                    -99
+                ]
+            },
+            "matlab": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    283
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -3,
+                    -3
+                ]
+            },
+            "svn": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    306
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -47
+                ]
+            },
+            "haskell": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    3,
+                    311
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -5,
+                    -33
+                ]
+            },
+            "qt": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    9,
+                    287
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -4,
+                    -18
+                ]
+            },
+            "drupal": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    300
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -7,
+                    -79
+                ]
+            },
+            "bash": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    305
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -4,
+                    -222
+                ]
+            },
+            "excel": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    5,
+                    295
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -12,
+                    -61
+                ]
+            },
+            "scala": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    5,
+                    280
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -6,
+                    -21
+                ]
+            },
+            "magento": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    2,
+                    294
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -9,
+                    -20
+                ]
+            },
+            "hibernate": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    4,
+                    283
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -2,
+                    -56
+                ]
+            },
+            "spring": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    6,
+                    288
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -28,
+                    -107
+                ]
+            }
+        }
+    },
+    "stackoverflow_DOC_468": {
+        "index": {
+            "Intent_Class": [
+                "visual-studio",
+                "apache",
+                "wordpress",
+                "linq",
+                "matlab",
+                "svn",
+                "haskell",
+                "qt",
+                "drupal",
+                "bash",
+                "excel",
+                "scala",
+                "magento",
+                "hibernate",
+                "spring"
+            ],
+            "Intent_Threshold": [
+                0.816240116543296,
+                0.8774085880537321,
+                0.8692764384574537,
+                0.8615198535887071,
+                0.8393823264819449,
+                0.9012785394438259,
+                0.8865707178951417,
+                0.8231548623574739,
+                0.8605610161175431,
+                0.8978176159562746,
+                0.8262078620788023,
+                0.8560022753079315,
+                0.8760205882645914,
+                0.8602467719013513,
+                0.8313397212089787
+            ],
+            "Intent_score": [
+                0.7055,
+                0.7166666666666667,
+                0.7126666666666667,
+                0.7116666666666667,
+                0.708,
+                0.7321666666666666,
+                0.7215,
+                0.706,
+                0.7115,
+                0.7296666666666667,
+                0.706,
+                0.7096666666666667,
+                0.7158333333333333,
+                0.711,
+                0.7066666666666667
+            ]
+        },
+        "xaxis": {
+            "visual-studio_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "apache_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "wordpress_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "linq_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "matlab_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "svn_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "haskell_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "qt_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "drupal_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "bash_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "excel_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "scala_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "magento_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "hibernate_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "spring_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ]
+        },
+        "content": {
+            "visual-studio": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    8,
+                    275
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -42,
+                    -129
+                ]
+            },
+            "apache": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    3,
+                    281
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -15,
+                    -198
+                ]
+            },
+            "wordpress": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    2,
+                    297
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -5,
+                    -60
+                ]
+            },
+            "linq": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    8,
+                    287
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -22,
+                    -99
+                ]
+            },
+            "matlab": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    283
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -3,
+                    -3
+                ]
+            },
+            "svn": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    306
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -47
+                ]
+            },
+            "haskell": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    3,
+                    311
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -5,
+                    -33
+                ]
+            },
+            "qt": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    9,
+                    287
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -4,
+                    -18
+                ]
+            },
+            "drupal": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    300
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -7,
+                    -79
+                ]
+            },
+            "bash": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    305
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -4,
+                    -222
+                ]
+            },
+            "excel": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    5,
+                    295
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -12,
+                    -61
+                ]
+            },
+            "scala": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    5,
+                    280
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -6,
+                    -21
+                ]
+            },
+            "magento": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    2,
+                    294
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -9,
+                    -20
+                ]
+            },
+            "hibernate": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    4,
+                    283
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -2,
+                    -56
+                ]
+            },
+            "spring": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    6,
+                    288
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -28,
+                    -107
+                ]
+            }
+        }
+    },
+    "banking_DOC_532": {
+        "index": {
+            "Intent_Class": [
+                "pending_top_up",
+                "why_verify_identity",
+                "top_up_failed",
+                "supported_cards_and_currencies",
+                "exchange_via_app",
+                "declined_card_payment",
+                "unable_to_verify_identity",
+                "exchange_rate",
+                "passcode_forgotten",
+                "verify_my_identity",
+                "declined_cash_withdrawal",
+                "top_up_limits",
+                "apple_pay_or_google_pay",
+                "lost_or_stolen_card",
+                "lost_or_stolen_phone",
+                "balance_not_updated_after_cheque_or_cash_deposit",
+                "change_pin",
+                "getting_virtual_card",
+                "pin_blocked"
+            ],
+            "Intent_Threshold": [
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                0.5
+            ],
+            "Intent_score": [
+                0.07954545454545454,
+                0.07954545454545454,
+                0.07954545454545454,
+                0.07954545454545454,
+                0.07954545454545454,
+                0.07954545454545454,
+                0.07954545454545454,
+                0.07954545454545454,
+                0.07954545454545454,
+                0.07954545454545454,
+                0.07954545454545454,
+                0.07954545454545454,
+                0.07954545454545454,
+                0.07954545454545454,
+                0.07954545454545454,
+                0.07954545454545454,
+                0.07954545454545454,
+                0.07954545454545454,
+                0.07954545454545454
+            ]
+        },
+        "xaxis": {
+            "pending_top_up_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "why_verify_identity_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "top_up_failed_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "supported_cards_and_currencies_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "exchange_via_app_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "declined_card_payment_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "unable_to_verify_identity_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "exchange_rate_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "passcode_forgotten_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "verify_my_identity_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "declined_cash_withdrawal_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "top_up_limits_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "apple_pay_or_google_pay_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "lost_or_stolen_card_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "lost_or_stolen_phone_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "balance_not_updated_after_cheque_or_cash_deposit_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "change_pin_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "getting_virtual_card_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "pin_blocked_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ]
+        },
+        "content": {
+            "pending_top_up": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    109,
+                    80,
+                    0,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -399,
+                    -76,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "why_verify_identity": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "top_up_failed": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -1,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "supported_cards_and_currencies": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "exchange_via_app": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    28,
+                    12,
+                    0,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -60,
+                    -10,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "declined_card_payment": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    2,
+                    2,
+                    0,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -19,
+                    -9,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "unable_to_verify_identity": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "exchange_rate": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    13,
+                    27,
+                    0,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -33,
+                    -11,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "passcode_forgotten": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "verify_my_identity": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "declined_cash_withdrawal": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "top_up_limits": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    8,
+                    15,
+                    0,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -72,
+                    -1,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "apple_pay_or_google_pay": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    15,
+                    27,
+                    0,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -62,
+                    -18,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "lost_or_stolen_card": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "lost_or_stolen_phone": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    38,
+                    45,
+                    0,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -73,
+                    -38,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "balance_not_updated_after_cheque_or_cash_deposit": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    65,
+                    149,
+                    8,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -361,
+                    -757,
+                    -23,
+                    0,
+                    0
+                ]
+            },
+            "change_pin": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    70,
+                    35,
+                    0,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -264,
+                    -33,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "getting_virtual_card": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    4,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "pin_blocked": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    8,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            }
+        }
+    },
+    "banking_DOC_613": {
+        "index": {
+            "Intent_Class": [
+                "pending_top_up",
+                "why_verify_identity",
+                "top_up_failed",
+                "supported_cards_and_currencies",
+                "exchange_via_app",
+                "declined_card_payment",
+                "unable_to_verify_identity",
+                "exchange_rate",
+                "passcode_forgotten",
+                "verify_my_identity",
+                "declined_cash_withdrawal",
+                "top_up_limits",
+                "apple_pay_or_google_pay",
+                "lost_or_stolen_card",
+                "lost_or_stolen_phone",
+                "balance_not_updated_after_cheque_or_cash_deposit",
+                "change_pin",
+                "getting_virtual_card",
+                "pin_blocked"
+            ],
+            "Intent_Threshold": [
+                0.9399876617874965,
+                0.8189394744100905,
+                0.930461860920627,
+                0.9148286335758347,
+                0.9427933321879767,
+                0.9656234311629448,
+                0.9238089988531941,
+                0.9643530798391398,
+                0.918182672668987,
+                0.8741073317831107,
+                0.9754970759341338,
+                0.9539305200448364,
+                0.9729915124634094,
+                0.9249245897122602,
+                0.9774420796871938,
+                0.977210197466329,
+                0.9811469249802718,
+                0.960704661916915,
+                0.9415792449924131
+            ],
+            "Intent_score": [
+                0.7704545454545455,
+                0.7422077922077922,
+                0.7613636363636364,
+                0.7444805194805195,
+                0.7701298701298701,
+                0.7951298701298701,
+                0.7529220779220779,
+                0.7902597402597402,
+                0.749025974025974,
+                0.7438311688311688,
+                0.811038961038961,
+                0.7788961038961039,
+                0.8081168831168831,
+                0.7532467532467533,
+                0.8142857142857143,
+                0.8126623376623376,
+                0.8159090909090909,
+                0.7876623376623376,
+                0.7691558441558441
+            ]
+        },
+        "xaxis": {
+            "pending_top_up_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "why_verify_identity_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "top_up_failed_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "supported_cards_and_currencies_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "exchange_via_app_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "declined_card_payment_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "unable_to_verify_identity_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "exchange_rate_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "passcode_forgotten_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "verify_my_identity_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "declined_cash_withdrawal_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "top_up_limits_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "apple_pay_or_google_pay_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "lost_or_stolen_card_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "lost_or_stolen_phone_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "balance_not_updated_after_cheque_or_cash_deposit_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "change_pin_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "getting_virtual_card_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ],
+            "pin_blocked_xaxis": [
+                0.1,
+                0.2,
+                0.3,
+                0.4,
+                0.5,
+                0.6,
+                0.7,
+                0.8,
+                0.9,
+                1.0
+            ]
+        },
+        "content": {
+            "pending_top_up": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    41
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -48
+                ]
+            },
+            "why_verify_identity": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    2,
+                    34
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -8,
+                    0
+                ]
+            },
+            "top_up_failed": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    26
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -20
+                ]
+            },
+            "supported_cards_and_currencies": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    29
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -161
+                ]
+            },
+            "exchange_via_app": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    35
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -42
+                ]
+            },
+            "declined_card_payment": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    36
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -61
+                ]
+            },
+            "unable_to_verify_identity": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    46
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -1
+                ]
+            },
+            "exchange_rate": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    41
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -51
+                ]
+            },
+            "passcode_forgotten": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    38
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "verify_my_identity": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    32
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -2,
+                    0
+                ]
+            },
+            "declined_cash_withdrawal": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    25
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -48
+                ]
+            },
+            "top_up_limits": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    41
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -28
+                ]
+            },
+            "apple_pay_or_google_pay": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    32
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -1
+                ]
+            },
+            "lost_or_stolen_card": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    40
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -60
+                ]
+            },
+            "lost_or_stolen_phone": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    33
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -3
+                ]
+            },
+            "balance_not_updated_after_cheque_or_cash_deposit": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    33
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -51
+                ]
+            },
+            "change_pin": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    34
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -1
+                ]
+            },
+            "getting_virtual_card": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    37
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -36
+                ]
+            },
+            "pin_blocked": {
+                "Known_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    26
+                ],
+                "Open_Intent": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    -4
+                ]
+            }
+        }
+    }
+}

@@ -26,14 +26,7 @@
                         <div class="layui-card-body ">
                             <form class="layui-form layui-col-space5">
 
-                                <div class="layui-input-inline layui-show-xs-block">
-                                    <select name="type_select" id="type_select">
-                                        <option value='5' selected>All Type</option>
-                                        <option value='0'>Internal</option>
-                                        <option value='1'>User</option>
-                                        <option value='2'>Annotated</option>
-                                    </select>
-                                </div>
+                                
                                 <div class="layui-inline layui-show-xs-block">
                                     <input style= "border-radius: 5px" type="text" id="dataset_name_select" name="dataset_name_select"  placeholder="Please input Name" autocomplete="off" class="layui-input">
                                 </div>
@@ -94,22 +87,23 @@
                     }
                     ,cols: [[ //表头
                             {field: 'dataset_name', title: 'Name' , align: 'center'}
-                            ,{field: 'domain', title: 'Domain' , align: 'center'}
+                            ,{field: 'domain', title: 'Description' , align: 'center'}
                             ,{field: 'class_num', title: 'Classes' , align: 'center'}
                             ,{field: 'source', title: 'Source', align: 'center' , templet: function(d){
-                                return '<a style = "text-decoration: underline ; color :blue;"  href="' + d.source + '" target=_blank>Source</a>'
+                                {return '<a style = "text-decoration: underline ; color :blue;"  href="'+d.source+'" target=_blank>Paper</a>'}
+                               
                                 }
                             }
-                            ,{field: 'type', title: 'Type' , align: 'center', templet: function(d){
+                            /*,{field: 'type', title: 'Type' , align: 'center', templet: function(d){
                                 if(d.type==0){return 'Internal'} else if(d.type==1){return 'User'} else if(d.type==2){return 'Annotated'}
                                 }
-                            }
-                            ,{field: 'create_time', title: 'Create Time' , align: 'center'}
+                            }*/
+                            ,{field: 'create_time', title: 'Created Time' , align: 'center'}
                             ,{field: 'right', title: 'Operation', align: 'center' , toolbar: '#barDemo' }
                             ]] //设置表头
                     ,id: 'submit'
                     ,where: {
-                        'type_select': $('#type_select').val(),
+                        //'type_select': $('#type_select').val(),
                         'dataset_name_select': $('#dataset_name_select').val(),
                         'domain_select': $('#domain_select').val()
                     }
@@ -120,10 +114,10 @@
 
                 //监听提交
                 form.on('submit(search)',function(data) {
-                    console.log($('#type_select').val());
+              
                     tableIns.reload({
                         where: { //设定异步数据接口的额外参数，任意设
-                        'type_select': $('#type_select').val(),
+                         
                         'dataset_name_select': $('#dataset_name_select').val(),
                         'domain_select': $('#domain_select').val()
                         }

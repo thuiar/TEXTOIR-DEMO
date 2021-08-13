@@ -6,7 +6,7 @@ do
     do
         for known_cls_ratio in 0.25 0.5 0.75
         do
-            for labeled_ratio in 0.5
+            for labeled_ratio in 1.0
             do 
                 python ../run.py \
                 --type 'Detection' \
@@ -16,7 +16,6 @@ do
                 --labeled_ratio $labeled_ratio \
                 --config_file_name 'ADB.py' \
                 --seed $seed \
-                --train \
                 --backbone 'bert' \
                 --save_results \
                 --save_model \
@@ -33,7 +32,6 @@ do
                 --known_cls_ratio $known_cls_ratio \
                 --labeled_ratio $labeled_ratio \
                 --seed $seed \
-                --train \
                 --backbone 'bert' \
                 --save_model \
                 --save_results \

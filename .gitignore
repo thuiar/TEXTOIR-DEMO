@@ -8,3 +8,6 @@ open_intent_detection_v1
 open_intent_detection_v2
 open_intent_discovery_v1
 exp
+frontend_
+.ipynb_checkpoints
+.vscode

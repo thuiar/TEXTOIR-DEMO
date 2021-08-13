@@ -1,0 +1,197 @@
+{
+    "banking_DeepAligned_311": {
+        "ACC": 22.4,
+        "ARI": 9.66,
+        "NMI": 42.88
+    },
+    "banking_DeepAligned_389": {
+        "ACC": 22.4,
+        "ARI": 9.66,
+        "NMI": 42.88
+    },
+    "banking_DeepAligned_312": {
+        "ACC": 22.4,
+        "ARI": 9.66,
+        "NMI": 42.88
+    },
+    "banking_CDACPlus_388": {
+        "ACC": 17.69,
+        "ARI": 6.37,
+        "NMI": 38.32
+    },
+    "banking_DTC_BERT_259": {
+        "ACC": 17.24,
+        "ARI": 6.09,
+        "NMI": 37.67
+    },
+    "banking_KCL_BERT_216": {
+        "ACC": 2.63,
+        "ARI": 0.7,
+        "NMI": 7.99
+    },
+    "banking_CDACPlus_445": {
+        "ACC": 20.49,
+        "ARI": 7.79,
+        "NMI": 39.22
+    },
+    "banking_DTC_BERT_473": {
+        "ACC": 63.05,
+        "ARI": 50.64,
+        "NMI": 78.47
+    },
+    "banking_DeepAligned_472": {
+        "ACC": 71.82,
+        "ARI": 60.1,
+        "NMI": 82.5
+    },
+    "banking_CDACPlus_567": {
+        "ACC": 17.56,
+        "NMI": 39.17,
+        "ARI": 6.83
+    },
+    "banking_CDACPlus_568": {
+        "ACC": 17.56,
+        "NMI": 39.17,
+        "ARI": 6.83
+    },
+    "banking_CDACPlus_569": {
+        "ACC": 17.56,
+        "NMI": 39.17,
+        "ARI": 6.83
+    },
+    "banking_CDACPlus_570": {
+        "ACC": 17.56,
+        "NMI": 39.17,
+        "ARI": 6.83
+    },
+    "banking_DeepAligned_575": {
+        "ACC": 21.27,
+        "NMI": 42.25,
+        "ARI": 10.42
+    },
+    "banking_DeepAligned_576": {
+        "ACC": 21.27,
+        "NMI": 42.25,
+        "ARI": 10.42
+    },
+    "banking_CDACPlus_577": {
+        "ACC": 17.56,
+        "NMI": 39.17,
+        "ARI": 6.83
+    },
+    "banking_DTC_BERT_579": {
+        "ACC": 18.41,
+        "NMI": 38.54,
+        "ARI": 6.83
+    },
+    "banking_KCL_BERT_580": {
+        "ACC": 3.51,
+        "NMI": 9.93,
+        "ARI": 0.32
+    },
+    "banking_MCL_BERT_584": {
+        "ACC": 24.35,
+        "NMI": 49.3,
+        "ARI": 13.93
+    },
+    "banking_DTC_BERT_585": {
+        "ACC": 18.41,
+        "NMI": 38.54,
+        "ARI": 6.83
+    },
+    "banking_CDACPlus_586": {
+        "ACC": 17.56,
+        "NMI": 39.17,
+        "ARI": 6.83
+    },
+    "banking_DeepAligned_587": {
+        "ACC": 21.27,
+        "NMI": 42.25,
+        "ARI": 10.42
+    },
+    "banking_MCL_BERT_588": {
+        "ACC": 24.35,
+        "NMI": 49.3,
+        "ARI": 13.93
+    },
+    "banking_MCL_BERT_589": {
+        "ACC": 24.35,
+        "NMI": 49.3,
+        "ARI": 13.93
+    },
+    "banking_KCL_BERT_590": {
+        "ACC": 3.51,
+        "NMI": 9.93,
+        "ARI": 0.32
+    },
+    "banking_KCL_BERT_591": {
+        "ACC": 3.51,
+        "NMI": 9.93,
+        "ARI": 0.32
+    },
+    "banking_KCL_BERT_592": {
+        "ACC": 3.51,
+        "NMI": 9.93,
+        "ARI": 0.32
+    },
+    "banking_CDACPlus_593": {
+        "ACC": 17.56,
+        "NMI": 39.17,
+        "ARI": 6.83
+    },
+    "banking_MCL_BERT_595": {
+        "ACC": 24.35,
+        "NMI": 49.3,
+        "ARI": 13.93
+    },
+    "banking_KCL_BERT_594": {
+        "ACC": 3.51,
+        "NMI": 9.93,
+        "ARI": 0.32
+    },
+    "banking_MCL_BERT_596": {
+        "ACC": 24.35,
+        "NMI": 49.3,
+        "ARI": 13.93
+    },
+    "banking_KCL_BERT_597": {
+        "ACC": 3.51,
+        "NMI": 9.93,
+        "ARI": 0.32
+    },
+    "banking_DTC_BERT_598": {
+        "ACC": 18.41,
+        "NMI": 38.54,
+        "ARI": 6.83
+    },
+    "banking_KCL_BERT_599": {
+        "ACC": 3.51,
+        "NMI": 9.93,
+        "ARI": 0.32
+    },
+    "banking_AG_600": {
+        "ACC": 31.17,
+        "NMI": 52.89,
+        "ARI": 14.57
+    },
+    "banking_KM_601": {
+        "ACC": 28.05,
+        "NMI": 49.05,
+        "ARI": 13.11
+    },
+    "banking_SAE_604": {
+        "ACC": 38.38,
+        "NMI": 60.94,
+        "ARI": 24.77
+    },
+    "banking_DEC_606": {
+        "ACC": 38.31,
+        "NMI": 62.89,
+        "ARI": 23.18
+    },
+    "banking_DCN_607": {
+        "ACC": 38.34,
+        "NMI": 62.91,
+        "ARI": 23.2
+    }
+}

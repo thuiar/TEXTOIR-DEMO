@@ -123,7 +123,6 @@ def save_final_results(args, test_results):
     logger = logging.getLogger(args.logger_name)
     logger.info('test_results: %s', data_diagram)
 
-
 def combine_test_results(args,  detection_preds, \
     discovery_data, discovery_results, logger):
     

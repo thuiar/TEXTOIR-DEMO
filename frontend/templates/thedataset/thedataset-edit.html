@@ -30,61 +30,61 @@
                         <form class="layui-form"  enctype="multipart/form-data">
 
                             <div class="layui-form-item">
-                                <label for="name" class="layui-form-label" style="margin-right: 5px">
+                                <label for="name" class="layui-form-label" style="margin-right: 4px">
                                     <span class="x-red">*</span>Name</label>
                                 <div class="layui-input-inline">
                                     <input style= "border-radius: 5px" type="text" id="dataset_name" readonly="readonly" value="{{ obj.dataset_name }}"  style="width: 80%" autocomplete="off" class="layui-input">
                                 </div>
-                                <label for="domain" class="layui-form-label" style="margin-right: 5px">
+                                <label for="domain" class="layui-form-label" style="margin-right: 15px">
                                     <span class="x-red">*</span>Domain</label>
                                 <div class="layui-input-inline">
                                     <input style= "border-radius: 5px" type="text" id="domain" value="{{ obj.domain }}" style="width: 80%" autocomplete="off" class="layui-input">
                                 </div>
                             </div>
                             <div class="layui-form-item">
-                                <label for="class_num" class="layui-form-label" style="margin-right:5px">
+                                <label for="class_num" class="layui-form-label" style="margin-right:15px">
                                     <span class="x-red">*</span>Classes</label>
                                 <div class="layui-input-inline">
                                     <input style= "border-radius: 5px" type="text" id="class_num" value="{{ obj.class_num }}" style="width: 80%" autocomplete="off" class="layui-input">
                                 </div>
-                                <label for="source" class="layui-form-label" style="margin-right: 5px">
+                                <label for="source" class="layui-form-label" style="margin-right: 15px">
                                     <span class="x-red">*</span>Source</label>
                                 <div class="layui-input-inline">
-                                    <a style = "text-decoration: underline ; color :blue;"  href=" {{ obj.source }}" target=_blank> Source</a>
+                                    <input style= "border-radius: 5px" type="text" id="source" value="{{ obj.source }}" style="width: 80%" autocomplete="off" class="layui-input">
                                 </div>
                             </div>
                             <div class="layui-form-item">
-                                <label for="sample_total_num" class="layui-form-label" style="margin-right: 5px">
-                                    sample_total_num</label>
+                                <label for="sample_total_num" class="layui-form-label" style="margin-right: 15px">
+                                    #Total&nbspsamples</label>
                                 <div class="layui-input-inline">
                                     <input style= "border-radius: 5px" type="text" id="sample_total_num" value="{{ obj.sample_total_num }}" style="width: 80%" autocomplete="off" class="layui-input">
                                 </div>
-                                <label for="sample_training_num" class="layui-form-label" style="margin-right: 5px">
-                                    sample_train_num</label>
+                                <label for="sample_training_num" class="layui-form-label" style="margin-right: 15px">
+                                    #Training&nbspsamples</label>
                                 <div class="layui-input-inline">
                                     <input  style= "border-radius: 5px" type="text" id="sample_training_num" value="{{ obj.sample_training_num }}" style="width: 80%" autocomplete="off" class="layui-input">
                                 </div>
                             </div>
                             <div class="layui-form-item">
-                                <label for="sample_vali_num" class="layui-form-label" style="margin-right: 5px">
-                                    sample_vali_num</label>
+                                <label for="sample_vali_num" class="layui-form-label" style="margin-right: 15px">
+                                    #Validation&nbspsamples</label>
                                 <div class="layui-input-inline">
                                     <input style= "border-radius: 5px" type="text" id="sample_validation_num" value="{{ obj.sample_validation_num }}" style="width: 80%" autocomplete="off" class="layui-input">
                                 </div>
-                                <label for="sample_test_num" class="layui-form-label" style="margin-right: 5px">
-                                    sample_test_num</label>
+                                <label for="sample_test_num" class="layui-form-label" style="margin-right: 15px">
+                                    #Testing&nbspsamples</label>
                                 <div class="layui-input-inline">
                                     <input style= "border-radius: 5px" type="text" id="sample_test_num" value="{{ obj.sample_test_num }}" style="width: 80%" autocomplete="off" class="layui-input">
                                 </div>
                             </div>
                             <div class="layui-form-item">
-                                <label for="sentence_max_length" class="layui-form-label" style="margin-right: 5px">
-                                    max_length</label>
+                                <label for="sentence_max_length" class="layui-form-label" style="margin-right: 15px">
+                                    #Maximum&nbsplength</label>
                                 <div class="layui-input-inline">
                                     <input  style= "border-radius: 5px" type="text" id="sentence_max_length" value="{{ obj.sentence_max_length }}" style="width: 80%"  autocomplete="off" class="layui-input">
                                 </div>
-                                <label for="sentence_avg_length" class="layui-form-label" style="margin-right: 5px">
-                                    avg_length</label>
+                                <label for="sentence_avg_length" class="layui-form-label" style="margin-right: 15px">
+                                    #Average&nbsplength</label>
                                 <div class="layui-input-inline">
                                     <input style= "border-radius: 5px" type="text" id="sentence_avg_length" value="{{ obj.sentence_avg_length }}" style="width: 80%" autocomplete="off" class="layui-input"></div>
                             </div>

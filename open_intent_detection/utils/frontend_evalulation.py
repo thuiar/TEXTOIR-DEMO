@@ -15,7 +15,7 @@ def json_add(predict_t_f, path):
     with open(path, 'w') as f:
         json.dump(predict_t_f, f, indent=4)
 
-def save_test_result(args, test_results):
+def save_test_results(args, test_results):
 
     if os.path.exists(args.test_results_dir):
         json_data = json_read(args.test_results_dir)
@@ -32,14 +32,17 @@ def save_test_result(args, test_results):
 
 def save_train_results(args, result_list):
     
-    results_path = args.train_results_path
+    results_path = args.train_results_dir
 
     train_loss_list = []
     valid_score_list = []
 
+    num_intervals = 20
+    interval = int(len(result_list) / num_intervals) + 1
+
     for i, elem in enumerate(result_list):
         
-        if i % 5 == 0:
+        if i % interval == 0:
             train_loss_list.append(elem['train_loss'])
             valid_score_list.append(elem['eval_score'])
     

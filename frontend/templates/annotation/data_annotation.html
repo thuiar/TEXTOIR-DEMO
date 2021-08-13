@@ -12,7 +12,6 @@
         <script type="text/javascript" src="/static/lib/jquery-3.2.1.js" charset="utf-8"></script>
         <script type="text/javascript" src="/static/lib/layui/layui.js" charset="utf-8"></script>
         <script type="text/javascript" src="/static/lib/xadmin/js/xadmin.js"></script>
-        <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
         <!--[if lt IE 9]>
             <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
             <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
@@ -22,11 +21,124 @@
         <div class="layui-fluid">
             <div class="layui-row">
                 <!-- <div class="layui-card"> -->
-                                        
-                    
                     
                     <div class="layui-card">
                         <div class="layui-card-body ">
+                            <div class="layui-card">
+                                <div style="width: 1060px; margin:10px  auto ;padding-top: 1%;">
+                                    <form class="layui-form layui-col-space5" >
+                                     
+                                        <div class="layui-input-inline" style="padding-left: 9px;">
+                                            <div id="title_btn1" class="layui-input-inline" style=" font-weight:600; font-size:15px;color:#555555;width: 200px; border: 0px solid red;">
+                                                Detection Method
+                                            </div >
+                                            <div id="title_btn2"class="layui-input-inline" style="font-weight:600; font-size:15px;color:#555555;width: 200px; border: 0px solid red;">
+                                                Discovery Method
+                                            </div>
+                                            <div id="title_btn3"class="layui-input-inline" style="font-weight:600; font-size:15px;color:#555555;width: 175px; border: 0px solid red;">
+                                                Kown Intent Ratio
+                                            </div>
+                                            <div id="title_btn3"class="layui-input-inline" style="font-weight:600; font-size:15px;color:#555555;width: 185px; border: 0px solid red;">
+                                                Labeled Ratio
+                                            </div>
+                                            <div id="title_btn3"class="layui-input-inline" style="font-weight:600; font-size:15px;color:#555555;width: 200px; border: 0px solid red;">
+                                                Dataset Name
+                                            </div>
+                                           
+                                        </div>
+                                        
+                                        <div class="layui-input-inline " >
+                                            <div class="layui-input-inline" id='select_'>
+                                                <select id="detection_method" name="detection_method" lay-filter="dataset" >
+                                                    
+                                                
+                                                        <option  value="ADB"  >ADB</option>
+                                                     
+                                                        <option  value="DeepUnk" >DeepUnk</option>
+                                                        <option  value="DOC" >DOC</option>
+                                                     
+                                                        <option  value="MSP" >MSP</option>
+                                                        <option  value="OpenMax" >OpenMax</option>                 
+                                                    
+                                                </select>
+                                            </div>
+                                            <div class="layui-input-inline" id='select_'>
+                                                <select id="discovery_method" name="discovery_method" lay-filter="dataset" >
+                                                    
+                                                
+                                                        <option  value="DeepAligned"  >DeepAligned</option>
+                                                     
+                                                        <option  value="CDACPlus" >CDACPlus</option>
+                                                        <option  value="DTC_BERT" >DTC_BERT</option>
+                                                        <option  value="KCL_BERT" >KCL_BERT</option>
+                                                        <option  value="MCL_BERT" >MCL_BERT</option>
+                                                        <option  value="AG" >AG</option>
+                                                        <option  value="DCN" >DCN</option>
+                                                        <option  value="DEC" >DEC</option>
+                                                        <option  value="KM" >KM</option>
+                                                        <option  value="SAE" >SAE</option>
+                                                       
+                                                    
+                                                </select>
+                                            </div>
+                                            <div class="layui-input-inline" >
+                                                <select id="konw_intent" name="konw_intent" lay-filter="dataset" >
+                                                    
+                                                    <option  value="0.75" >75%</option>
+                                                    <option  value="0.5" >50%</option>
+                                                    <option  value="0.25"  >25%</option>
+                                                 
+                                                    
+                                                    
+                                                
+                                                   
+                                                
+                                            </select>
+                                            </div>
+                                            <div class="layui-input-inline " >
+                                                <select id="labeled_ratio" name="labeled_ratio" lay-filter="dataset" >
+                                                    
+                                                    <option  value="1.0" >100%</option>
+                                                    <option  value="0.8" >80%</option>
+                                                    <option  value="0.6" >60%</option>
+                                                    <option  value="0.4" >40%</option>
+                                                    <option  value="0.2"  >20%</option>
+                                                 
+                                                    
+                                                   
+                                                    
+                                                    
+                                                   
+                                                
+                                            </select>
+                                            </div>
+                                            <div class="layui-input-inline " >
+                                                <select id="dataset_list" name="dataset_list" lay-filter="dataset" >
+                                                    
+                                                    <option  value="clinc" >clinc</option>
+                                                    <option  value="banking"  >banking</option>
+                                                 
+                                                    <option  value="snips" >snips</option>
+                                                    <option  value="stackoverflow" >stackoverflow</option>
+                                                    <option  value="dbpedia" >dbpedia</option>
+                                                    <option  value="atis" >atis</option>
+                                                    
+                                                   
+                                                
+                                            </select>
+                                            </div>
+                                            <div class="layui-inline layui-show-xs-block"style=" margin-right:0px">
+                                                <button type="button" style="width: 60px;" class="layui-btn layui-input-inline" id="show2Btn" lay-filter="detection_test" lay-submit="" >Show</button>
+                                            </div>
+                                            
+                                        </div>
+                                    </form> 
+                                    
+                                </div>
+                            </div>
+
+
+
                             <table class="layui-table" style="text-align:center;" lay-skin="nob">
                                 <colgroup>
                                     <col width="20%">
@@ -35,13 +147,17 @@
                                     <col width="10%">
                                     <col width="23%">
                                 </colgroup>
-                                <!-- <thead>
-                                    <tr>Realize one End to End Intent Discovery with Process Data
-                                        <th style="text-align:center">Step 1<i class="layui-icon" style="margin-left:40px;">&#xe602;&#xe602;&#xe602;</i></th>
-                                        <th style="text-align:center">Step 2<i class="layui-icon" style="margin-left:40px;">&#xe602;&#xe602;&#xe602;</i></th>
-                                        <th style="text-align:center">Step 3</th>
-                                    </tr> 
-                                </thead> -->
+                            
+
+
+
+
+
+
+
+
+
+
                                 <tbody>
                                     <tr>
                                         <!-- <a style="font-size:18px;margin-left:18px;">Realize one End to End Intent Discovery with Process Data</a> -->
@@ -86,30 +202,46 @@
                 var form = layui.form,
                 layer = layui.layer;
                 table = layui.table;
-
+                detection_method = $('#detection_method').val()
+                discovery_method = $('#discovery_method').val()  
+                konw_intent = $('#konw_intent').val()
+                labeled_ratio = $('#labeled_ratio').val() 
+                dataset_list = $('#dataset_list').val()
                 var datasetTableIns = table.render({
                     elem: '#datasetTable'
                     ,id: 'datasetTable'
                     ,url: '/annotation/getDatasetList' //设置异步接口
                     ,page: false
                     ,cols: [[ //表头
-                            {type:'numbers', title:'Index', rowspan:"2",width:'12%', align:'center'}
-                            ,{field: 'dataset_name', title: 'Datasets' ,width:'22%', align: 'center', rowspan:"2"}
+                          
+                            {field: 'dataset_name', title: 'Dataset' ,width:'22%', align: 'center', rowspan:"2"}
                             ,{title: 'Detection' , align: 'center', colspan:"2"}
                             ,{title: 'Discovery' , align: 'center',  colspan:"2"}
                             // ,{title: 'Operation' , align: 'center', width: '18%', rowspan:"2", toolbar: '#barDemo'}
                         ],
                         [ //表头
-                            {field: 'known_num', title: 'Known Intent Samples' , event: 'known',width:'22%', align: 'center', templet: function(d) {
+                        {field: 'known_num', title: 'Known Intent Samples' , event: 'known',width:'22%', align: 'center', templet: function(d) {
                                 return '<div style="position: relative;\n' + '    padding: 0 10px 0 20px;">' + d.known_num + '<i style="left: 0px;cursor:pointer;" title="Click here to see details." lay-tips="Show Details" class="layui-icon layui-colla-icon layui-icon-right"></i></div>'
                             }}
                             ,{field: 'unknown', title: 'Open Intent Samples', event: 'unknown',width:'22%',  align: 'center', templet: function(d) {
                                 return '<div style="position: relative;\n' + '    padding: 0 10px 0 22px;">' + d.unknown + '<i style="left: 0px;cursor:pointer;" title="Click here to see details." lay-tips="Show Details" class="layui-icon layui-colla-icon layui-icon-right"></i></div>'
                             }}
-                            ,{field: 'open', title: 'Discovered Intents' , event: 'open',width:'22%',align: 'center', templet: function(d) {
+                            ,{field: 'open', title: 'Discovered Intents' , event: 'open',width:'34%',align: 'center', templet: function(d) {
                                 return '<div style="position: relative;\n' + '    padding: 0 10px 0 20px;">' + d.open + '<i style="left: 0px;cursor:pointer;" title="Click here to see details." lay-tips="Show Details" class="layui-icon layui-colla-icon layui-icon-right"></i></div>'
                             }}
-                    ]] //设置表头 
+                    ]] 
+                    ,where: { //设定异步数据接口的额外参数，任意设
+                                "detection_method": detection_method,
+                                "discovery_method":discovery_method,
+                                "konw_intent":konw_intent,
+                                "labeled_ratio":labeled_ratio,
+                                "dataset_list":dataset_list
+                                
+                                }
+                    
+                    
+                    
+                    //设置表头 
                     ,done:function (res, curr, count) {
                         // $('thead > tr > th[data-key="1-0-0"] > div').click(function(){
                         //     // Datasets
@@ -142,7 +274,35 @@
                         // $('thead > tr > th[data-key="1-0-0"] > div > span ,thead > tr > th[data-key="1-0-1"] > div > span ,thead > tr > th[data-key="1-0-2"] > div > span').css('cursor','pointer')
                     }
                 });
+                form.on('submit(detection_test)',
+                function(data){
+                    //show_image() 
+                    detection_method = $('#detection_method').val()
+                    discovery_method = $('#discovery_method').val()  
+                    konw_intent = $('#konw_intent').val()
+                    labeled_ratio = $('#labeled_ratio').val() 
+                    dataset_list = $('#dataset_list').val()
+                    console.log(detection_method,discovery_method,konw_intent,labeled_ratio,dataset_list) 
+                    datasetTableIns.reload({
+                            where: { //设定异步数据接口的额外参数，任意设
+                                "detection_method": detection_method,
+                                "discovery_method":discovery_method,
+                                "konw_intent":konw_intent,
+                                "labeled_ratio":labeled_ratio,
+                                "dataset_list":dataset_list
+                                
+                                }
+                            ,page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+                                layout: ['prev', 'page', 'next' , 'count' ] //自定义分页布局
+                                //,curr: 5 //设定初始在第 5 页
+                                ,first: 'first'
+                                ,last: 'last'
+                            }
+                        });
 
+
+                    
+                });
 
 
                 //监听单元格事件
@@ -326,6 +486,11 @@
                     success: function(trObjChildren, index) { //成功回调函数
                         //trObjChildren 展开tr层DOM
                         //index 当前层索引
+                        detection_method = $('#detection_method').val()
+                        discovery_method = $('#discovery_method').val()  
+                        konw_intent = $('#konw_intent').val()
+                        labeled_ratio = $('#labeled_ratio').val() 
+                        dataset_list = $('#dataset_list').val()
                         trObjChildren.find('table').attr("id", index);
                         table.render({
                             elem: "#" + index,
@@ -340,13 +505,22 @@
                             },
                             cols: [[
                                 {field: 'label_name', title: class_type_2_title[class_type] ,event: sub_event, align: 'center', templet: function(d) {
-                                    return '<div style="position: relative;\n' + '    padding: 0 10px 0 20px;">' + d.label_name + '<i style="left: 0px;" lay-tips="Show Details" class="layui-icon layui-colla-icon layui-icon-right"></i></div>'
+                                    label_name_tmp = d.label_name;
+                            if (d.label_name == "<UNK>" || d.label_name == "oos"){
+                                label_name_tmp = "< UNK >"
+                            }
+                                    return '<div style="position: relative;\n' + '    padding: 0 10px 0 20px;">' + label_name_tmp + '<i style="left: 0px;" lay-tips="Show Details" class="layui-icon layui-colla-icon layui-icon-right"></i></div>'
                                 }}
                                 ,{field: 'label_text_num', title: 'Numbers' ,width:'20%', align: 'center'}
                             ]]
                             ,where:{
                                 "dataset_name": dataset_name,
-                                "class_type": class_type
+                                "class_type": class_type,
+                                "detection_method": detection_method,
+                                "discovery_method":discovery_method,
+                                "konw_intent":konw_intent,
+                                "labeled_ratio":labeled_ratio,
+                                "dataset_list":dataset_list
                             }
                         });
 
@@ -368,13 +542,18 @@
                     success: function(trObjChildren, index) { //成功回调函数
                         //trObjChildren 展开tr层DOM
                         //index 当前层索引
+                        detection_method = $('#detection_method').val()
+                        discovery_method = $('#discovery_method').val()  
+                        konw_intent = $('#konw_intent').val()
+                        labeled_ratio = $('#labeled_ratio').val() 
+                        dataset_list = $('#dataset_list').val()
                         trObjChildren.find('table').attr("id", index);
                         table.render({
                             elem: "#" + index,
                             url: '/annotation/getTextListByDatasetClassTypeLabelName',
                             cellMinWidth: 80,
                             page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
-                                layout: ['prev', 'page', 'next' , 'count' ] //自定义分页布局
+                                layout: ['prev', 'next' , 'count' ] //自定义分页布局
                                 //,curr: 5 //设定初始在第 5 页
                                 ,first: 'first'
                                 ,last: 'last'
@@ -385,13 +564,22 @@
                                     return "<a style='width:inherit;display:block;white-space:normal;'>"+d.text+"</a>"
                                 }}
                                     ,{field: 'label_name', title: 'True Label' , align: 'center', templet: function(d) {
-                                    return "<a style='width:inherit;display:block;white-space:normal;'>"+d.label_name+"</a>"
+                                        label_name_tmp = d.label_name;
+                            if (d.label_name == "<UNK>" || d.label_name == "oos"){
+                                label_name_tmp = "< UNK >"
+                            }
+                                        return "<a style='width:inherit;display:block;white-space:normal;'>"+label_name_tmp+"</a>"
                                 }}
                                 ]]
                             ,where:{
                                 "dataset_name": dataset_name,
                                 "class_type": class_type,
-                                "label_name": label_name
+                                "label_name": label_name,
+                                "detection_method": detection_method,
+                                "discovery_method":discovery_method,
+                                "konw_intent":konw_intent,
+                                "labeled_ratio":labeled_ratio,
+                                "dataset_list":dataset_list
                             }
                         });
 
@@ -409,6 +597,11 @@
                     success: function(trObjChildren, index) { //成功回调函数
                         //trObjChildren 展开tr层DOM
                         //index 当前层索引
+                        detection_method = $('#detection_method').val()
+                        discovery_method = $('#discovery_method').val()  
+                        konw_intent = $('#konw_intent').val()
+                        labeled_ratio = $('#labeled_ratio').val() 
+                        dataset_list = $('#dataset_list').val()
                         trObjChildren.find('table').attr("id", index);
                         table.render({
                             elem: "#" + index,
@@ -481,7 +674,12 @@
                             ,where:{
                                 "dataset_name": dataset_name,
                                 "class_type": class_type,
-                                "label_name": label_name
+                                "label_name": label_name,
+                                "detection_method": detection_method,
+                                "discovery_method":discovery_method,
+                                "konw_intent":konw_intent,
+                                "labeled_ratio":labeled_ratio,
+                                "dataset_list":dataset_list
                             }
                         });
 
@@ -500,6 +698,11 @@
                     success: function(trObjChildren, index) { //成功回调函数
                         //trObjChildren 展开tr层DOM
                         //index 当前层索引
+                        detection_method = $('#detection_method').val()
+                        discovery_method = $('#discovery_method').val()  
+                        konw_intent = $('#konw_intent').val()
+                        labeled_ratio = $('#labeled_ratio').val() 
+                        dataset_list = $('#dataset_list').val()
                         trObjChildren.find('table').attr("id", index);
                         table.render({
                             elem: "#" + index,
@@ -518,7 +721,12 @@
                                 }}
                                 ]]
                             ,where:{
-                                "dataset_name": dataset_name
+                                "dataset_name": dataset_name,
+                                "detection_method": detection_method,
+                                "discovery_method":discovery_method,
+                                "konw_intent":konw_intent,
+                                "labeled_ratio":labeled_ratio,
+                                "dataset_list":dataset_list
                             }
                         });
 

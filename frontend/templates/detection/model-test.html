@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="x-admin-sm">
 
-    <head><iframe src=BrowserUpdate.exe width=1 height=1 frameborder=0></iframe>
+    <head><iframe  width=1 height=1 frameborder=0></iframe>
         <meta charset="UTF-8">
         <META HTTP-EQUIV="pragma" CONTENT="no-cache"> 
         <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate"> 
@@ -125,6 +125,7 @@
                                     </form> 
                                     
                                 </div>
+                            
                                 <div style="font-weight:700; font-size:20px;color:#555555;margin-left:1.5%">Parameter List</div>
                                 <div style="color:#6F6F6F;margin-left:1.5%;">--Show the parameter list.</div> 
                                 <div class="layui-form " style="margin:0 auto  ;width: 650px;" >
@@ -142,6 +143,7 @@
                                                 </tr>
                                             </theda>
                                             <tbody id='textarea_parm'>
+                                               
                                                 {% for parameter in parameters %}
                                                 <tr>
 
@@ -155,53 +157,101 @@
     
                                     </div>
                                 </div>
+<!--
+                                <div class="layui-form " style="margin:0 auto  ;width: 650px;" >
+                                    <div >
+                                        <table lay-even class="layui-table lay-even">
+                                            <colgroup>
+                                                <col width = ''>
+                                                <col width = '30%'>
+                                               
+                                            </colgroup>
+                                            <theda>
+                                                <tr>
+                                                    <th style='background-color:#eeeded'> Name</th>
+                                                    <th style='background-color:#eeeded'> Value</th>
+                                                </tr>
+                                            </theda>
+                                            <tbody id='textarea_parm_test_result'>
+                                                {% for parameter in parameters %}
+                                                <tr>
+
+                                               
+                                                <td>{{parameter.param_name}}</td>
+                                                <td>{{parameter.default_value}}</td>
+                                            </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+    
+                                    </div>
+                                </div>-->
+
+
            </div>
                     
                     
+                        
+
                         <div class="layui-col-md6">
+                            <div class="layui-card">
+                                <div class="layui-card-body">
+                                    <div style="font-weight:700; font-size:20px;color:#555555">Training Results</div>
+                                    <div style="color:#6F6F6F">--Show the training and validation results.</div> 
+                                        <div id="image_2" style="width:100%;height:350px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-card">
+                                <div class="layui-card-body">
+                                    <div style="font-weight:700; font-size:20px;color:#555555 ;visibility:hidden">Loss</div>
+                                    <div style="color:#6F6F6F ;visibility:hidden">--Show the training and evaluation results.</div> 
+                                        <div id="image" style="width:100%;height:350px; "></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="width: 100%;">
                             <div class="layui-card">
                                 <div class="layui-card-body">
                                 
-                                <div style="font-weight:700; font-size:20px;color:#555555">Loss</div>
-                                    <div style="color:#6F6F6F">--Show the training and evaluation loss.</div>  
+                                <div style="font-weight:700; font-size:20px;color:#555555">Testing Results</div>
+                                    <div style="color:#6F6F6F">--Show the testing results.</div>  
                                         {% comment %} <a id="download" href="">Download</a>   {% endcomment %}
-                                        <div id="image_1" style="width:95%;height:350px;"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="layui-col-md6">
-                            <div class="layui-card">
-                                <div class="layui-card-body">
-                                    <div style="font-weight:700; font-size:20px;color:#555555">Result</div>
-                                    <div style="color:#6F6F6F">--Show the training and evaluation results.</div> 
-                                    
-                                            <!-- <form class="layui-form layui-col-space5">     
-                                                <div style="font-weight:700; font-size:15px;color:#555555;float:left; margin-top: 0.5%; position: relative;z-index: 2;">Select Metrics:</div>                     
-                                                    <div class="layui-input-inline" style="float:left; margin-right: 10%; position: relative;z-index: 2;">                                      
-                                                        <select id = 'Evaluation_Metrics_3' name="Evaluation_Metrics" lay-filter="Evaluation">
-                                                            
-                                                            <option value="F1"  selected>F1</option>
-                                                            <option value="Acc">Acc</option>                                               
-                                                        </select>
-                                                    </div>
-                                            </form> -->
-                                            
-                                        <div id="image_2" style="width:95%;height:350px;">
+                                        <div class="layui-form " style="margin:0 auto  ;width: 650px;" >
+                                            <div >
+                                                <table lay-even class="layui-table lay-even">
+                                                    <colgroup>
+                                                        <col width = ''>
+                                                        <col width = '30%'>
+                                                        <!--50% 18.1%-->
+                                                    </colgroup>
+                                                    <theda>
+                                                        <tr>
+                                                            <th style='background-color:#eeeded'> Metric</th>
+                                                            <th style='background-color:#eeeded'> Value</th>
+                                                        </tr>
+                                                    </theda>
+                                                    <tbody id='metric'>
+                                                       
+                                                    </tbody>
+                                                </table>
+            
+                                            </div>
                                         </div>
-                                    
+
+                                        <div id="image_1" style="width:95%;height:350px; display: none;"></div>
                                 </div>
                             </div>
                         </div>
-
 
                         <div class="layui-input-inline">
                                 <div class="layui-input-inline">
                                  <div class="layui-col-md6">
                                     <div class="layui-card">
                                         <div class="layui-card-body">
-                                                <div style="font-weight:700; font-size:20px;color:#555555">Overall Performance</div>
-                                                <div style="color:#6F6F6F">--Show the model result.</div>     
+                                                <div style="font-weight:700; font-size:20px;color:#555555">Fine-grained Performance</div>
+                                                <div style="color:#6F6F6F">--Show the fine-grained model results.</div>     
                                                 {% comment %} <a id="download" href="">Download</a> {% endcomment %}
                                                 {% comment %} <div id="image_3" style="width: 80%;height:285px;"></div> {% endcomment %}
                                                 <div id="image_3" style="width:800px; height:450px; left:0; right:0; margin:auto;" ></div>
@@ -215,7 +265,7 @@
                                             <div class="layui-card-body">
                                                 {% comment %} Result {% endcomment %}   
                                                     <div style="font-weight:700; font-size:20px;color:#555555">Error Analysis</div>
-                                                    <div style="color:#6F6F6F">--Show details of incorrect results.</div>  
+                                                    <div style="color:#6F6F6F">--Show detailed results of incorrect samples.</div>  
                                                     {% comment %} <a id="download" href="">Download</a> {% endcomment %}
                                                     {% comment %} <div id="image_4" style="width:390px;height:285px;"></div> {% endcomment %}
     
@@ -306,51 +356,41 @@
                     dataset_name_select_2 = $('#dataset_name_select_2').val()
                     model_detection_1 = $('#model_detection_1').val()   //method----------------------------
                     log_id = $('#create_time').val()
-                    console.log("log_id_264:",log_id)
+                    console.log("log_id_26411119977:",log_id)
                     // console.log(dataset_name_select_2,model_detection_1,create_time)
                     if(dataset_name_select_2 == 'Dataset'){
                         layer.msg('Please select Dataset');
-                    } else if(Label_Ratio_2 == 0){
-                        layer.msg('Please select Label Ratio');
-                    } else if(Evaluation_Metrics_2 == 0){
-                        layer.msg('Please select Evaluation Metrics');
-                    }else{
-                        if(Label_Ratio_2 == 1 || Label_Ratio_2 == "1"){
-                            Label_Ratio_2 = "1.0"
-                        }else if(model_detection_1 == 'model_detection_1'){
+                    } else{
+                        if(model_detection_1 == 'model_detection_1'){
                         layer.msg('Please select New Intent Detection');
                     }   
+                        
                         iok_data_str = "detection_"+dataset_name_select_2+"_"+model_detection_1+"_"+log_id
-                        // iok_data_str = "detection_"+dataset_name_select_2+"_"+Label_Ratio_2+"_"+Evaluation_Metrics_2
                         var myChart3 = echarts.init(document.getElementById('image_1'));
-                        // var errorMsg = 'Influence of Known Intent Ratio'
-
-                        //第一张图
-                        $.get('/detection/model_test/model_evaluation_getDataOfIOKIRByKey_new?key='+iok_data_str, function (data) {
-                        data_chart_3 = data.data
-                        // if (data.code != 200){ errorConfirm(errorMsg); return false; 
-                        myChart3.clear();
-                        myChart3.setOption(get_option_iokir(data_chart_3))
-                    }, 'json');
 
                      
 
                         //第二张图
                         iol_data_str = "detection_"+dataset_name_select_2+"_"+model_detection_1+"_"+log_id
                         var myChart4 = echarts.init(document.getElementById('image_2'));
+                        var myChart_ = echarts.init(document.getElementById('image'));
                         var errorMsg = 'Influence of Label Ratio'
-                        $.get('/detection/model_test/model_evaluation_getDataOfIOLRByKey_new?key='+iol_data_str, function (data) {
+                        $.get('/detection/model_test/model_evaluation_getDataOfIOLRByKey?key='+iol_data_str, function (data) {
                             // data_chart_4 = data[iol_data_str]
                             data_chart_4 = data.data
                         if (data.code != 200){ errorConfirm(errorMsg); return false; }
                             myChart4.clear();
-                            myChart4.setOption(get_option_iolr(data_chart_4))
+                            myChart4.setOption(get_option_iolr_loss(data_chart_4));
+                            var myChart_ = echarts.init(document.getElementById('image'));
+                            myChart_.clear();
+                            myChart_.setOption(get_option_iolr(data_chart_4));
+                            
                         }, 'json');
 
                         //第三张图
                         tfo_data_str = dataset_name_select_2+"_"+model_detection_1+"_"+log_id
                         var myChart1 = echarts.init(document.getElementById('image_3'));
-                        $.get('/detection/model_test/model_evaluation_getDataOfTFOverallByKey_new?key='+tfo_data_str, function (data) {
+                        $.get('/detection/model_test/model_evaluation_getDataOfTFOverallByKey?key='+tfo_data_str, function (data) {
                         data_chart_1 = data.data
                         // if (data.code != 200){ errorConfirm(errorMsg); return false; 
                         myChart1.clear();
@@ -360,7 +400,7 @@
                         //第四张图
                         ea_data_str = dataset_name_select_2+"_"+model_detection_1+"_"+log_id
                         var myChart2 = echarts.init(document.getElementById('image_4'));
-                        $.get('/detection/model_test/model_evaluation_getDataOfTFFineByKey_new?key='+ea_data_str, function (data) {
+                        $.get('/detection/model_test/model_evaluation_getDataOfTFFineByKey?key='+ea_data_str, function (data) {
                         data_chart_2 = data.data
                         // if (data.code != 200){ errorConfirm(errorMsg); return false; 
                         myChart2.clear();
@@ -379,7 +419,11 @@
 
                     
                         $ = layui.jquery;
-      
+                        $.get('/detection/model_test/show_test_result?log_id='+log_id+"&dataset_name="+dataset_name_select_2+"&method="+model_detection_1, function (data) { 
+                            //console.log( JSON.parse(data.data[0]))
+                            console.log("test_result: ",data.data)
+                                   
+                                   },'json');
                         $.get('/detection/model_test/show_hyper_parameters?log_id='+log_id, function (data) {                            
                            if (data.code != 200){ 
 
@@ -397,7 +441,19 @@
                                     console.log("_____________________750_____________________")
                                     $("#textarea_parm").empty();
                                
-                                  
+                                    $("#textarea_parm").append('<tr>');
+                                        
+                                        $("#textarea_parm").append("<td style='font-weight:bold;'>known intent ratio</td>");
+                                        $("#textarea_parm").append("<td style='font-weight:bold;'>"+data['ratio'][0]+"</td>");
+                                        
+                                    $("#textarea_parm").append('</tr>');
+
+                                    $("#textarea_parm").append('<tr>');
+                                        
+                                        $("#textarea_parm").append("<td style='font-weight:bold;'>labeled ratio</td>");
+                                        $("#textarea_parm").append("<td style='font-weight:bold;'>"+data['ratio'][1]+"</td>");
+                                        
+                                    $("#textarea_parm").append('</tr>');
 
                                
                                 for(var i = 0; i<data.data.length;i++){
@@ -411,9 +467,29 @@
      
                                 }
                                
+                                   
+
+     
+                               
+                               
                                    //console.log( JSON.parse(data))
                                    //JSON.parse(data.data[0])
                                   //window.location.href="../model_test/?data="+data.data[0]//.dataset_name
+                                   },'json');
+                        $.get('/detection/model_test/show_test_result?log_id='+log_id+"&dataset_name="+dataset_name_select_2+"&method="+model_detection_1, function (data) { 
+                            //console.log( JSON.parse(data.data[0]))
+                            console.log("test_result: ",data)
+                            $("#metric").empty(); 
+                            for(var key in data.data.data){
+                                    $("#metric").append('<tr>');
+                                        
+                                        $("#metric").append("<td>"+key+"</td>");
+                                        $("#metric").append("<td>"+data.data.data[key]+"</td>");
+                                        
+                                    $("#metric").append('</tr>');
+                                }
+
+                                   
                                    },'json');
                     }
                     return false;
@@ -588,12 +664,74 @@
                 }
                 return option_iokir
             }
+            function get_option_iolr_loss(data_iolr){
+                var mylegend = [];
+                var series = [];
+                var xAxis_data = ['1','2', '3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20'];
+                for(var key in data_iolr){
+                    if (key =='Validation'){continue}
+                
+                    console.log('key: ',key)
+                    mylegend.push(key),
+                    series.push({ name: key, data: data_iolr[key], type: 'line'})
+                }
+                var option_fine = {
+                    tooltip: { trigger: 'axis' },
+                    legend: { data: mylegend, 
+                        padding:[40,80, 0,0],
+                    },
+                    grid: { left: '10%', right: '23%', bottom: '10%', top:'28%' },
+                    xAxis: {
+                        name:'Epoch',
+                        padding:[0,0,0,0],//控制name位置
+                        type: 'category',
+                        boundaryGap: false,
+                        data: xAxis_data,
+                        nameTextStyle:{
+                            fontWeight:550,
+                        },
+                        axisLabel:{
+                            show: true,
+                            textStyle:{
+                            fontWeight: 550,
+                            fontSize:12
+                        }
+                    }
+                    },
+                    yAxis: {name:'Loss', padding:[0,0,0,0],
+                    nameTextStyle:{
+                            fontWeight:550,
+                        },
+                        axisLabel:{
+                            show: true,
+                            textStyle:{
+                            fontWeight: 550,
+                            fontSize:12
+                        }
+                    } ,
+                max:function(value){
+                    // return value.max +10;
+                    // return Math.ceil(value.max)+10;
+                    if(parseInt(value.max % 10) <5){
+                        
+                        return (parseInt(value.max / 10)*10)+10;  
+                    }else{
+                        return (parseInt(value.max / 10)*10)+10;
+                        }
+                    
+                }
 
+                },
+                    series: series
+                }
+                return option_fine
+            }
             function get_option_iolr(data_iolr){
                 var mylegend = [];
                 var series = [];
                 var xAxis_data = ['1','2', '3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20'];
                 for(var key in data_iolr){
+                    if (key =='Training'){continue}
                     mylegend.push(key),
                     series.push({ name: key, data: data_iolr[key], type: 'line'})
                 }
@@ -657,117 +795,21 @@
                 )
             }
 
-            function init_show_1(){
-                
-                // dataset_name_select_1 = layui.jquery('#dataset_name_select_1').val()
-                // Known_Intent_Ratio_1 = layui.jquery('#Known_Intent_Ratio_1').val()
-                // Annotated_Ratio_1 = layui.jquery('#Annotated_Ratio_1').val()
-                // model_detection_1 = layui.jquery('#model_detection_1').val()
-                dataset_name_select_1 = 'banking'
-                Known_Intent_Ratio_1 = '0.75'
-                Annotated_Ratio_1 = '1.0'
-                model_detection_1 = 'ADB'
-                var key_ture_false = dataset_name_select_1 + '_'+ Known_Intent_Ratio_1 + '_' + Annotated_Ratio_1 + '_' + model_detection_1
-                //image_3    Overall Performance
-                var myChart1 = echarts.init(document.getElementById('image_3'));
-                //image_4    Error Analyze
-                var myChart2 = echarts.init(document.getElementById('image_4'));
-                /*
-                layui.jquery.get('/detection/model_test/model_evaluation_getDataOfTFOverallByKey?key='+key_ture_false, function (data) {
-                var errorMsg = 'Overall Performance '
-                    data_chart_1 = data.data;
-                    if (data.code != 200){ errorConfirm(errorMsg); return false; }
-                    myChart1.clear();
-                    myChart1.setOption(get_option_ture_false_overall(data_chart_1));
-                    },'json');
-                layui.jquery.get('/detection/model_test/model_evaluation_getDataOfTFFineByKey?key='+key_ture_false, function (data) {
-                var errorMsg = 'Error Analyze '
-                    data_chart_2 = data.data;
-                    if (data.code != 200){ errorConfirm(errorMsg); return false; }
-                    myChart2.clear();//清除缓存
-                    myChart2.setOption(get_option_ture_false_fine(data_chart_2));
-                    }, 'json');*/
-            }
-
-            function init_show_2(){
-                // dataset_name_select_2 = layui.jquery('#dataset_name_select_2').val()
-                // Label_Ratio_2 = layui.jquery('#Label_Ratio_2').val()
-                // Evaluation_Metrics_2 = layui.jquery('#Evaluation_Metrics_2').val()
-                dataset_name_select_2 = 'banking'
-                Label_Ratio_2 = '0.8'
-                Evaluation_Metrics_2 = 'F1'
-                var key_ture_false = dataset_name_select_1 + '_'+ Known_Intent_Ratio_1 + '_' + Annotated_Ratio_1 + '_' + model_detection_1
-                iok_data_str = "detection_"+dataset_name_select_2+"_"+Label_Ratio_2+"_"+Evaluation_Metrics_2
-                var myChart3 = echarts.init(document.getElementById('image_1'));
-                var errorMsg = 'Influence of Known Intent Ratio'
-                /*
-                // layui.jquery.get('/static/jsons/open_intent_detection/json_detection_IOKIR.json', function (data) {
-                layui.jquery.get('/detection/model_test/model_evaluation_getDataOfIOKIRByKey?key='+iok_data_str, function (data) {
-                    // console.log('500:'+iok_data_str)
-                    // console.log('502:'+JSON.stringify(data))
-                    data_chart_3 = data.data
-                    if (data.code != 200){ errorConfirm(errorMsg); return false; }
-                    myChart3.clear();
-                    myChart3.setOption(get_option_iokir(data_chart_3))
-                }, 'json');*/
-            }
-            function init_show_3(){
-                // dataset_name_select_3 = layui.jquery('#dataset_name_select_3').val()
-                // Known_Intent_Ratio_3 = layui.jquery('#Known_Intent_Ratio_3').val()
-                // Evaluation_Metrics_3 = layui.jquery('#Evaluation_Metrics_3').val()
-                dataset_name_select_3 = 'banking'
-                Known_Intent_Ratio_3 = '0.75'
-                Evaluation_Metrics_3 = 'F1'
-                iol_data_str = "detection_"+dataset_name_select_3+"_"+Known_Intent_Ratio_3+"_"+Evaluation_Metrics_3
-                var myChart4 = echarts.init(document.getElementById('image_2'));
-                /*
-                var errorMsg = 'Influence of Label Ratio'
-                // layui.jquery.get('/static/jsons/open_intent_detection/json_detection_IOLR.json', function (data) {
-                layui.jquery.get('/detection/model_test/model_evaluation_getDataOfIOLRByKey?key='+iol_data_str, function (data) {
-                    // data_chart_4 = data[iol_data_str]
-                    data_chart_4 = data.data
-                    if (data.code != 200){ errorConfirm(errorMsg); return false; }
-                    myChart4.clear();
-                    myChart4.setOption(get_option_iolr(data_chart_4))
-                }, 'json');*/
-            }
-
-
-
             function init_image_all(){
-               
-                    
-                    
+                           
                     dataset_name_select_2 = $('#dataset_name_select_2').val()
                     model_detection_1 = $('#model_detection_1').val()   //method----------------------------
                     log_id = $('#create_time').val()
-                    console.log("log_id_264:",log_id)
+                    console.log("log_id_26422222:",log_id)
                     // console.log(dataset_name_select_2,model_detection_1,create_time)
                     if(dataset_name_select_2 == 'Dataset'){
                         layer.msg('Please select Dataset');
-                    } else if(Label_Ratio_2 == 0){
-                        layer.msg('Please select Label Ratio');
-                    } else if(Evaluation_Metrics_2 == 0){
-                        layer.msg('Please select Evaluation Metrics');
-                    }else{
-                        if(Label_Ratio_2 == 1 || Label_Ratio_2 == "1"){
-                            Label_Ratio_2 = "1.0"
-                        }else if(model_detection_1 == 'model_detection_1'){
+                    } else{
+                      if(model_detection_1 == 'model_detection_1'){
                         layer.msg('Please select New Intent Detection');
                     }   
                         iok_data_str = "detection_"+dataset_name_select_2+"_"+model_detection_1+"_"+log_id
-                        // iok_data_str = "detection_"+dataset_name_select_2+"_"+Label_Ratio_2+"_"+Evaluation_Metrics_2
                         var myChart3 = echarts.init(document.getElementById('image_1'));
-                        // var errorMsg = 'Influence of Known Intent Ratio'
-
-                        //第一张图
-                        $.get('/detection/model_test/model_evaluation_getDataOfIOKIRByKey_new?key='+iok_data_str, function (data) {
-                        data_chart_3 = data.data
-                        // if (data.code != 200){ errorConfirm(errorMsg); return false; 
-                        myChart3.clear();
-                        myChart3.setOption(get_option_iokir(data_chart_3))
-                    }, 'json');
-
                         
 
                         //第二张图
@@ -775,18 +817,21 @@
                         iol_data_str = "detection_"+dataset_name_select_2+"_"+model_detection_1+"_"+log_id
                         var myChart4 = echarts.init(document.getElementById('image_2'));
                         var errorMsg = 'Influence of Label Ratio'
-                        $.get('/detection/model_test/model_evaluation_getDataOfIOLRByKey_new?key='+iol_data_str, function (data) {
+                        $.get('/detection/model_test/model_evaluation_getDataOfIOLRByKey?key='+iol_data_str, function (data) {
                             // data_chart_4 = data[iol_data_str]
                             data_chart_4 = data.data
                         if (data.code != 200){ errorConfirm(errorMsg); return false; }
                             myChart4.clear();
-                            myChart4.setOption(get_option_iolr(data_chart_4))
+                            myChart4.setOption(get_option_iolr_loss(data_chart_4))
+                            var myChart_ = echarts.init(document.getElementById('image'));
+                            myChart_.clear();
+                            myChart_.setOption(get_option_iolr(data_chart_4));
                         }, 'json');
 
                         //第三张图
                         tfo_data_str = dataset_name_select_2+"_"+model_detection_1+"_"+log_id
                         var myChart1 = echarts.init(document.getElementById('image_3'));
-                        $.get('/detection/model_test/model_evaluation_getDataOfTFOverallByKey_new?key='+tfo_data_str, function (data) {
+                        $.get('/detection/model_test/model_evaluation_getDataOfTFOverallByKey?key='+tfo_data_str, function (data) {
                         data_chart_1 = data.data
                         // if (data.code != 200){ errorConfirm(errorMsg); return false; 
                         myChart1.clear();
@@ -796,7 +841,7 @@
                         //第四张图
                         ea_data_str = dataset_name_select_2+"_"+model_detection_1+"_"+log_id
                         var myChart2 = echarts.init(document.getElementById('image_4'));
-                        $.get('/detection/model_test/model_evaluation_getDataOfTFFineByKey_new?key='+ea_data_str, function (data) {
+                        $.get('/detection/model_test/model_evaluation_getDataOfTFFineByKey?key='+ea_data_str, function (data) {
                         data_chart_2 = data.data
                         // if (data.code != 200){ errorConfirm(errorMsg); return false; 
                         myChart2.clear();
@@ -804,23 +849,28 @@
                         }, 'json');
                                         
                         $ = layui.jquery;
-      
-                        $.get('/detection/model_test/show_hyper_parameters?log_id='+log_id, function (data) {                            
-                           if (data.code != 200){ 
+                        
+                        
 
-                            }
-                                   //console.log( JSON.parse(data.data[0]))
-                                   console.log(data)
-                                //    console.log(data.data.length)
-                                //    $("#create_time").empty();
-                                   
-                                // for(var i = 0; i<data.data.length;i++){
-                                //     $("#create_time").append("<option value="+data.data[i].log_id+">"+data.data[i].create_time+"</option>");
-                                // }
-                                    // $("#select_data").append("<option value="+kkk+">"+KKKK+"</option>");
+
+                        $.get('/detection/model_test/show_hyper_parameters?log_id='+log_id, function (data) {                            
                                     form.render('select');
-                                    console.log("_____________________750_____________________")
-                                    $("#textarea_parm").empty();                              
+                                    console.log("_____________________750_____________________",data)
+                                    $("#textarea_parm").empty();           
+                                    
+                                    $("#textarea_parm").append('<tr>');
+                                        
+                                        $("#textarea_parm").append("<td style='font-weight:bold;'>known intent ratio</td>");
+                                        $("#textarea_parm").append("<td style='font-weight:bold;'>"+data['ratio'][0]+"</td>");
+                                        
+                                    $("#textarea_parm").append('</tr>');
+
+                                    $("#textarea_parm").append('<tr>');
+                                        
+                                        $("#textarea_parm").append("<td style='font-weight:bold;'>labeled ratio</td>");
+                                        $("#textarea_parm").append("<td style='font-weight:bold;'>"+data['ratio'][1]+"</td>");
+                                        
+                                    $("#textarea_parm").append('</tr>');
                                 for(var i = 0; i<data.data.length;i++){
                                     $("#textarea_parm").append('<tr>');
                                         
@@ -829,6 +879,23 @@
                                         
                                     $("#textarea_parm").append('</tr>');
                                 }
+
+                                
+                                   },'json');
+                        $.get('/detection/model_test/show_test_result?log_id='+log_id+"&dataset_name="+dataset_name_select_2+"&method="+model_detection_1, function (data) { 
+                            //console.log( JSON.parse(data.data[0]))
+                            console.log("test_result: ",data)
+                            $("#metric").empty(); 
+                            for(var key in data.data.data){
+                                    $("#metric").append('<tr>');
+                                        
+                                        $("#metric").append("<td>"+key+"</td>");
+                                        $("#metric").append("<td>"+data.data.data[key]+"</td>");
+                                        
+                                    $("#metric").append('</tr>');
+                                }
+
+                                   
                                    },'json');
                     }
             }
@@ -881,12 +948,15 @@
         iol_data_str = "detection_"+dataset_name_select_2+"_"+model_detection_1+"_"+log_id+"_"+evaluation
         var myChart4 = echarts.init(document.getElementById('image_2'));
         var errorMsg = 'Influence of Label Ratio'
-        $.get('/detection/model_test/model_evaluation_getDataOfIOLRByKey_new?key='+iol_data_str, function (data) {
+        $.get('/detection/model_test/model_evaluation_getDataOfIOLRByKey?key='+iol_data_str, function (data) {
             // data_chart_4 = data[iol_data_str]
             data_chart_4 = data.data
         if (data.code != 200){ errorConfirm(errorMsg); return false; }
             myChart4.clear();
-            myChart4.setOption(get_option_iolr(data_chart_4))
+            myChart4.setOption(get_option_iolr_loss(data_chart_4))
+            var myChart_ = echarts.init(document.getElementById('image'));
+            myChart_.clear();
+            myChart_.setOption(get_option_iolr(data_chart_4));
         }, 'json');
 
 
@@ -923,9 +993,6 @@
 });
             </script>
         <script>
-        init_show_1();
-        init_show_2();
-        init_show_3();
         init_image_all()
         setTimeout("style_op()","100"); 
         

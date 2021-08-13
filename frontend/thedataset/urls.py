@@ -16,5 +16,7 @@ urlpatterns = [
     url(r'^toEdit/$', views.toEdit),
     url(r'^editData/$', views.editData),
     url(r'^delData/$', views.delData),
+    url(r'^update_source/$', views.update_source),
+
     
 ]

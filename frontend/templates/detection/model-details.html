@@ -39,22 +39,22 @@
                                     </div>
                                     <label for="source" class="layui-form-label" style="margin-right: 5px">
                                         Method Type</label>
-                                    <div class="layui-input-inline">
-                                        {% if  obj.method_type  == 1 or '1' %}
+                                    <div class="layui-input-inline" style="margin-right: 0px">
+                                        {% if  obj.model_name  == 'ADB' or 'DeepUnk' %}
                                         {% comment %} <p> New Intent Detection </p> {% endcomment %}
-                                        <input type="text"  readonly="readonly" value="New Intent Detection"  style="width: 80%" autocomplete="off" class="layui-input">
-                                        {% elif  obj.method_type  == 2 or '2'%}
+                                        <input type="text"  readonly="readonly" value="Geometrical feature based"  style="width: 80%" autocomplete="off" class="layui-input">
+                                        {% else    %}
                                         {% comment %} <p>New Intent Discovery </p>      {% endcomment %}
-                                        <input type="text"  readonly="readonly" value="New Intent Discovery"  style="width: 80%" autocomplete="off" class="layui-input">
+                                        <input type="text"  readonly="readonly" value="Threshold-based"  style="width: 80%" autocomplete="off" class="layui-input">
                                         {% endif %} 
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
                                     <label for="domain" class="layui-form-label" style="margin-right: 5px">
                                         Paper Source</label>
-                                    <div class="layui-input-inline">
+                                    <div class="layui-input-inline" style="margin-right: 0px">
                                         {% comment %} <input type="text" readonly="readonly" value="{{ obj.paper_source }}" style="width: 80%" autocomplete="off" class="layui-input"> {% endcomment %}
-                                         <a style = "text-decoration: underline ; color :blue;"  href=" {{obj.model_name }}" target=_blank>Paper</a>
+                                         <a style = "text-decoration: underline ; color :blue;"  href=" {{obj.paper_source }}" target=_blank>Paper</a>
                                     </div>
                                     <label for="class_num" class="layui-form-label" style="margin-right: 5px">
                                         Code Source</label>

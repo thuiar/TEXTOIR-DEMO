@@ -12,7 +12,6 @@ class ParamManager:
         output_path_param = self.add_output_path_param(args)
         
         if args.save_frontend_results:
-
             self.frontend_param = self.add_frontend_path_param(args)
 
             method_param = self.get_method_param(args)
@@ -51,12 +50,12 @@ class ParamManager:
         method_args = method_param(args)
 
         if args.save_frontend_results:
-            if os.path.exists(self.frontend_param["config_results_dir"])\
-                 and (os.path.getsize(self.frontend_param["config_results_dir"] != 0)):
+            
+            if os.path.exists(self.frontend_param["config_results_dir"]):
 
                 with open(self.frontend_param["config_results_dir"]) as f:
                     config_dicts = json.load(f)
-                
+
                 flag = True
                 for key in config_dicts:
                     if key not in method_args.hyper_param:

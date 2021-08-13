@@ -3,7 +3,7 @@ from dataloaders.base import DataManager
 from backbones.base import ModelManager
 from methods import method_map
 from utils.functions import save_results
-from utils.frontend_evalulation import save_train_results, save_evaluation_results
+from utils.frontend_evalulation import save_train_results, save_evaluation_results, save_test_results
 from utils.frontend_analysis import save_analysis_table_results, save_point_results, save_MSP_results, save_DOC_results, save_OpenMax_results
 import logging
 import argparse
@@ -119,6 +119,7 @@ def run(args, data, model, logger):
         logger.info('Save frontend results start...')
         save_train_results(args, method.train_results)
         save_evaluation_results(args, data, outputs)
+        save_test_results(args, outputs)
         save_analysis_table_results(args, data, outputs, save_dir = args.type)
 
         map_save_analysis_figs = {
@@ -138,31 +139,16 @@ if __name__ == '__main__':
     args = parse_arguments()
     logger = set_logger(args)
 
-    test = False
-    if test:
-        args.dataset = 'banking'
-        args.method = 'ADB'
-        args.config_file_name = 'ADB.py'
-        args.known_cls_ratio = 0.75
-        args.labeled_ratio = 1.0
-        args.train = True
-        args.log_id = '0'
-        args.save_model = True
-
     logger.info('Open Intent Detection Begin...')
     logger.info('Parameters Initialization...')
     param = ParamManager(args)
     args = param.args
 
-    if test:
-        args.num_train_epochs = 2
         
     logger.debug("="*30+" Params "+"="*30)
     for k in args.keys():
         logger.debug(f"{k}:\t{args[k]}")
     logger.debug("="*30+" End Params "+"="*30)
-
-
 
     logger.info('Data and Model Preparation...')
     data = DataManager(args)

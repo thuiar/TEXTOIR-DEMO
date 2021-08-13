@@ -141,7 +141,7 @@ def judgeStateDataExport2Disk(request):
     print('judgeStateDataExport2Disk')
     dataset_id = request.POST['dataset_name']
     model_annotation = request.POST["model_detection"]
-    print('*', 'dataset_id:\t', dataset_id, '\nmodel_annotation:\t', model_annotation)
+    #print('*', 'dataset_id:\t', dataset_id, '\nmodel_annotation:\t', model_annotation)
     base_runing_log_dir = '/static/log/annotation/runing/'
     obj = models.DataSet.objects.get(dataset_id=dataset_id)
     runing_log_dir = sys.path[0] + base_runing_log_dir + obj.dataset_name+'_'+model_annotation
@@ -245,21 +245,32 @@ def updateResultByResultId(request):
 
 @csrf_exempt
 def getDatasetList(request):
-    dataset_info_json_path = os.path.join(sys.path[0], '../frontend/static/jsons/data_annotation', 'dataset_info.json')
+    detection_method = request.GET.get('detection_method')
+    discovery_method = request.GET.get('discovery_method')
+    konw_intent = request.GET.get('konw_intent')
+    labeled_ratio = request.GET.get('labeled_ratio')
+    dataset_list = request.GET.get('dataset_list')
+    key = str(detection_method)+'_'+str(discovery_method)+'_'+str(dataset_list)+'_'+str(konw_intent)+'_'+str(labeled_ratio)+'_0.json'
+    #dataset_info_json_path = os.path.join(sys.path[0], '../frontend/static/jsons/data_annotation', 'dataset_info.json')
+    dataset_info_json_path = os.path.join(sys.path[0], '../frontend/static/jsons/open_intent_recognition', key)
     with open(dataset_info_json_path, 'r') as load_f:
         dataset_info = json.load(load_f)
     if dataset_info.__contains__('dataset_list') == False :
         dataset_list = []
     else:
         dataset_list = dataset_info['dataset_list']
+        print('dataset_list',dataset_list)
     # elif args.dataset not in dataset_info['dataset_list']:
     count = len(dataset_list)
+
+    dataset_list_arr=[]
+    dataset_list_arr.append(dataset_list)
 
     result = {}
     result['code'] = 0
     result['msg'] = ''
     result['count'] = count
-    result['data'] = dataset_list
+    result['data'] = dataset_list_arr
     
     return JsonResponse(result)
 
@@ -269,7 +280,13 @@ def getClassListByDatasetNameAndClassType(request):
     class_type = request.GET.get('class_type')
     page = request.GET.get('page')
     limit = request.GET.get("limit")
-    json_path = os.path.join(sys.path[0], 'static/jsons/data_annotation/', 'dataset_info.json')
+    detection_method = request.GET.get('detection_method')
+    discovery_method = request.GET.get('discovery_method')
+    konw_intent = request.GET.get('konw_intent')
+    labeled_ratio = request.GET.get('labeled_ratio')
+    dataset_list = request.GET.get('dataset_list')
+    key = str(detection_method)+'_'+str(discovery_method)+'_'+str(dataset_list)+'_'+str(konw_intent)+'_'+str(labeled_ratio)+'_0.json'
+    json_path = os.path.join(sys.path[0], 'static/jsons/open_intent_recognition/', key)
     return_list = []
     with open(json_path, 'r') as load_f:
         load_dict = json.load(load_f)
@@ -292,7 +309,13 @@ def getTextListByDatasetClassTypeLabelName(request):
     label_name = request.GET.get('label_name')
     page = request.GET.get('page')
     limit = request.GET.get("limit")
-    json_path = os.path.join(sys.path[0], 'static/jsons/data_annotation/', 'dataset_info.json')
+    detection_method = request.GET.get('detection_method')
+    discovery_method = request.GET.get('discovery_method')
+    konw_intent = request.GET.get('konw_intent')
+    labeled_ratio = request.GET.get('labeled_ratio')
+    dataset_list = request.GET.get('dataset_list')
+    key = str(detection_method)+'_'+str(discovery_method)+'_'+str(dataset_list)+'_'+str(konw_intent)+'_'+str(labeled_ratio)+'_0.json'
+    json_path = os.path.join(sys.path[0], 'static/jsons/open_intent_recognition/', key)
     return_list = []
     with open(json_path, 'r') as load_f:
         load_dict = json.load(load_f)
@@ -315,12 +338,19 @@ def getTextListByDatasetForUnknown(request):
     class_type = 'open' # all open === unknown
     page = request.GET.get('page')
     limit = request.GET.get("limit")
-    json_path = os.path.join(sys.path[0], 'static/jsons/data_annotation/', 'dataset_info.json')
+    detection_method = request.GET.get('detection_method')
+    discovery_method = request.GET.get('discovery_method')
+    konw_intent = request.GET.get('konw_intent')
+    labeled_ratio = request.GET.get('labeled_ratio')
+    dataset_list = request.GET.get('dataset_list')
+    key = str(detection_method)+'_'+str(discovery_method)+'_'+str(dataset_list)+'_'+str(konw_intent)+'_'+str(labeled_ratio)+'_0.json'
+    json_path = os.path.join(sys.path[0], 'static/jsons/open_intent_recognition/', key)
     load_dict = {}
     with open(json_path, 'r') as load_f:
         load_dict = json.load(load_f)
     # get class_list of all open by dataset_name
     class_list = load_dict["class_list_"+dataset_name+"_"+class_type]
+    print('class_list:',"class_list_"+dataset_name+"_"+class_type)
     # Iterate over the class_list to get each text_list, and then join them to result_lsit
     result_list = []
     for class_item in class_list:

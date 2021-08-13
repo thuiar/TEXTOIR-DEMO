@@ -3,7 +3,6 @@ import json
 import numpy as np
 import logging
 from sklearn.manifold import TSNE
-from torch.utils.data import dataset
 from keybert import KeyBERT
 
 def json_read(path):
@@ -46,6 +45,8 @@ def save_analysis_table_results(args, data, results, logger_name, pipeline = Fal
         dataset_info = json_read(results_path)
     else:
         dataset_info = {}
+        if os.path.exists(results_path):
+            dataset_info = json_read(results_path)
 
     logger = logging.getLogger(logger_name)
     logger.info('Loading KeyBERT model start...')
@@ -65,7 +66,7 @@ def save_analysis_table_results(args, data, results, logger_name, pipeline = Fal
 
         name_list = []
         for keyword in keywords:
-            name = '(' + str(keyword[0]) + ', ' + str(keyword[1]) + str( '%.2f' % (keyword[1]*100) ) + '%)'
+            name = '(' + str(keyword[0]) + ', ' + str(round(keyword[1] * 100, 2)) + '%)'
             name_list.append(name)
         
         label_item = ', '.join(name_list)
@@ -90,7 +91,7 @@ def save_analysis_table_results(args, data, results, logger_name, pipeline = Fal
                 can_1 = keywords[0][0]
                 conf_1 = '%.2f' % (keywords[0][1] * 100) + '%'
                 can_2 = keywords[1][0]
-                conf_2 = '%.2f' % (keywords[1][1] *100) + '%'
+                conf_2 = '%.2f' % (keywords[1][1] * 100) + '%'
             
             elif keywords_sent_len == 1:
                 
@@ -161,19 +162,29 @@ def save_centroid_analysis(args, data, results):
     test_feats = results['y_feat']
     reduce_feats = TSNE_reduce_feats(test_feats, 2)
 
-    results_path = args.analysis_file_name
-
+    
+    results_path = args.analysis_output_dir
     all_dict = {}
+    if os.path.exists(results_path) and (os.path.getsize(results_path) != 0):
+        all_dict = json_read(results_path)
+
     reduce_centers = []
+    reduce_center_ids = []
+
     for idx in range(args.num_labels):
         pos = list(np.where(results['y_pred'] == idx)[0])
         center = np.mean(reduce_feats[pos], axis = 0)
-        center = [round(float(x), 2) for x in center]
+
+        if (np.isnan(center[0])) or (np.isnan(center[1])):
+            continue
+
+        center = [round(float(x), 2) for x in center if x is not np.nan]
         reduce_centers.append(center)
+        reduce_center_ids.append(idx)
     
     known_centers = []
     open_centers = []
-    for idx, center in enumerate(reduce_centers):
+    for idx, center in zip(reduce_center_ids, reduce_centers):
         label = data.all_label_list[idx]
         if label in data.known_label_list:
             point = center + [label]

@@ -5,7 +5,10 @@
 **TEXOIR** is the first integrated and visualized platform for text Open Intent Recognition. **This repo is based on the [TEXTOIR toolkit](https://github.com/thuiar/TEXTOIR)**. It contains a pipeline framework to perform [open intent detection](./open_intent_detection) and [open_intent_discovery](./open_intent_discovery) simultaneously. It also consists of a [visualization system](./frontend) to demonstrate the whole process of the two sub-modules and the pipeline framework. More information can be seen on our [ACL 2021 demo paper](https://aclanthology.org/2021.acl-demo.20.pdf). 
 
 Demonstration video:  
-![Example](materials/TEXTOIR.mp4 "Example")
+<video id="video" controls="" preload="none" poster="materials/poster.png" width="360" height = "200">
+<source id="mp4" src="materials/TEXTOIR.mp4" type="video/mp4">
+</video>
+
 
 If you are interested in this work, and want to use the codes in this repo, please **star** and **fork** this repo, and cite the following paper:
 ```
@@ -65,6 +68,8 @@ This module integrates five advanced open intent detection methods:
 * [A Baseline For Detecting Misclassified and Out-of-distribution Examples in Neural Networks](https://arxiv.org/pdf/1610.02136.pdf) (MSP, ICLR 2017) 
 * [Towards Open Set Deep Networks](https://openaccess.thecvf.com/content_cvpr_2016/papers/Bendale_Towards_Open_Set_CVPR_2016_paper.pdf) (OpenMax, CVPR 2016)
 
+![Example](materials/detection_model.png "Example")
+
 #### Open Intent Discovery
 
 This module integrates ten typical open intent discovery methods:
@@ -82,7 +87,7 @@ This module integrates ten typical open intent discovery methods:
     - Agglomerative clustering (AG)
     - K-Means (KM)
 
-![Example](materials/model_management_detection.png "Example")
+![Example](materials/discovery_model.png "Example")
 
 ### Training
 
@@ -90,15 +95,35 @@ Our platform supports training the algorithms in two modules. Users can add a ne
 
 After training starts, users can monitor the training status (finished or failed), observe the set training information, and jump to the evaluation and analysis module corresponding to the training record.
 
-![Example](materials/training.png "Example")
+Training for open intent detection:  
 
-### Evaluation
+![Example](materials/detection_train.png "Example")
+
+Training for open intent discovery:  
+
+![Example](materials/discovery_train.png "Example")
+
+### Model Evaluation
 
 In this module, we show the basic information about the training record, the training results (loss and validation score), the testing results. Moreover, the fine-grained performance of each class and the corresponding error analysis.
 
-![Example](materials/evluation.png "Example")
+Example for parameters and testing results:  
 
-### Analysis
+![Example](materials/evaluation_param_test.png "Example")
+
+Example for training results:
+
+![Example](materials/training_results.png "Example")
+
+Example for fine-grained performance:
+
+![Example](materials/fine-grained.png "Example")
+
+Evaluation for error analysis:  
+
+![Example](materials/error_analysis.png "Example")
+
+### Model Analysis
 
 In this module, we first show the fine-grained predicted results of each sample. Then, we visualize the evaluation results from multiple views of according to the features of different methods.
 
@@ -106,21 +131,31 @@ In this module, we first show the fine-grained predicted results of each sample.
 
 We divide the methods into threshold-based methods and geometrical feature based methods. Threshold-based methods are shown in the format of probability distribution. Geometrical feature based methods show the intent features of different points.
 
-![Example](materials/evluation.png "Example")
+Example of analysis table:
 
-![Example](materials/evluation.png "Example")
+![Example](materials/analysis_table.png "Example")
+
+Example of analysis results:
+
+![Example](materials/detection_analysis.png "Example")
+
+
 
 #### Open Intent Discovery
 
 As we adopt clustering methods (semi-supervised and unsupervised) in this module, we obtain clusters of each discovered open intent. We extract the top-3 high-confidence keywords for each cluster and each sample. The distribution of cluster centroids is shown in the 2D plane.
 
-![Example](materials/evluation.png "Example")
+Example of analysis table:
+![Example](materials/discovery_table.png "Example")
+
+Example of analysis results:
+![Example](materials/discovery_analysis.png "Example")
 
 ### Open Intent Recognition
 
 This module visualizes the results of the pipeline framework. It shows the identified known intents and the detected open intent from the open intent detection module, and the discovered open intents (keywords with confidence scores) from the open intent discovery module.
 
-![Example](materials/evluation.png "Example")
+![Example](materials/oir.png "Example")
 
 ## Usage
 
@@ -136,8 +171,44 @@ conda activate textoir
 conda install pytorch torchvision torchaudio cudatoolkit=11.0 -c pytorch -c conda-forge  
 ```
 3. Install MySQL 
+
 ```
-xxx
+sudo apt-get install mysql-server
+sudo apt-get install mysql-client
+sudo apt-get install libmysqlclient-dev
+pip install mysqlclient
+pip install pymysql
+```
+
+### Database Configuration 
+
+1. Login MySQL with root.
+```
+$ mysql -u root -p
+```
+
+2. Create a database and make configuration.
+```
+mysql> CREATE DATABASE ds;
+mysql> CREATE USER ds IDENTIFIED BY 'your password';
+mysql> GRANT ALL PRIVILEGES ON ds.* TO ds@`%`;
+mysql> FLUSH PRIVILEGES;
+```
+
+3. Connect database and framework in the [settings.py](./frontend/textoir/settings.py):
+
+```
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'HOST': 'your ip',
+        'PORT': '3306',
+        'NAME': 'ds',
+        'USER': root,
+        'PASSWORD': 'your password,
+    }
+}
+
 ```
 
 ### Quick Start

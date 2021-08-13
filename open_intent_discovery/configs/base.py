@@ -41,18 +41,17 @@ class ParamManager:
     def get_method_param(self, args):
         
         if args.config_file_name.endswith('.py'):
-            module_name = "configs." + str(args.config_file_name[:-3])
+            module_name = '.' + args.config_file_name[:-3]
         else:
-            module_name = "configs." + str(args.config_file_name)
+            module_name = '.' + args.config_file_name
 
-        config = importlib.import_module(module_name)
+        config = importlib.import_module(module_name, 'configs')
 
         method_param = config.Param
         method_args = method_param(args)
 
         if args.save_frontend_results:
-            if os.path.exists(self.frontend_param["config_results_dir"])\
-                 and (os.path.getsize(self.frontend_param["config_results_dir"] != 0)):
+            if os.path.exists(self.frontend_param["config_results_dir"]):
 
                 with open(self.frontend_param["config_results_dir"]) as f:
                     config_dicts = json.load(f)
@@ -79,9 +78,10 @@ class ParamManager:
 
         analysis_file_name = 'Discovery_analysis.json'
         config_file_name = 'config.json'
+        test_file_name = 'json_test_results.json'
 
         paths = []
-        for save_file_name in [analysis_file_name, config_file_name]:
+        for save_file_name in [analysis_file_name, config_file_name, test_file_name]:
             results_path = os.path.join(save_dir, save_file_name)
             if not os.path.exists(results_path):
                 f = open(results_path, 'w')
@@ -90,7 +90,8 @@ class ParamManager:
 
         frontend_path_param = {
             'analysis_output_dir': paths[0],
-            'config_results_dir': paths[1]
+            'config_results_dir': paths[1], 
+            'test_results_dir': paths[2]
         }
 
         return frontend_path_param

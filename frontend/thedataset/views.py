@@ -29,10 +29,97 @@ base_dataset_path_win = '\\..\\textoir\\data\\'
 def toDatasetList(request):
     return render(request,'thedataset/thedataset-list.html')
 
+def update_source(request):
+    result = {}
+#https://github.com/PolyAI-LDN/task-specific-datasets
 
+    hyper_parameters = {
+
+            'num_train_epochs': 5000,
+            'feat_dim': 2000,
+            'batch_size': 4096,
+
+        }
+    des={   
+            'num_train_epochs_DEC': 'The number of epochs for training DEC model.',
+            'num_train_epochs_SAE': 'The number of epochs for training stacked auto-encoder.',
+            'num_train_epochs_DCN': 'The number of epochs for training DCN model.',
+            'feat_dim' : 'The feature dimension.',
+            'update_interval' : 'The number of int,ervals between contiguous updates.',
+            'lr' : 'The learning rate for training DCN.',
+            'momentum' : 'The momentum value of SGD optimizer.',
+            'tol' : 'The tolerance threshold to stop training for DCN.',
+            'batch_size':'Batch size',
+
+
+
+
+            'max_num_words' : 'The maximum number of words.',
+            'update_interval' : 'The number of intervals between contiguous updates.',
+            'alpha' : 'The weights for updating the auxiliary distribution targets.',
+            'num_warmup_train_epochs': 'The number of warmup training epochs.',
+            'num_pretrain_epochs':'The number of pre-training epochs.',
+            'lr_pre' : 'The learning rate for pre-training the backbone.',
+            'num_refine_epochs': 'The number of refining epochs.',
+            'u' : 'The upper bound of the dynamic threshold.',
+            'l' : 'The lower bound of the dynamic threshold.',
+
+            'weibull_tail_size': 'The factor of weibull model.',
+            'alpharank' : 'The factor of alpha rank.',
+        
+            'threshold' :'The probability threshold for detecting the open samples.',
+            'scale' : 'The scale factor of DOC.',
+            'num_train_epochs': 'The number of training epochs.',
+            'feat_dim' : 'The feature dimension.',
+            'warmup_proportion' : 'The warmup ratio for learning rate.',
+            'n_neighbors' : 'The number of neighbors of LOF.',
+            'contamination' : 'The contamination factor of LOF.',
+            'lr' : 'The learning rate of backbone.',
+            'train_batch_size' : 'The batch size for training.',
+            'eval_batch_size' : 'The batch size for evaluation. ',
+            'test_batch_size' : 'The batch size for testing.',
+            'wait_patient' : 'Patient steps for Early Stop.'
+    }
+    '''
+    for k,v in hyper_parameters.items():
+        
+
+        add_prarm = models.Hyper_parameters.objects.create(
+                                                param_name=k, 
+                                                param_describe=des[k],  
+                                                default_value=v,  
+                                                value_type='float',
+                                                model_id=15
+    
+                                                )
+    '''
+    #add_prarm.save()   #添加参数
+    
+     
+    b=[]
+    #for i in [149,150,151,152,153,154,155,156]:
+        #a = models.Hyper_parameters.objects.filter(param_id=i).delete()#.first()#.all()
+        #a.model_id=3
+        #a.save()
+    
+    #update = models.Model_Tdes.objects.filter(model_name="OpenMax").first()#.all()
+    #update.paper_source=''
+    
+    #update.save()
+    #for dataset in datasetList:
+        #dataset_list.append(dataset['model_id'])
+        #dataset_list.append(dataset['model_name'])
+    result['code'] = 0
+    #result['msg'] =list( update)
+
+#model_id  model_name    1, "ADB", 2, "DeepUnk", 3, "DOC", 4, "MSP", 5, "OpenMax", 
+# 6, "CDACPlus", 7, "DeepAligned", 8, "DTC_BERT", 9, "KCL_BERT", 10, "MCL_BERT", 
+# 11, #"AG", 12, "DCN", 13, "DEC", 14, "KM", 15, "SAE"
+    
+    return JsonResponse(list(models.Model_Tdes.objects.values().all()))
 @csrf_exempt
 def getDatasetList(request):
-    type_select = request.GET.get('type_select')
+    type_select = '5'
     dataset_name_select = request.GET.get("dataset_name_select")
     domain_select = request.GET.get("domain_select")
     page = request.GET.get('page')
@@ -225,10 +312,10 @@ def editData(request):
             ## save msg to database
             record.save()
         else:
-            return JsonResponse({'code': 400, 'msg': 'Edit Dataset Has An Error ！！'})
+            return JsonResponse({'code': 400, 'msg': 'Edit Dataset Has An Error1 ！！'})
     except :
         # pass
-        return JsonResponse({'code': 400, 'msg': 'Edit Dataset Has An Error ！！'})
+        return JsonResponse({'code': 400, 'msg': 'Edit Dataset Has An Error2 ！！'})
     ## return msg
     return JsonResponse({'code':200,'msg':'Successfully Edit Dataset'})
 

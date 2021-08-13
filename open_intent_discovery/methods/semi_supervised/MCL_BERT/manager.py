@@ -130,7 +130,7 @@ class MCLManager:
     def test(self, args, data):
 
         y_true, y_pred = self.get_outputs(args, mode = 'test')
-        y_feat = self.get_features(args, mode = 'test', get_feats = True)
+        y_feat = self.get_outputs(args, mode = 'test', get_feats = True)
         test_results = clustering_score(y_true, y_pred)
 
         cm = confusion_matrix(y_true, y_pred)

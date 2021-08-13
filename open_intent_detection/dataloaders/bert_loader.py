@@ -86,17 +86,17 @@ def get_loader(examples, args, label_list, mode):
 
         sampler = RandomSampler(datatensor)
 
-        dataloader = DataLoader(datatensor, sampler=sampler, batch_size = args.train_batch_size)    
+        dataloader = DataLoader(datatensor, sampler=sampler, batch_size = int(args.train_batch_size)    )
 
     else:
         sampler = SequentialSampler(datatensor)
 
         if mode == 'train_unlabeled':
-            dataloader = DataLoader(datatensor, sampler=sampler, batch_size = args.train_batch_size)    
+            dataloader = DataLoader(datatensor, sampler=sampler, batch_size = int(args.train_batch_size))
         elif mode == 'eval':
-            dataloader = DataLoader(datatensor, sampler=sampler, batch_size = args.eval_batch_size)    
+            dataloader = DataLoader(datatensor, sampler=sampler, batch_size = int(args.eval_batch_size))
         elif mode == 'test':
-            dataloader = DataLoader(datatensor, sampler=sampler, batch_size = args.test_batch_size)    
+            dataloader = DataLoader(datatensor, sampler=sampler, batch_size = int(args.test_batch_size))
 
     
     return dataloader

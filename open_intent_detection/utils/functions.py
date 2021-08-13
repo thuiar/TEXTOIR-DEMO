@@ -37,6 +37,8 @@ def save_results(args, test_results):
 
     if 'y_true' in test_results.keys():
         del test_results['y_true']
+    if 'y_prob' in test_results.keys():
+        del test_results['y_prob']
     if 'y_pred' in test_results.keys():
         del test_results['y_pred']
     if 'y_feat' in test_results.keys():

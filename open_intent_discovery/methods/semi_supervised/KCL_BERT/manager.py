@@ -43,7 +43,9 @@ class KCLManager:
                 args.num_train_epochs, args.lr, args.warmup_proportion)
 
         else:
-            self.pretrained_model = restore_model(pretrain_manager.model, os.path.join(args.method_output_dir, 'pretrain'))
+            args.num_labels = data.num_labels
+            args.backbone = backbone
+            self.model = model.set_model(args, data, 'bert')
             self.model = restore_model(self.model, args.model_output_dir)
 
     def train(self, args, data): 

@@ -1,0 +1,11 @@
+{
+    "num_train_epochs_SAE": 5000,
+    "num_train_epochs_DCN": 12000,
+    "feat_dim": 2000,
+    "update_interval": 100,
+    "batch_size": 256,
+    "lr": 0.001,
+    "momentum": 0.9,
+    "tol": 0.01,
+    "model_name": "DCN.h5"
+}

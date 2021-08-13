@@ -47,10 +47,36 @@ def cal_true_false(true_labels, predictions):
 
     return results, results_fine
 
+def save_test_results(args, test_results):
+    
+    if os.path.exists(args.test_results_dir):
+        json_data = json_read(args.test_results_dir)
+    
+    
+    record_name =  str(args.dataset) + '_' + str(args.method) + '_' + str(args.log_id)
+    json_data[record_name]={}
+    json_data[record_name]['ACC'] = test_results['ACC']
+    json_data[record_name]['NMI'] = test_results['NMI']
+    json_data[record_name]['ARI'] = test_results['ARI']
+
+    json_add(json_data, args.test_results_dir)
+
 def save_evaluation_results(args, data, results):
 
     save_dir = os.path.join(args.frontend_result_dir, args.type)  
+    ######
+    ##alignment
+    from utils.metrics import hungray_aligment
+    ind, w = hungray_aligment(results['y_true'], results['y_pred'])
+    d_ind = {i[0]: i[1] for i in ind}
+    import pandas as pd
+    results['y_pred'] = pd.Series(results['y_pred']).map(d_ind)
 
+    """
+    for i, j in ind:
+        pred_label = results['y_pred']
+    """
+    ######
     predictions = list([data.all_label_list[idx] for idx in results['y_pred']])
     true_labels = list([data.all_label_list[idx] for idx in results['y_true']])
 
@@ -69,12 +95,15 @@ def save_evaluation_results(args, data, results):
 
     if not os.path.exists(tf_fine_path):
         f = open(tf_fine_path, 'w')
-        
     elif os.path.exists(tf_fine_path) and (os.path.getsize(tf_fine_path) != 0):
         results_fine = json_read(tf_fine_path)
 
     results = {}
     results_fine = {}
+    if os.path.exists(tf_overall_path):
+        results = json_read(tf_overall_path)
+    if os.path.exists(tf_fine_path):
+        results_fine = json_read(tf_fine_path)
     key = str(args.dataset) + '_'  + str(args.method) + '_' + str(args.log_id)
 
     

@@ -8,11 +8,11 @@ class Param():
     def get_hyper_parameters(self, args):
         """
         Args:
-            SAE_feats_path (directory): The path for pre-trained stacked auto-encoder features.
             num_train_epochs_SAE (int): The number of epochs for training stacked auto-encoder.
             num_train_epochs_DCN (int): The number of epochs for training DCN model.
             feat_dim (int): The feature dimension.
             update_interval (int): The number of intervals between contiguous updates.
+            batch_size (int): The batch size for training.
             lr (float): The learning rate for training DCN.
             momentum (float): The momentum value of SGD optimizer.
             tol (float): The tolerance threshold to stop training for DCN.

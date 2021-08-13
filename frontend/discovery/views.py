@@ -18,26 +18,12 @@ from django.core import serializers
 # 
 from django.views import View
 
-# from sklearn.datasets import make_blobs
-# from sklearn.cluster import KMeans
-# import matplotlib.pyplot as plt
 
-# import numpy as np
-# from io import BytesIO
-
-# import matplotlib as mat
-# mat.use('Agg')
-# from transformers import BertModel, BertTokenizer, BertConfig
-# from sklearn.feature_extraction.text import  TfidfVectorizer
-# from sklearn.decomposition import PCA
-# 分页
-# 查询数据库
 from django.db import connection
-# 查询数据库结果转字典。
+
 from django.forms.models import model_to_dict
 
-
-backend_engine_linux = '/../textoir/run_discover.py '
+backend_engine_linux = '/../open_intent_discovery/run.py '
 backend_engine_win = '\\..\\textoir\\run_discover.py '
 
 
@@ -57,7 +43,6 @@ def getModelList(request):
     
     modelList = models.Model_Tdes.objects.values().filter(model_name__contains=model_name_select,type=2).order_by('model_id')
     count = modelList.count()
-    # 分页
     paginator = Paginator(modelList, limit)
     modelList = paginator.get_page(page)
 
@@ -72,9 +57,9 @@ def getModelList(request):
 @xframe_options_exempt
 def model_management_details(request):
     model_id = request.GET.get('model_id')
-    # print(model_id)
+
     obj = models.Model_Tdes.objects.get(model_id=model_id)
-    # obj_param = models.Hyper_parameters.objects.get(model_id = model_id)
+
     paramList = models.Hyper_parameters.objects.filter(model_id=model_id)
     return render(request,'discovery/model-details.html',{'obj':obj,'paramList':paramList})
 
@@ -91,8 +76,6 @@ def getModelLogList(request):
     model_select = request.GET.get("model_select")
     page = request.GET.get('page')
     limit = request.GET.get("limit")
-
-    
     logList = models.Run_Log.objects.values().filter(model_id__type=2)
 
     if dataset_select == None:
@@ -103,7 +86,6 @@ def getModelLogList(request):
     if type_select != '5':
         logList = logList.filter(type=type_select)
 
-    # 分页
     paginator = Paginator(logList, limit)
     logList = paginator.get_page(page)
     count = paginator.count
@@ -155,9 +137,132 @@ def getParamListByModelId(request):
     result['data'] = list(resultList)
     return JsonResponse(result)
 
+def json_add(predict_t_f, path):
+    
+    with open(path, 'w') as f:
+        json.dump(predict_t_f, f, indent=4)
+
+def json_read(path):
+    
+    with open(path, 'r')  as f:
+        json_r = json.load(f)
+
+    return json_r
+
+def get_key_attrs(path):
+    string=''
+    with open(path, 'r') as lines:
+
+        flag = False
+        for line in lines:
+
+            if line.strip() == "Args:":
+                flag = True
+                continue
+            
+            if line.startswith("hyper_parameters"):
+                flag = False
+                break
+
+            if flag:
+                string += line
+    
+    string = string.replace("\"","")
+    sen_list = string.split('\n')
+    key_attr_dict = {}
+
+    for sen in sen_list:
+        if ':' not in sen:
+            break
+
+        sen_split = sen.split(':')
+        key_attr_split = sen_split[0].strip().split('(')
+        attr = key_attr_split[1].strip(')')
+        key = key_attr_split[0].strip()
+        
+        key_attr_dict[key] = attr
+
+    return key_attr_dict
+
+def convert_type(attr, value):
+    
+    if attr == 'int':
+        value = int(value)
+
+    elif attr == 'str':
+        value = str(value)
+
+    elif attr == 'binary':
+        if value == 'True':
+            value = True
+        elif value == 'False':
+            value = False
+
+    elif attr == 'autofill':
+        value = None
+    
+    elif attr == 'float':
+        value = float(value)
+    
+    elif attr == 'directory':
+        value = str(value)
+
+    return value
+
+def get_config_py(method_name, method_type):
+    
+    if method_type == 1:
+        rootpath = os.path.abspath(os.path.join(os.getcwd(), ".."))+'/open_intent_detection/configs/'
+    elif method_type == 2: 
+        rootpath = os.path.abspath(os.path.join(os.getcwd(), ".."))+'/open_intent_discovery/configs/'
+   
+    save_file_name = method_name+'.py'
+    results_path = os.path.join(rootpath, save_file_name)
+    
+    key_attr_dict = get_key_attrs(results_path)
+
+    string=''
+    op=False
+    with open(results_path, 'r') as lines:
+        for line in lines:
+            if line.strip().startswith("hyper_parameters"):
+                op=True
+                continue
+            if line.strip()=="}":
+                op=False
+                break
+            if op:
+                string = string + line.strip()
+    
+
+    string = string.replace("\"","")
+    string = string.replace("\'","")
+    string = string.replace(" ", "")
+    hyper_parameters = string.split(',')
+
+    hyper_parameter_dict = {}
+    import copy
+    tmp_hyper_parameters = copy.copy(hyper_parameters)
+
+    for item in tmp_hyper_parameters:
+        if ':' not in item:
+            continue
+        
+        key_value = item.split(':')
+
+        key = key_value[0].strip()
+        value = key_value[1].strip()
+
+        hyper_parameter_dict[key] = value
+
+        attr = key_attr_dict[key]
+        hyper_parameter_dict[key] = convert_type(attr, value)
+
+    return hyper_parameter_dict, key_attr_dict
+
 @csrf_exempt
 def add_model_training_log(request):
-    #将模型的参数列表直接读取出来得到参数列表和参数的数量
+
     print('there is add_model_training_log')
     model_id = request.POST['model_id']
     dataset_name_select = request.POST['dataset_name_select']
@@ -169,29 +274,87 @@ def add_model_training_log(request):
     modelItem = models.Model_Tdes.objects.get(model_id=model_id)
     model_name = modelItem.model_name
     
-    # 拼接命令
-    para_str_python = ' --dataset '+  dataset_name_select + ' --known_cls_ratio ' + Known_Intent_Ratio + ' --labeled_ratio ' + Annotated_Ratio + ' --method  '+ model_name
+    if model_name =='CDACPlus':
+        backbone='bert_CDAC'
+    
+        config_file_name = 'CDACPlus'
+    elif model_name =='DeepAligned':
+        backbone='bert'
+    
+        config_file_name='DeepAligned'
+    elif model_name =='DTC_BERT':
+        backbone='bert_DTC'
+     
+        config_file_name='DTC_BERT'
+    elif model_name =='KCL_BERT':
+        backbone='bert_KCL'
+      
+        config_file_name='KCL_BERT'
+    elif model_name =='MCL_BERT':
+        backbone='bert_MCL'
+        
+        config_file_name='MCL_BERT'
+    elif model_name =='AG':
+        backbone='glove'
+        config_file_name='AG'
+
+    elif model_name =='DCN':
+        backbone='sae'
+        config_file_name='DCN'
+
+    elif model_name =='DEC':
+        backbone='sae'
+        config_file_name='DEC'
+
+    elif model_name =='KM':
+        backbone='glove'
+        config_file_name='KM'
+
+    elif model_name =='SAE':
+        backbone='sae'
+        config_file_name='SAE'
+
+    # para_str_python = ' --dataset '+  dataset_name_select + ' --known_cls_ratio ' + Known_Intent_Ratio + ' --labeled_ratio ' + Annotated_Ratio + ' --method  '+ model_name + ' --config_file_name '+config_file_name + ' --backbone  '+ backbone + ' --save_frontend_results '+  ' --save_model'+ ' --train '
+    para_str_python = ' --dataset '+  dataset_name_select + ' --known_cls_ratio ' + Known_Intent_Ratio + ' --labeled_ratio ' + Annotated_Ratio + ' --method  '+ model_name + ' --config_file_name '+config_file_name + ' --backbone  '+ backbone + ' --save_frontend_results '+  ' --save_model'
+    
+    save_file_name = 'config.json'
+
+    if modelItem.type == 1:
+        save_dir = sys.path[0]+'/static/jsons/open_intent_detection/'
+    elif modelItem.type == 2:
+        save_dir = sys.path[0]+'/static/jsons/open_intent_discovery/'
+    else:
+        print('This type is not implemented.')
+
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir)
+
+    results_path = os.path.join(save_dir, save_file_name)    
+
+    if not os.path.exists(results_path):
+        f = open(results_path, 'w')
+
+    json_data={}
+    
+    default_parameters, attrs  = get_config_py(model_name, modelItem.type)
+
+    for key in default_parameters.keys():
+        json_data[key] = default_parameters[key]
+
     for paramItem in paramsListJson:
-        para_str_python = para_str_python + ' --' + paramItem['param_name'] + ' ' + paramItem['default_value']
-        # print('param_id==',paramItem['param_id'],'\tparam_name==',paramItem['param_name'],'\tdefault_value==',paramItem['default_value'],'\trun_value==',paramItem['run_value'])
-    print('para_str_python==',para_str_python)
-    # 生成本地路径
-    ## genernate local_path
-    print('local_path===',sys.path[0])
-    if platform.system() == 'Linux':
-        local_path = sys.path[0]+'/static/log/discovery/add_model_training_log/running/'+  dataset_name_select + model_id + Annotated_Ratio + Known_Intent_Ratio +'/'
-    elif platform.system() == 'Windows':
-        local_path = sys.path[0]+'\\static\\log\\discovery\\add_model_training_log\\running\\'+  dataset_name_select + model_id + Annotated_Ratio + Known_Intent_Ratio +'\\'
-    ## determine if the dataset exists
-    if os.path.exists(local_path):
-        return JsonResponse({'code':201,'msg':'The  Process Already Exists , Please Check It !!!'})
+
+        attr = attrs[paramItem['param_name']]
+        json_data[paramItem['param_name']] = convert_type(attr, paramItem['default_value'])
+
+    json_add(json_data, results_path)
+   
 
     try:
         run_logItem = models.Run_Log(                         
             dataset_name = dataset_name_select, 
             model_name = modelItem.model_name,
             model_id_id = model_id,
-            Local_Path = local_path, 
+            Local_Path = "", 
             create_time = timezone.now().strftime("%Y-%m-%d %H:%M:%S"),
             Annotated_ratio = Annotated_Ratio, 
             Intent_Ratio = Known_Intent_Ratio,
@@ -199,6 +362,14 @@ def add_model_training_log(request):
             
             )
         run_logItem.save()
+
+        if platform.system() == 'Linux':
+            local_path = sys.path[0]+'/static/log/discovery/add_model_training_log/running/'+  dataset_name_select + model_id + Annotated_Ratio + Known_Intent_Ratio + str(run_logItem.log_id)  +'/'
+        elif platform.system() == 'Windows':
+            local_path = sys.path[0]+'\\static\\log\\discovery\\add_model_training_log\\running\\'+  dataset_name_select + model_id + Annotated_Ratio + Known_Intent_Ratio + str(run_logItem.log_id) +'\\'
+        
+        _ = models.Run_Log.objects.filter(log_id=run_logItem.log_id).update(Local_Path = local_path)
+
         # save msg to run_log_hyper_parameters
         for paramItem in paramsListJson:
             run_log_hyper_parametersItem = models.run_log_hyper_parameters(
@@ -209,28 +380,25 @@ def add_model_training_log(request):
             run_log_hyper_parametersItem.save()
 
         os.makedirs(local_path)
-        
-        print('*'*20, '\n\npara_str_python:', para_str_python, '\n\n')
-        print("RUN"*10)
         str_run = ''
-        if model_name in os.listdir(os.path.join(sys.path[0], '..', 'textoir/open_intent_discovery/methods/unsupervised')):
-            para_str_python = para_str_python + ' --setting unsupervised'
-        else:
-            para_str_python = para_str_python + ' --setting semi_supervised'
-        if platform.system() == 'Linux':
-            str_run = "python " + sys.path[0]+ backend_engine_linux +  para_str_python
-        elif platform.system() == 'Windows':
-            str_run = "python " + sys.path[0]+ backend_engine_win + para_str_python
         
-        print('*'*20, '\n\nstr_run:', str_run, '\n\n')
-        # run model
-        print("RUN"*10)
+        if model_name in os.listdir(os.path.join(sys.path[0], '../open_intent_discovery/methods/unsupervised')):
+            para_str_python = str(para_str_python) + ' --setting unsupervised'
+        else:
+            para_str_python = str(para_str_python) + ' --setting semi_supervised'
+        
+        if platform.system() == 'Linux':
+            
+            str_run = 'python ' + str(sys.path[0])+ str(backend_engine_linux) +  str(para_str_python) +' --log_id '+str(run_logItem.log_id)
+        elif platform.system() == 'Windows':
+            str_run = "python " + sys.path[0]+ backend_engine_win + para_str_python +' --log_id '+str(run_logItem.log_id)
+        
         str_run = shlex.split(str_run)
         process = subprocess.Popen(str_run)
         
         # #get pid
         run_pid = process.pid
-        # run_pid = 99999   ## 测试用
+        # run_pid = 99999   
         ## save msg to run log
         updat = models.Run_Log.objects.filter(log_id=run_logItem.log_id).update(run_pid = run_pid)
         
@@ -238,7 +406,7 @@ def add_model_training_log(request):
         ##get returncode ---wait runing state change
         process.communicate()
         run_type = process.returncode
-        # run_type = 0  ## 测试用
+        # run_type = 0 
         # ## save run_type to run log
         # 1--runing  2--finished 3--failed
         if run_type == 0 or run_type == '0':
@@ -255,30 +423,29 @@ def add_model_training_log(request):
         if os.path.exists(local_path):
             os.removedirs(local_path)
     
+    print("Running finished!")
     return JsonResponse({'code':200,'msg':'Successfully Running Process!'})
 
 
 
 @xframe_options_exempt
 def model_test(request):
-    print("----------------------------***-------------------------------")
+
     datasetList = models.DataSet.objects.values()
     modelList_detection = models.Model_Tdes.objects.values().filter(type = 2)
 
- 
-
-    if request.GET.get('log_id'):     #如果是跳转，带着log_id_jump
+    if request.GET.get('log_id'):   
         log_id = request.GET.get('log_id')
-        create_time_new = models.Run_Log.objects.values().filter(log_id = log_id,model_id__type=2).first()#.filter(type = 2)     #默认显示最新的一条
+        create_time_new = models.Run_Log.objects.values().filter(log_id = log_id,model_id__type=2,type = 2).first()#.filter(type = 2)     #默认显示最新的一条
     else:
-        create_time_new = models.Run_Log.objects.values().filter(model_id__type=2).order_by('-log_id').first()     #默认显示最新的一条
+        create_time_new = models.Run_Log.objects.values().filter(model_id__type=2,type = 2).order_by('-log_id').first()     #默认显示最新的一条
         log_id = create_time_new['log_id']
     
     
      
     dataset_new = create_time_new['dataset_name']
     model_new = create_time_new['model_name']
-    create_time = models.Run_Log.objects.values().filter(dataset_name = dataset_new,model_name=model_new,model_id__type=2) #成功完成的记录 *******待改***********
+    create_time = models.Run_Log.objects.values().filter(dataset_name = dataset_new,model_name=model_new,model_id__type=2,type = 2) #成功完成的记录 *******待改***********
 
     parameters = models.run_log_hyper_parameters.objects.values().filter(log_id=log_id)
   
@@ -298,46 +465,28 @@ def model_test(request):
 #--------------------------------------------------------------------------------------------------
 
 @csrf_exempt
-def model_evaluation_getDataOfIOKIRByKey_new(request):
-    key = request.GET.get('key')
-    json_path = os.path.join(sys.path[0], 'static/jsons/open_intent_discovery/', 'json_discvoery_loss.json')
-    print("*******************************************")
-    print(key)
-    print(json_path)
-    #/home/wx/workplace_1/TEXTOIR/frontend/static/jsons/open_intent_detection/json_detection_IOKIR.json
-    print("*******************************************")
-    data_iokir = {}
+def show_test_result(request):
+    dataset_name = request.GET.get('dataset_name')
+    method = request.GET.get('method')
+    log_id = request.GET.get('log_id')#new
+    json_path = os.path.join(sys.path[0], 'static/jsons/open_intent_discovery/', 'json_test_results.json')
+    return_list = []
+
     with open(json_path, 'r') as load_f:
         load_dict = json.load(load_f)
-    if not load_dict.__contains__(key):
-        return JsonResponse({ "code":201, "msg": "There is no data" })
-    data_iokir = load_dict[key]
-    
+    if load_dict.__contains__(dataset_name +'_'+ method +"_"+ log_id) == False:
+        return JsonResponse({'code':200, 'msg':'There is no data', 'count':0, 'data':list([]) })
+    return_list = load_dict[dataset_name +'_'+ method +"_"+ log_id ]
     results = {}
-    results['code'] = 201
-    results['msg'] = ''
-    results['data'] = data_iokir
-    return JsonResponse(results)
+    results['data'] = return_list
+
+
+    return JsonResponse({'code':200,'msg':'Successfully !','data':results})
+
 @csrf_exempt
-def model_evaluation_getDataOfTFOverallByKey_new(request):
+def model_evaluation_getDataOfTFFineByKey(request):
     key = request.GET.get('key')
-    json_path = os.path.join(sys.path[0], 'static/jsons/open_intent_discovery/', 'true_false_overall_new.json')
-    data_iokir = {}
-    with open(json_path, 'r') as load_f:
-        load_dict = json.load(load_f)
-    if not load_dict.__contains__(key):
-        return JsonResponse({ "code":201, "msg": "There is no data" })
-    data_iokir = load_dict[key]
-    
-    results = {}
-    results['code'] = 200
-    results['msg'] = ''
-    results['data'] = data_iokir
-    return JsonResponse(results)
-@csrf_exempt
-def model_evaluation_getDataOfTFFineByKey_new(request):
-    key = request.GET.get('key')
-    json_path = os.path.join(sys.path[0], 'static/jsons/open_intent_discovery/', 'true_false_fine_new.json')
+    json_path = os.path.join(sys.path[0], 'static/jsons/open_intent_discovery/', 'true_false_fine.json')
     data_iokir = {}
     with open(json_path, 'r') as load_f:
         load_dict = json.load(load_f)
@@ -351,44 +500,23 @@ def model_evaluation_getDataOfTFFineByKey_new(request):
     results['data'] = data_iokir
     return JsonResponse(results)
 
-
-@csrf_exempt
-def model_evaluation_getDataOfIOLRByKey_new(request):
-    key = request.GET.get('key')
-    json_path = os.path.join(sys.path[0], 'static/jsons/open_intent_discovery/', 'json_discvoery_metric.json')
-    data_iokir = {}
-    with open(json_path, 'r') as load_f:
-        load_dict = json.load(load_f)
-    if not load_dict.__contains__(key):
-        return JsonResponse({ "code":201, "msg": "There is no data" })
-    data_iokir = load_dict[key]
-    
-    results = {}
-    results['code'] = 200
-    results['msg'] = ''
-    results['data'] = data_iokir
-    return JsonResponse(results)
 #--------------------------------------------------------------------------------------------------
 @xframe_options_exempt
 def model_analysis(request):
     dataset_list = models.DataSet.objects.values()
     modelList_discovery = models.Model_Tdes.objects.values().filter(type = 2)
     example_list = models.Model_Test_Example.objects.values()
-    # print(dataset_list)
 
-
-    if request.GET.get('log_id'):     #如果是跳转，带着log_id_jump
+    if request.GET.get('log_id'):    
         log_id = request.GET.get('log_id')
-        create_time_new = models.Run_Log.objects.values().filter(log_id = log_id,model_id__type=2).first()#.filter(type = 2)     #默认显示最新的一条
+        create_time_new = models.Run_Log.objects.values().filter(log_id = log_id,model_id__type=2,type = 2).first()   
     else:
-        create_time_new = models.Run_Log.objects.values().filter(model_id__type=2).order_by('-log_id').first()#.filter(type = 2)     #默认显示最新的一条
+        create_time_new = models.Run_Log.objects.values().filter(model_id__type=2,type = 2).order_by('-log_id').first()
         log_id = create_time_new['log_id']
 
     dataset_new = create_time_new['dataset_name']
     model_new = create_time_new['model_name']
-    create_time = models.Run_Log.objects.values().filter(dataset_name = dataset_new,model_name=model_new,model_id__type=2) #type=2#成功完成的记录 *******待改***********
-
-
+    create_time = models.Run_Log.objects.values().filter(dataset_name = dataset_new,model_name=model_new,model_id__type=2,type = 2) 
     
     result = {}
     result['dataset_list'] = dataset_list
@@ -432,24 +560,9 @@ def getModelAnalysisExampleData(request):
 
 
 @csrf_exempt
-def modelAnalysisTest(request):
-
-    print('there is discovery_test')
-    model_discovery = request.POST['model_discovery']
-    example_select_discovery = request.POST['example_select_discovery']
-
-    print(model_discovery)
-    print(example_select_discovery)
-
-
-    print('there is discovery_end')
-    return JsonResponse({'code':200,'msg':'Successfully Discovery The Intent!'})
-
-
-@csrf_exempt
 def model_evaluation_getDataOfTFOverallByKey(request):
     key = request.GET.get('key')
-    json_path = os.path.join(sys.path[0], 'static/jsons/open_intent_discovery/', 'ture_false_overall.json')
+    json_path = os.path.join(sys.path[0], 'static/jsons/open_intent_discovery/', 'true_false_overall.json')
     data_iokir = {}
     with open(json_path, 'r') as load_f:
         load_dict = json.load(load_f)
@@ -463,78 +576,21 @@ def model_evaluation_getDataOfTFOverallByKey(request):
     results['data'] = data_iokir
     return JsonResponse(results)
 
-
-@csrf_exempt
-def model_evaluation_getDataOfTFFineByKey(request):
-    key = request.GET.get('key')
-    json_path = os.path.join(sys.path[0], 'static/jsons/open_intent_discovery/', 'ture_false_fine.json')
-    data_iokir = {}
-    with open(json_path, 'r') as load_f:
-        load_dict = json.load(load_f)
-    if not load_dict.__contains__(key):
-        return JsonResponse({ "code":201, "msg": "There is no data" })
-    data_iokir = load_dict[key]
-    
-    results = {}
-    results['code'] = 200
-    results['msg'] = ''
-    results['data'] = data_iokir
-    return JsonResponse(results)
-
-@csrf_exempt
-def model_evaluation_getDataOfIOKIRByKey(request):
-    key = request.GET.get('key')
-    json_path = os.path.join(sys.path[0], 'static/jsons/open_intent_discovery/', 'json_discovery_IOKIR.json')
-    data_iokir = {}
-    with open(json_path, 'r') as load_f:
-        load_dict = json.load(load_f)
-    if not load_dict.__contains__(key):
-        return JsonResponse({ "code":201, "msg": "There is no data" })
-    data_iokir = load_dict[key]
-    
-    results = {}
-    results['code'] = 200
-    results['msg'] = ''
-    results['data'] = data_iokir
-    return JsonResponse(results)
-
-@csrf_exempt
-def model_evaluation_getDataOfIONOCByKey(request):
-    key = request.GET.get('key')
-    json_path = os.path.join(sys.path[0], 'static/jsons/open_intent_discovery/', 'json_discovery_IONOC.json')
-    data_iokir = {}
-    with open(json_path, 'r') as load_f:
-        load_dict = json.load(load_f)
-    if not load_dict.__contains__(key):
-        return JsonResponse({ "code":201, "msg": "There is no data" })
-    data_iokir = load_dict[key]
-    
-    results = {}
-    results['code'] = 200
-    results['msg'] = ''
-    results['data'] = data_iokir
-    return JsonResponse(results)
-
-
-
-
-# old
 @csrf_exempt
 def model_analysis_getClassListByDatasetNameAndMethod(request):
-    print('model_analysis_getTableResultsByDatasetNameAndMethod')
+
     dataset_name = request.GET.get('dataset_name')
     method = request.GET.get('method')
     log_id = str(request.GET.get('log_id'))
-    print(dataset_name)
-    print(method)
+
     class_type = 'open'
     page = request.GET.get('page')
     limit = request.GET.get("limit")
-    json_path = os.path.join(sys.path[0], 'static/jsons/open_intent_discovery/', 'analysis_table_info_new.json')
+    json_path = os.path.join(sys.path[0], 'static/jsons/open_intent_discovery/', 'analysis_table_info.json')
     return_list = []
     with open(json_path, 'r') as load_f:
         load_dict = json.load(load_f)
-    print("class_list_"+ dataset_name +'_'+ method +"_"+ log_id +"_" + class_type)
+
     if load_dict.__contains__("class_list_"+ dataset_name +'_'+ method +"_"+ log_id +"_" + class_type) == False:
         return JsonResponse({'code':200, 'msg':'There is no data', 'count':0, 'data':list([]) })
     
@@ -553,7 +609,7 @@ def model_analysis_getClassListByDatasetNameAndMethod(request):
 
 @csrf_exempt
 def model_analysis_getTextListByDatasetNameAndMethodAndLabel(request):
-    print('model_analysis_getTableResultsByDatasetNameAndMethod')
+
     dataset_name = request.GET.get('dataset_name')
     log_id = str(request.GET.get('log_id'))
     method = request.GET.get('method')
@@ -561,23 +617,16 @@ def model_analysis_getTextListByDatasetNameAndMethodAndLabel(request):
     class_type = 'open'
     page = request.GET.get('page')
     limit = request.GET.get("limit")
-    json_path = os.path.join(sys.path[0], 'static/jsons/open_intent_discovery/', 'analysis_table_info_new.json')
+    json_path = os.path.join(sys.path[0], 'static/jsons/open_intent_discovery/', 'analysis_table_info.json')
     return_list = []
     with open(json_path, 'r') as load_f:
         load_dict = json.load(load_f)
     key = "text_list_"+ str(dataset_name) +'_'+ str(method) +"_"+log_id+"_"+ str(class_type)+"_"+str(label)
-    print('key: ',key)
-    print("*"*40,"\n\n\n\n",key,"\n\n\n","*"*40)
+
     if load_dict.__contains__(key) == False:
         return JsonResponse({'code':200, 'msg':'There is no data', 'count':0, 'data':list([]) })
     
-    # return_list = load_dict["class_list_"+ dataset_name +'_'+ method +"_"+ class_type+"_"+label]
     return_list = load_dict[key]
-    
-
-
-
-
     
     count = len(return_list)
     paginator = Paginator(return_list, limit)
@@ -594,12 +643,15 @@ def model_analysis_getTextListByDatasetNameAndMethodAndLabel(request):
 @csrf_exempt
 def model_analysis_getDataOfDINByKey(request):
     key = request.GET.get('key')
-    # key='banking_DeepAligned_389'
-    json_path = os.path.join(sys.path[0], 'static/jsons/open_intent_discovery/', 'Discovery_analysis_new.json')
+    json_path = os.path.join(sys.path[0], 'static/jsons/open_intent_discovery/', 'Discovery_analysis.json')
 
+    if not os.path.exists(json_path):
+        f = open(json_path, 'w')
+        
     data_iokir = {}
     with open(json_path, 'r') as load_f:
         load_dict = json.load(load_f)
+
     if not load_dict.__contains__(key):
         return JsonResponse({ "code":201, "msg": "There is no data" })
     data_iokir = load_dict[key]
@@ -610,9 +662,16 @@ def model_analysis_getDataOfDINByKey(request):
     results['data'] = data_iokir
     return JsonResponse(results)
 
+def log_delete(request):
+    log_id =  request.GET.get('log_id')
 
 
-
+    models.Run_Log.objects.filter(log_id=log_id).delete()
+    results = {}
+    results['code'] = 200
+    results['msg'] = 'del_okk'
+ 
+    return JsonResponse(results)
 
 
 

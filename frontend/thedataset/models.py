@@ -15,7 +15,7 @@ class DataSet(models.Model):
     sample_validation_num = models.BigIntegerField()
     sample_test_num = models.BigIntegerField()
     sentence_max_length = models.IntegerField()
-    sentence_avg_length = models.IntegerField()
+    sentence_avg_length = models.FloatField()
     create_time = models.DateTimeField()
 
 # data annotation 数据标注结果
@@ -59,7 +59,7 @@ class Run_Log(models.Model):
     dataset_name = models.CharField(max_length=255)
     model_name = models.CharField(max_length=255)
     # model_id = models.IntegerField()
-    model_id = models.ForeignKey(Model_Tdes,related_name='model_tdes',db_constraint=False,on_delete=models.DO_NOTHING,blank=True)
+    model_id = models.ForeignKey(Model_Tdes,related_name='model_tdes',db_constraint=False,on_delete=models.DO_NOTHING,blank=True,default='')
     Annotated_ratio = models.CharField(max_length=255)
     Intent_Ratio = models.CharField(max_length=255)
     Local_Path = models.CharField(max_length=255)

