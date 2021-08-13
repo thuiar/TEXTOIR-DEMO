@@ -4,12 +4,6 @@
 
 **TEXOIR** is the first integrated and visualized platform for text Open Intent Recognition. **This repo is based on the [TEXTOIR toolkit](https://github.com/thuiar/TEXTOIR)**. It contains a pipeline framework to perform [open intent detection](./open_intent_detection) and [open_intent_discovery](./open_intent_discovery) simultaneously. It also consists of a [visualization system](./frontend) to demonstrate the whole process of the two sub-modules and the pipeline framework. More information can be seen on our [ACL 2021 demo paper](https://aclanthology.org/2021.acl-demo.20.pdf). 
 
-Demonstration video:  
-<video id="video" controls="" preload="none" poster="materials/poster.png" width="360" height = "200">
-<source id="mp4" src="materials/TEXTOIR.mp4" type="video/mp4">
-</video>
-
-
 If you are interested in this work, and want to use the codes in this repo, please **star** and **fork** this repo, and cite the following paper:
 ```
 @inproceedings{zhang-etal-2021-textoir,
@@ -161,17 +155,16 @@ This module visualizes the results of the pipeline framework. It shows the ident
 
 ### Environments
 
-1. Use anaconda to create Python (version >= 3.6) environment
+1. Use anaconda to create Python (version >= 3.6) environment.
 ```
 conda create --name textoir python=3.6
 conda activate textoir
 ```
-2. Install PyTorch (Cuda version 11.2)
+2. Install PyTorch (Cuda version 11.2).
 ```
 conda install pytorch torchvision torchaudio cudatoolkit=11.0 -c pytorch -c conda-forge  
 ```
-3. Install MySQL 
-
+3. Install MySQL. 
 ```
 sudo apt-get install mysql-server
 sudo apt-get install mysql-client
@@ -179,8 +172,7 @@ sudo apt-get install libmysqlclient-dev
 pip install mysqlclient
 pip install pymysql
 ```
-
-### Database Configuration 
+### Database Configuration 
 
 1. Login MySQL with root.
 ```
@@ -233,7 +225,8 @@ pip install -r requirements.txt
 
 3. Run frontend interfaces.
 ```
-xxx
+cd frontend
+python manage.py runserver 0.0.0.0:8080
 ```
 4. Run open intent recognition examples.
 ```
