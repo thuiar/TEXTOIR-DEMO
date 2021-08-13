@@ -112,11 +112,11 @@ Example for training results:
 
 Example for fine-grained performance:
 
-<img src="materials/fine-grained.png" width="400" height = "200">
+<img src="materials/fine-grained.png" width="360" height = "180">
 
 Evaluation for error analysis:  
 
-<img src="materials/error_analysis.png" width="400" height = "200">
+<img src="materials/error_analysis.png" width="360" height = "180">
 
 ### Model Analysis
 
