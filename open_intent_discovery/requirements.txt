@@ -115,7 +115,7 @@ velruse==1.1.1
 venusian==3.0.0
 Wand==0.6.6
 WebOb==1.8.7
-Werkzeug==1.0.1
+Werkzeug==0.15.3
 wordcloud==1.8.1
 wrapt==1.12.1
 WTForms==2.3.3
