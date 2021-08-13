@@ -107,15 +107,16 @@ Example for parameters and testing results:
 
 Example for training results:
 
-![Example](materials/training_results.png "Example")
+<img src="materials/training_results.png" width="500" height = "170">
+
 
 Example for fine-grained performance:
 
-<img src="materials/fine-grained.png" width="360" height = "200">
+<img src="materials/fine-grained.png" width="400" height = "200">
 
 Evaluation for error analysis:  
 
-<img src="materials/error_analysis.png" width="360" height = "200">
+<img src="materials/error_analysis.png" width="400" height = "200">
 
 ### Model Analysis
 
@@ -130,7 +131,7 @@ Example of analysis table:
 ![Example](materials/analysis_table.png "Example")
 
 Example of analysis results:
-<img src="materials/detection_analysis.png" width="360" height = "200">
+![Example](materials/detection_analysis.png "Example")
 
 
 
@@ -142,7 +143,7 @@ Example of analysis table:
 ![Example](materials/discovery_table.png "Example")
 
 Example of analysis results:
-<img src="materials/discovery_analysis.png" width="320" height = "250">
+<img src="materials/discovery_analysis.png" width="400" height = "300">
 
 
 ### Open Intent Recognition
