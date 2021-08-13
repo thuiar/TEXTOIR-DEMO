@@ -144,7 +144,7 @@ pycparser @ file:///tmp/build/80754af9/pycparser_1594388511720/work
 pycrypto==2.6.1
 pycurl==7.43.0.2
 pyflakes==2.1.1
-Pygments==2.3.1
+Pygments==2.7.4
 pylint==2.3.1
 pyodbc==4.0.26
 pyOpenSSL @ file:///tmp/build/80754af9/pyopenssl_1608057966937/work
