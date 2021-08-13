@@ -87,7 +87,7 @@ libarchive-c==2.8
 lief==0.9.0
 llvmlite==0.28.0
 locket==0.2.0
-lxml==4.3.2
+lxml==4.6.3
 Markdown==3.3.4
 MarkupSafe==1.1.1
 matplotlib==3.0.3
