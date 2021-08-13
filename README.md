@@ -112,19 +112,11 @@ In this module, we show the basic information about the training record, the tra
 
 3. Example of fine-grained performance:
 
-<<<<<<< HEAD
 <img src="materials/fine-grained.png" width="700" height = "350">
-=======
-<img src="materials/fine-grained.png" width="360" height = "180">
->>>>>>> 43f7971389a983c3b544868c966b3693fde39781
 
 4. Example of error analysis:  
 
-<<<<<<< HEAD
 <img src="materials/error_analysis.png" width="700" height = "350">
-=======
-<img src="materials/error_analysis.png" width="360" height = "180">
->>>>>>> 43f7971389a983c3b544868c966b3693fde39781
 
 ### Model Analysis
 
@@ -152,7 +144,7 @@ As we adopt clustering methods (semi-supervised and unsupervised) in this module
 
 2. Example of analysis results:
 
-<img src="materials/discovery_analysis.PNG" width="700" height = "500">
+<img src="materials/discovery_analysis.png" width="700" height = "500">
 
 
 ### Open Intent Recognition
