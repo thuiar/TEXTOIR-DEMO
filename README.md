@@ -1,10 +1,8 @@
 # TEXTOIR: An Integrated and Visualized Platform for Text Open Intent Recognition
 
-## Introduction
+**TEXOIR** is the first integrated and visualized platform for text Open Intent Recognition. It contains a pipeline framework to perform [open intent detection](./open_intent_detection) and [open_intent_discovery](./open_intent_discovery) simultaneously. It also consists of a [visualization system](./frontend) to demonstrate the whole process of the two sub-modules and the pipeline framework. **This repo is based on the [TEXTOIR toolkit](https://github.com/thuiar/TEXTOIR)**. 
 
-**TEXOIR** is the first integrated and visualized platform for text Open Intent Recognition. **This repo is based on the [TEXTOIR toolkit](https://github.com/thuiar/TEXTOIR)**. It contains a pipeline framework to perform [open intent detection](./open_intent_detection) and [open_intent_discovery](./open_intent_discovery) simultaneously. It also consists of a [visualization system](./frontend) to demonstrate the whole process of the two sub-modules and the pipeline framework. More information can be seen on our [ACL 2021 demo paper](https://aclanthology.org/2021.acl-demo.20.pdf). 
-
-If you are interested in this work, and want to use the codes in this repo, please **star** and **fork** this repo, and cite the following paper:
+If you are interested in this work, and want to use the codes in this repo, please **star** and **fork** this repo, and cite our [ACL 2021 demo paper](https://aclanthology.org/2021.acl-demo.20.pdf):
 ```
 @inproceedings{zhang-etal-2021-textoir,
     title = "{TEXTOIR}: An Integrated and Visualized Platform for Text Open Intent Recognition",
@@ -20,15 +18,21 @@ If you are interested in this work, and want to use the codes in this repo, plea
 }
 ```
 
-## Overall Framework
+Contributors: Hanlei Zhang, Xiaoteng Li, Xin Wang, Panpan Zhang, and Kang Zhao. 
+
+Supervisor: Hua Xu.
+
+## A Pipeline Framework for Open Intent Recognition
 
 We propose a pipeline scheme to finish the whole process of both identifying known intents and discovering open intents. First, we prepare the intent data for the two modules (open intent detection and open intent discovery) with the assigned labeled ratio and known intent ratio. Then, we set the hyper-parameters and prepare the backbone for feature extraction. 
 
 After data and model preparation, we use the labeled known intent data to train the selected open intent detection method. The well-trained detection model is used to predict the known intents and detect the open intent. Then, the predicted and labeled known intents are used to train the open intent discovery model. The well-trained discovery model further cluster the open intent into fine-grained intent-wise classes.
 
-Finally, we combine the predicted results of the two modules, containing the identified known intents and discovered open-intent clusters. We extract top-3 key-words as the reference intents of each open-intent cluster.
+Finally, we combine the predicted results of the two modules, containing the identified known intents and discovered open-intent clusters. We extract top-3 key-words as the reference intents of each open-intent cluster. 
 
 ![Example](materials/pipeline.png "Example")
+
+More related papers and resources can be seen in our previously released [reading list](https://github.com/thuiar/OKD-Reading-List). 
 
 ## Visualized Platform
 
@@ -241,9 +245,3 @@ python manage.py runserver 0.0.0.0:8080
 cd pipeline
 sh examples/run_ADB_DeepAligned.sh
 ```
-
-## Acknowledgements
-
-DEMO Contributors: Hanlei Zhang, Xiaoteng Li, Xin Wang, Panpan Zhang, and Kang Zhao. 
-
-Supervisor: Hua Xu.
