@@ -1,10 +1,8 @@
 # TEXTOIR: An Integrated and Visualized Platform for Text Open Intent Recognition
 
-## Introduction
+**TEXOIR** is the first integrated and visualized platform for text Open Intent Recognition. It contains a pipeline framework to perform open intent detectio and open_intent_discovery simultaneously. It also consists of a visualization system to demonstrate the whole process of the two sub-modules and the pipeline framework. **We also release the toolkit (continue updating) in the repo [TEXTOIR](https://github.com/thuiar/TEXTOIR)**. 
 
-**TEXOIR** is the first integrated and visualized platform for text Open Intent Recognition. **This repo is based on the [TEXTOIR toolkit](https://github.com/thuiar/TEXTOIR)**. It contains a pipeline framework to perform [open intent detection](./open_intent_detection) and [open_intent_discovery](./open_intent_discovery) simultaneously. It also consists of a [visualization system](./frontend) to demonstrate the whole process of the two sub-modules and the pipeline framework. More information can be seen on our [ACL 2021 demo paper](https://aclanthology.org/2021.acl-demo.20.pdf). 
-
-If you are interested in this work, and want to use the codes in this repo, please **star** and **fork** this repo, and cite the following paper:
+If you are interested in this work, and want to use the codes in this repo, please **star** and **fork** this repo, and cite our [ACL 2021 demo paper](https://aclanthology.org/2021.acl-demo.20.pdf):
 ```
 @inproceedings{zhang-etal-2021-textoir,
     title = "{TEXTOIR}: An Integrated and Visualized Platform for Text Open Intent Recognition",
@@ -20,15 +18,17 @@ If you are interested in this work, and want to use the codes in this repo, plea
 }
 ```
 
-## Overall Framework
+## A Pipeline Framework for Open Intent Recognition
 
 We propose a pipeline scheme to finish the whole process of both identifying known intents and discovering open intents. First, we prepare the intent data for the two modules (open intent detection and open intent discovery) with the assigned labeled ratio and known intent ratio. Then, we set the hyper-parameters and prepare the backbone for feature extraction. 
 
 After data and model preparation, we use the labeled known intent data to train the selected open intent detection method. The well-trained detection model is used to predict the known intents and detect the open intent. Then, the predicted and labeled known intents are used to train the open intent discovery model. The well-trained discovery model further cluster the open intent into fine-grained intent-wise classes.
 
-Finally, we combine the predicted results of the two modules, containing the identified known intents and discovered open-intent clusters. We extract top-3 key-words as the reference intents of each open-intent cluster.
+Finally, we combine the predicted results of the two modules, containing the identified known intents and discovered open-intent clusters. We extract top-3 key-words as the reference intents of each open-intent cluster. 
 
 ![Example](materials/pipeline.png "Example")
+
+More related papers and resources can be seen in our previously released [reading list](https://github.com/thuiar/OKD-Reading-List). 
 
 ## Visualized Platform
 
@@ -112,19 +112,11 @@ In this module, we show the basic information about the training record, the tra
 
 3. Example of fine-grained performance:
 
-<<<<<<< HEAD
 <img src="materials/fine-grained.png" width="700" height = "350">
-=======
-<img src="materials/fine-grained.png" width="360" height = "180">
->>>>>>> 43f7971389a983c3b544868c966b3693fde39781
 
 4. Example of error analysis:  
 
-<<<<<<< HEAD
 <img src="materials/error_analysis.png" width="700" height = "350">
-=======
-<img src="materials/error_analysis.png" width="360" height = "180">
->>>>>>> 43f7971389a983c3b544868c966b3693fde39781
 
 ### Model Analysis
 
@@ -152,7 +144,7 @@ As we adopt clustering methods (semi-supervised and unsupervised) in this module
 
 2. Example of analysis results:
 
-<img src="materials/discovery_analysis.PNG" width="700" height = "500">
+<img src="materials/discovery_analysis.png" width="700" height = "500">
 
 
 ### Open Intent Recognition
@@ -250,8 +242,12 @@ cd pipeline
 sh examples/run_ADB_DeepAligned.sh
 ```
 
-## Acknowledgements
+## Ackownledgements
 
-DEMO Contributors: Hanlei Zhang, Xiaoteng Li, Xin Wang, Panpan Zhang, and Kang Zhao. 
+Contributors: Hanlei Zhang, Xiaoteng Li, Xin Wang, Panpan Zhang, and Kang Zhao. 
 
 Supervisor: Hua Xu.
+
+## Bugs or questions?
+
+If you have any questions, feel free to open issues and pull request. Please illustrate your problems as detailed as possible. If you want to integrate your method in our repo, please contact us (zhang-hl20@mails.tsinghua.edu.cn).
