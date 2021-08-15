@@ -86,16 +86,16 @@ WSGI_APPLICATION = 'textoir.wsgi.application'
 #     }
 # }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'HOST': '166.111.138.103',
-        'PORT': '3306',
-        'NAME': 'ds',
-        'USER': 'lixiaoteng',
-        'PASSWORD': 'lixiaoteng',
-    }
-}
+DATABASES = { 
+     'default': { 
+     'ENGINE': 'django.db.backends.mysql', 
+     'HOST': '', 
+     'PORT': '3306', 
+     'NAME': 'ds', 
+     'USER': '', 
+     'PASSWORD': '', 
+     } 
+ } 
 
 
 # Password validation
