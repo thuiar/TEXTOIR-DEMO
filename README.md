@@ -18,7 +18,7 @@ If you are interested in this work, and want to use the codes in this repo, plea
 }
 ```
 
-The demmonstration video is shown on [youtube](https://www.youtube.com/watch?v=cM-2KoV3eTc).
+The demmonstration video is shown on [YouTube](https://www.youtube.com/watch?v=cM-2KoV3eTc).
 
 ## A Pipeline Framework for Open Intent Recognition
 
