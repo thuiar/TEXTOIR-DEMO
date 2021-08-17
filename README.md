@@ -18,6 +18,8 @@ If you are interested in this work, and want to use the codes in this repo, plea
 }
 ```
 
+The demmonstration video is shown on [youtube](https://www.youtube.com/watch?v=cM-2KoV3eTc).
+
 ## A Pipeline Framework for Open Intent Recognition
 
 We propose a pipeline scheme to finish the whole process of both identifying known intents and discovering open intents. First, we prepare the intent data for the two modules (open intent detection and open intent discovery) with the assigned labeled ratio and known intent ratio. Then, we set the hyper-parameters and prepare the backbone for feature extraction. 
