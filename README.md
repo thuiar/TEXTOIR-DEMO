@@ -244,7 +244,7 @@ cd pipeline
 sh examples/run_ADB_DeepAligned.sh
 ```
 
-## Ackownledgements
+## Acknowledgements
 
 Contributors: Hanlei Zhang, Xiaoteng Li, Xin Wang, Panpan Zhang, and Kang Zhao. 
 
